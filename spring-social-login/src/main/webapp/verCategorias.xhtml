@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+<h:body> 
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+		  <div style="width: 50%; margin: 0 auto auto;">
+		    <p:commandButton value="+" update=":nuevodialogo" oncomplete="PF('newDialog').show()" style="width: 12%; height: 32px; padding-left: -15px;"/>
+			<h:form id="form">
+					<p:dataTable id="tablaCat" var="categoria" value="#{contenidoView.obtenerCategorias()}">
+					    
+					    <f:facet name="header">
+					    	Categorias del Sistema
+				        </f:facet>
+					    
+					    <p:column headerText="#" style="width: 12%;">
+					    	<h:outputText value="#{categoria.id}" />
+					    </p:column>
+					    
+					    <p:column headerText="Nombre">
+					        	<h:outputText value="#{categoria.nombre}" />
+					    </p:column>
+					    
+					    <p:column style="width:64px">
+					    	<div style="display: block; padding-left: 1px;">
+					    	<p:commandButton update="editdialogo" oncomplete="PF('editDialog').show()" icon="ui-icon-pencil" style="width: 30px; height: 30px;" title="View">
+				                <f:setPropertyActionListener value="#{categoria}" target="#{contenidoView.selectedCate}" />
+				            </p:commandButton>
+					    	
+					    	<p:commandButton icon="ui-icon-minusthick" update=":form:tablaCat" actionListener="#{contenidoView.eliminarCategoria(categoria.id)}" style="width: 30px; height: 30px;">
+					    		<p:confirm header="Eliminar categoria" message="Desea eliminar esta categoria #{categoria.nombre}?" icon="ui-icon-alert"/>
+					    	</p:commandButton>
+					    	</div>
+				       </p:column>
+					    
+					</p:dataTable>
+					
+					</h:form>
+					
+					<p:dialog id="editdialogo" header="Editar categoria" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <h:form>
+				            <h:panelGrid id="editdisplay" columns="2">
+
+				                <p:outputLabel value="Nombre:"/>
+						        <p:inputText value="#{contenidoView.selectedCate.nombre}"/>
+				 
+				            </h:panelGrid>
+				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
+				            <p:commandButton value="Guardar" oncomplete="PF('editDialog').hide()"></p:commandButton>
+							<p:spacer width="40" height="10" />
+						    <p:commandButton value="Cancelar" oncomplete="PF('editDialog').hide()"></p:commandButton>
+				            </div>
+				        </h:form>
+				    </p:dialog>
+				    
+				    <p:dialog id="nuevodialogo" header="Nueva categoria" widgetVar="newDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <h:form>
+				            <h:panelGrid id="editdisplay" columns="2">
+
+				                <p:outputLabel value="Nombre:"/>
+						        <p:inputText value="#{contenidoView.categoria.nombre}"/>
+				 
+				            </h:panelGrid>
+				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
+				            <p:commandButton value="Agregar" actionListener="#{contenidoView.guardarCategoria()}" update=":form:tablaCat" oncomplete="PF('newDialog').hide()"></p:commandButton>
+							<p:spacer width="40" height="10" />
+						    <p:commandButton value="Cancelar" oncomplete="PF('newDialog').hide()"></p:commandButton>
+				            </div>
+				        </h:form>
+				    </p:dialog>
+				    
+				    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				    	<div style="text-align: center;">
+				        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				        </div>
+				    </p:confirmDialog>
+				    
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>  
+</html>

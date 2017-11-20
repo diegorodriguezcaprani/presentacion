@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	
+</h:head> 
+<h:body> 
+	<style type="text/css">
+	  .colored {
+	    background: #000000 !important;
+	    color: #FFFFFF;
+	  }
+	  .ui-widget-content {
+	  	background: blue !important;
+	  }
+	</style>
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+					<h:form id="form">
+					<p:dataTable var="contenido" value="#{contenidoView.obtenerContenidos()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="contTable"
+			                 emptyMessage="No users found with given criteria" filteredValue="#{contenidoView.contenidoFiltrado}" rowStyleClass="#{contenido.puntuacion le 5 ? 'colored' : 'colored'}" >
+					    
+					    <f:facet name="header">
+					    	Contenidos del Sistema
+				            <p:outputPanel style="padding-left: 870px;" layout="block">
+				                <h:outputText value="Buscar contenido: " />
+				                <p:inputText id="globalFilter" onkeyup="PF('contTable').filter()" style="width:150px" placeholder=""/>
+				            </p:outputPanel>
+				        </f:facet>
+					    
+					    <p:column headerText="Titulo" sortBy="#{contenido.titulo}" style="width: 10%;">
+					        <h:outputText value="#{contenido.titulo}" />
+					    </p:column>
+					 
+					    <p:column headerText="Descripcion" filterBy="#{contenido.descripcion}" filterMatchMode="contains" sortBy="#{contenido.descripcion}">
+					        <h:outputText value="#{contenido.descripcion}" />
+					    </p:column>
+					 	<!-- 
+					    <p:column headerText="#Puntuaciones" filterBy="#{contenido.cantPuntuaciones}" filterMatchMode="contains" sortBy="#{contenido.cantPuntaciones}">
+					        <h:outputText value="#{contenido.cantPuntuaciones}" />
+					    </p:column>
+					 	 -->
+					    <p:column headerText="Puntuacion" filterBy="#{contenido.puntuacion}" filterMatchMode="contains" sortBy="#{contenido.puntuacion}">
+					        <h:outputText value="#{contenido.puntuacion}" />
+					    </p:column>
+			
+						<p:column headerText="Destacado" filterBy="#{contenido.destacado}" filterMatchMode="contains" sortBy="#{contenido.destacado}">
+					        <h:outputText value="#{contenido.destacado}" />
+					    </p:column>
+					    
+					    <p:column headerText="Bloqueado" filterBy="#{contenido.bloqueado}" filterMatchMode="contains" sortBy="#{contenido.bloqueado}">
+					        <h:outputText value="#{contenido.bloqueado}" />
+					    </p:column>
+					    
+				        <p:column headerText="Portada" filterBy="#{contenido.portada}" filterMatchMode="contains" sortBy="#{contenido.portada}">
+					        <h:outputText value="#{contenido.portada}" />
+					    </p:column>
+					    <!-- 
+					    <p:column headerText="Comienzo" filterBy="#{contenido.comienzo}" filterMatchMode="contains" sortBy="#{contenido.comienzo}">
+					        <h:outputText value="#{contenido.comienzo}" />
+					    </p:column>
+					    
+					    <p:column headerText="Fin" filterBy="#{contenido.fin}" filterMatchMode="contains" sortBy="#{contenido.fin}">
+					        <h:outputText value="#{contenido.fin}" />
+					    </p:column>
+					     -->
+					    
+					    <p:column style="width:42px;text-align: center">
+				             <p:commandButton update=":form:contDetail" oncomplete="PF('contDialog').show()" icon="ui-icon-search" title="View">
+				                <f:setPropertyActionListener value="#{contenido}" target="#{contenidoView.selectedCont}" />
+				            </p:commandButton>
+				        </p:column>
+					    
+					</p:dataTable>
+					
+					<p:dialog header="Detalle de contenido" widgetVar="contDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <p:outputPanel id="contDetail" style="text-align:center;">
+				            <p:panelGrid  columns="2" rendered="#{not empty contenidoView.selectedCont}" columnClasses="label,value">
+				 
+				                <h:outputText value="Titulo:" />
+				                <h:outputText value="#{contenidoView.selectedCont.titulo}" />
+				 
+				                <h:outputText value="Descripcion" />
+				                <h:outputText value="#{contenidoView.selectedCont.descripcion}" />
+				 
+				                <h:outputText value="Puntuacion:" />
+				                <h:outputText value="#{contenidoView.selectedCont.puntuacion}"/>
+				 
+				                <h:outputText value="Bloqueado" />
+				                <h:outputText value="$#{contenidoView.selectedCont.bloqueado}" />
+				                
+				                <h:outputText value="Destacado" />
+				                <h:outputText value="$#{contenidoView.selectedCont.destacado}" />
+				                
+				                <h:outputText value="Portada" />
+				                <h:outputText value="$#{contenidoView.selectedCont.portada}" />
+				                
+				                <h:outputText value="# Puntuaciones" />
+				                <h:outputText value="$#{contenidoView.selectedCont.cantPuntuaciones}" />
+				                
+				                <h:outputText value="Elenco" />
+				                <h:outputText value="$#{contenidoView.selectedCont.elenco}" />
+				                
+				                <h:outputText value="Directores" />
+				                <h:outputText value="$#{contenidoView.selectedCont.directores}" />
+				                
+				                <h:outputText value="Categoria" />
+				                <h:outputText value="$#{contenidoView.selectedCont.categorias}" />
+				            </p:panelGrid>
+				            <br/>
+				            <p:commandButton value="Cerrar" oncomplete="PF('contDialog').hide()"></p:commandButton>
+				        </p:outputPanel>
+				    </p:dialog>
+					
+					</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body> 
+</html>

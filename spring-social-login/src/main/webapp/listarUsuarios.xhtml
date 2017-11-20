@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<script>
+	.ui-datatable {
+		min-height: 700px;
+	}
+	</script>
+</h:head>
+<h:body>
+
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+					<h:form>
+					<p:dataTable var="usr" value="#{dtBasicView.retornarUsuarios()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="usrsTable"
+			                 emptyMessage="No users found with given criteria" filteredValue="#{dtBasicView.filteredUsrs}" selection="#{dtBasicView.selectedUsrs}" rowKey="#{usr.id}">
+					    
+					    <f:facet name="header">
+					    	Usuarios del sistema
+				            <p:outputPanel style="padding-left: 870px;" layout="block">
+				                <h:outputText value="Buscar usuario: " />
+				                <p:inputText id="globalFilter" onkeyup="PF('usrsTable').filter()" style="width:150px" placeholder=""/>
+				            </p:outputPanel>
+				        </f:facet>
+					    
+					    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+					    
+					    <p:column headerText="Id" sortBy="#{usr.id}" style="width: 10%;">
+					        <h:outputText value="#{usr.id}" />
+					    </p:column>
+					 
+					    <p:column headerText="Name" filterBy="#{usr.name}" filterMatchMode="contains" sortBy="#{usr.name}">
+					        <h:outputText value="#{usr.name}" />
+					    </p:column>
+					 
+					    <p:column headerText="Apellido" filterBy="#{usr.apellido}" filterMatchMode="contains" sortBy="#{usr.apellido}">
+					        <h:outputText value="#{usr.apellido}" />
+					    </p:column>
+					 
+					    <p:column headerText="Cumple" filterBy="#{usr.anioNac}" filterMatchMode="contains" sortBy="#{usr.anioNac}">
+					        <h:outputText value="#{usr.anioNac}" />
+					    </p:column>
+			
+						<p:column headerText="Registrado" filterBy="#{usr.anioReg}" filterMatchMode="contains" sortBy="#{usr.anioReg}">
+					        <h:outputText value="#{usr.anioReg}" />
+					    </p:column>
+					    
+					    <p:column headerText="Casado" filterBy="#{usr.iscasado}" filterMatchMode="contains" sortBy="#{usr.iscasado}">
+					        <h:outputText value="#{usr.iscasado}" />
+					    </p:column>
+					    
+					    <p:column style="width: 5%;">
+					    	<p:commandButton icon="ui-icon-transferthick-e-w">
+					    	</p:commandButton>
+					    </p:column>
+					    
+					</p:dataTable>
+					</h:form>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>

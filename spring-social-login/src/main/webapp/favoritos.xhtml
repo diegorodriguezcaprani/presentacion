@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	  xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
+	<ui:composition template="templates/template.xhtml"> 
+    <ui:define name="content">
+	<h:outputStylesheet library="css" name="welcome.css" />
+	<h:outputStylesheet library="css" name="favoritos.css" />
+	<h:outputScript library="js" name="dropdown.js" />
+    <div class= "divC">
+     <h:graphicImage library="images" name="Mantel_cont.png" style= "margin: 0 auto" />
+     <table class= "home-table">
+	  			<tr>
+	    			<th><a href="welcome.xhtml">Home</a></th>
+	  			</tr>
+	  			<tr>
+	    			<td><a href="url">Favoritos</a></td>
+	  			</tr>
+     </table>
+    </div>
+    <div class= "divContenidos">
+	     <header>
+	   	  	<h2 class= "Mis-favoritos"> Mis favoritos </h2>
+	   	  	<form class= "search-form">
+	 				<input type="text" name="search" placeholder="Search.."> </input>
+			</form>
+	   	 </header>
+	   	 <div class="flex-container">
+		   	 <ui:repeat var="o" value="#{favoritosBean.imageURLs}" >
+		    	<div class="flex-item">
+	        		<img src= "#{o}"></img>
+	   			</div>	
+		    </ui:repeat>
+		  </div>
+    </div>
+    </ui:define>
+	</ui:composition>
+</html>

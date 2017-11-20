@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<title><h:outputText value="Ejemplo con JSF" /></title>
+</h:head> 
+<h:body style="background-color: lightblue;">
+	<center>
+	<h:form style="margin-top: 10%">
+	
+		<p:growl id="msg" showDetail="true" life="3000" />
+        <p:panel style="width: 28%; background: lightblue; border-style: none;">
+			<h:graphicImage value="resources/images/logotipo.png" />
+            <h:panelGrid id="loginPanel" columns="3" cellpadding="5">
+
+				<p:outputLabel for="user" value="Usuario:" />
+			    <p:inputText id="user"
+                    required="true" label="Usuario">
+                    <f:validateLength minimum="3" />
+                </p:inputText>
+			    <br/>
+			    <p:outputLabel for="password" value="Password:" />
+		    	<p:password id="password"
+                     required="true"
+                    label="Password">
+                    <f:validateLength minimum="3" />
+                </p:password>
+
+			</h:panelGrid>
+			<br/>
+			<p:commandButton action="home" value="Acceder" style="width: 100%; background-color: #9ACD32;"/>
+		</p:panel>
+	</h:form>
+	</center>
+</h:body> 
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+<h:body> 
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+			<div style="padding-top: 10px">
+				<p:chart type="line" model="#{reportesView.zoomModel}" style="height:250px;" widgetVar="chart" responsive="true"/>
+	 
+				<p:commandButton type="button" value="Reset" icon="ui-icon-cancel" onclick="PF('chart').resetZoom()" style="font-size: 80%;"/>
+				
+				<br/>
+				<br/>
+				<p:separator />
+				<br/>
+				
+				<p:chart type="bar" model="#{reportesView.barModel}" style="height:250px;" responsive="true"/>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body> 
+</html>

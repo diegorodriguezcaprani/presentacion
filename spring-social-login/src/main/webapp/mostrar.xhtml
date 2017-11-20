@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+<h:body> 
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+					<h:form>
+					<p:dataTable var="respuesta" value="#{dtBasicView.recursos}">
+					    
+					    <f:facet name="header">
+					    	Respuesta llamado REST
+				        </f:facet>
+					    
+					    <p:column headerText="Id">
+					        <h:outputText value="#{respuesta.id}" />
+					    </p:column>
+					 
+					    <p:column headerText="Name">
+					        <h:outputText value="#{respuesta.nombre}" />
+					    </p:column>
+					 
+					    <p:column headerText="Descripcion">
+					        <h:outputText value="#{respuesta.descripcion}" />
+					    </p:column>
+					 
+					    <p:column headerText="Fecha">
+					        <h:outputText value="#{respuesta.fecha_compra}" />
+					    </p:column>
+					    
+					</p:dataTable>
+					</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body> 
+</html>

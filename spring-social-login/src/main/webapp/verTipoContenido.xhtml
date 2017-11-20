@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+<h:body> 
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+			<p:commandButton value="Nuevo" update=":nuevodialogo" oncomplete="PF('newDialog').show()" icon="ui-icon-plus"/>
+			<h:form id="form">
+					<p:dataTable id="tablaTipo" var="tipocontenido" value="#{contenidoView.obtenerTiposContenidos()}" rowKey="#{tipocontenido.nombre}">
+					    
+					    <f:facet name="header">
+					    	Tipos de contenidos del Sistema
+				        </f:facet>
+					    
+					    <p:column headerText="Nombre" sortBy="#{tipocontenido.nombre}">
+					        	<h:outputText value="#{tipocontenido.nombre}" />
+					    </p:column>
+					 
+					    <p:column headerText="Atributos" filterMatchMode="contains" sortBy="#{tipocontenido.atributos}">
+					    	<h:outputText value="#{tipocontenido.atributos}" />
+					    </p:column>
+					    
+					    <p:column style="width:40px">
+				           <p:commandButton update="editdialogo" actionListener="#{contenidoView.seleccionarTipoContenido(tipocontenido)}" oncomplete="PF('editDialog').show()" icon="ui-icon-pencil">
+					    	</p:commandButton>
+				       </p:column>
+					    
+					</p:dataTable>
+					
+					</h:form>
+					
+					<p:dialog id="editdialogo" header="Editar tipo" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <h:form>
+				            <h:panelGrid id="editdisplay" columns="2">
+
+				                <p:outputLabel value="Nombre:"/>
+						        <p:inputText value="#{contenidoView.nombreTipoContenido}"/>
+						        
+						        <p:outputLabel value="Atributos:"/>
+						        <p:inputText value="#{contenidoView.atributosTipoContenido}"/>
+				 
+				            </h:panelGrid>
+				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
+				            <p:commandButton value="Guardar" actionListener="#{contenidoView.updateTipoContenido()}" oncomplete="PF('editDialog').hide()"></p:commandButton>
+							<p:spacer width="40" height="10" />
+						    <p:commandButton value="Cancelar" oncomplete="PF('editDialog').hide()"></p:commandButton>
+				            </div>
+				        </h:form>
+				    </p:dialog>
+					
+					<p:dialog id="nuevodialogo" header="Nuevo tipo de contenido" widgetVar="newDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <h:form>
+				            <h:panelGrid id="newdisplay" columns="2">
+
+				                <p:outputLabel value="Nombre:"/>
+						        <p:inputText value="#{contenidoView.tipo.nombre}"/>
+						        
+						        <p:outputLabel value="Atributos:"/>
+						        <p:inputText />
+				 
+				            </h:panelGrid>
+				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
+				            <p:commandButton value="Agregar" actionListener="#{contenidoView.guardarTipoContenido()}" update=":form:tablaTipo" oncomplete="PF('newDialog').hide()"></p:commandButton>
+							<p:spacer width="40" height="10" />
+						    <p:commandButton value="Cancelar" oncomplete="PF('newDialog').hide()"></p:commandButton>
+				            </div>
+				        </h:form>
+				    </p:dialog>
+					
+		</ui:define>
+	</ui:composition>
+</h:body> 
+</html>

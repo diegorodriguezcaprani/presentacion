@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+<h:body>
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+			<center>
+			<h:form id="form-contenido" style="margin-top: 2%;">
+			
+				<p:growl id="msg" showDetail="true" life="3000" />
+		        <p:panel id="header-contenido" header="Crear un nuevo contenido" style="width: 50%;">
+					
+		            <h:panelGrid id="contenidoPanel" columns="3" cellpadding="7">
+		
+						<p:outputLabel for="titulo" value="Titulo:" />
+					    <p:inputText id="titulo" value="#{contenidoView.contenido.titulo}"
+		                     label="Titulo" style="width: 100%;">
+		                    <f:validateLength minimum="3" />
+		                </p:inputText>
+					    <br/>
+					    <p:outputLabel for="descripcion" value="Descripción:" />
+				    	<p:inputText id="descripcion" value="#{contenidoView.contenido.descripcion}"
+		                    label="Descripcion" style="width: 100%;">
+		                    <f:validateLength minimum="3" />
+		                </p:inputText>
+		                <br/>
+		                <p:outputLabel for="portada" value="URL foto portada:" />
+					    <p:inputText id="portada" value="#{contenidoView.contenido.portada}"
+		                    label="Portada" style="width: 100%;">
+		                    <f:validateLength minimum="3" />
+		                </p:inputText>
+		                <br/>
+		                <p:outputLabel for="categoria" value="Categoria: " />
+			            <p:selectOneMenu id="categoria" value="#{contenidoView.categoria}" style="width:102%">
+			                <f:selectItem itemLabel="Seleccionar Categoria" itemValue="" noSelectionOption="true"/>
+			                <f:selectItems value="#{contenidoView.categorias}" />
+			            </p:selectOneMenu>
+		                
+		                 <br/>
+						<h:outputLabel value="Elenco:" for="txt_elenco" style="margin-right: -6px"></h:outputLabel>
+						<h:panelGrid id="panelElenco" columns="2" cellpadding="7" style="margin-left: -6px; width: 115%;">
+							<p:inputText id="txt_elenco" value="#{contenidoView.elencoi}" placeholder="Ingresar nombre" style="width: 100%;"/>
+	           				<p:commandButton id="btn_addElen" value="+" process="@parent" update="int_elenco" action="#" >
+				                <p:collector value="#{contenidoView.elencoi}" addTo="#{contenidoView.elencos}" unique="true"/>
+				            </p:commandButton>
+						</h:panelGrid>
+						<br/>
+						<h:panelGroup />
+						<p:outputPanel id="int_elenco">
+			            	<p:dataTable value="#{contenidoView.elencos}" var="elencoi" id="elencotable" style="width: 103%;">
+			            		<p:column>
+			            			<h:outputText value="#{elencoi}" />
+			            		</p:column>
+			            	</p:dataTable>
+			            </p:outputPanel>
+
+						<br/>
+						<h:outputLabel value="Directores:" for="txt_directores"></h:outputLabel>
+						<h:panelGrid id="panelDirector" columns="2" cellpadding="7" style="margin-left: -6px; width: 115%;">
+							<p:inputText id="txt_directores" value="#{contenidoView.directori}" placeholder="Ingresar nombre" style="width: 100%;"/>
+	           				<p:commandButton id="btn_addDir" value="+" process="@parent" update="int_directores" action="#" >
+				                <p:collector value="#{contenidoView.directori}" addTo="#{contenidoView.directores}" unique="true"/>
+				            </p:commandButton>
+						</h:panelGrid>
+						<br/>
+						<h:panelGroup />
+						<p:outputPanel id="int_directores">
+			            	<p:dataTable value="#{contenidoView.directores}" var="directori" id="directortable" style="width: 103%;">
+			            		<p:column>
+			            			<h:outputText value="#{directori}" />
+			            		</p:column>
+			            	</p:dataTable>
+			            </p:outputPanel>
+						
+					</h:panelGrid>
+					<br/>
+					<!-- SUBIR CONTENIDO -->
+					<h:panelGrid id="chooseFile" columns="1" cellpadding="7" style="margin-left: -6px; width: 115%;">
+						<input type="file" id="file-chooser" style="width: 150%;"
+						onclick="llamarJavascriptPostRendering()"/>
+           				<div id="results"></div>
+					</h:panelGrid>
+					
+					
+					
+					
+					<!--<input type="file" id="file-chooser" style="width: 103%;"/>
+				     <button id="upload-button">Subir contenido</button> 
+				    <div id="results"></div>-->
+				    
+				    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
+					<script type="text/javascript">
+						function llamarJavascriptPostRendering(){
+						AWS.config.region = 'us-east-1';
+					
+					    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+					        IdentityPoolId: 'us-east-1:7f3d22e5-92e7-437f-bf32-ebf76ec926da'
+					    });
+					
+					    AWS.config.credentials.get(function(err) {
+					        if (err) alert(err);
+					        console.log(AWS.config.credentials);
+					    });
+					
+					    var bucketName = 'tsi2.testbucket';
+					    var bucket = new AWS.S3({
+					        params: {
+					            Bucket: bucketName
+					        }
+					    });
+					
+					    var fileChooser = document.getElementById('file-chooser');
+					    var button = document.getElementById('form-contenido:upload-button');
+					    button.addEventListener('click', function() {
+					
+					        var file = fileChooser.files[0];
+					
+					        if (file) {
+					
+					            var objKey = 'Fox/' + file.name;
+					            var params = {
+					                Key: objKey,
+					                ContentType: file.type,
+					                Body: file,
+					                ACL: 'public-read'
+					            };
+					
+					            bucket.putObject(params, function(err, data) {
+					                if (err) {
+					                    alert("fallo la subida!!");
+					                } else {
+					                	alert("funco la subida!!");
+										$('#form-contenido\\:hdnBtn').click();
+					                }
+					            });
+					        } else {
+					            alert('Nothing to upload.');
+					        }
+					    }, false); }
+					    
+	   				</script>
+					<!-- FIN SUBIR CONTENIDO -->
+					<br/>
+					<!-- id="upload-button" -->
+					<p:commandButton id="upload-button" value="Guardar" style="width: 100%; background-color: #9ACD32;" />
+	 					<h:commandButton id="hdnBtn" actionListener="#{contenidoView.guardarContenido}" style="display: none;" />
+				</p:panel>
+			</h:form>
+			</center>
+		</ui:define>
+	</ui:composition>
+</h:body> 
+</html>
