@@ -14,7 +14,7 @@ import org.primefaces.model.chart.LineChartSeries;
 @ManagedBean(name="reportesView")
 @ViewScoped
 public class ReportesBean {
-	private String URL_Back = "http://localhost:8080/";
+	private String URL_Back = "http://localhost:8080/ServidorTsi2-0.0.1-SNAPSHOT/";
 	
 	private LineChartModel zoomModel;
 	

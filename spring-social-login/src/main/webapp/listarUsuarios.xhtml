@@ -6,11 +6,6 @@
       xmlns:p="http://primefaces.org/ui"> 
 
 <h:head>
-	<script>
-	.ui-datatable {
-		min-height: 700px;
-	}
-	</script>
 </h:head>
 <h:body>
 
@@ -18,7 +13,7 @@
 		<ui:define name="content">
 					<h:form>
 					<p:dataTable var="usr" value="#{dtBasicView.retornarUsuarios()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="usrsTable"
-			                 emptyMessage="No users found with given criteria" filteredValue="#{dtBasicView.filteredUsrs}" selection="#{dtBasicView.selectedUsrs}" rowKey="#{usr.id}">
+			                 emptyMessage="No users found with given criteria" filteredValue="#{dtBasicView.filteredUsrs}" rowKey="#{usr.id}">
 					    
 					    <f:facet name="header">
 					    	Usuarios del sistema
@@ -28,30 +23,36 @@
 				            </p:outputPanel>
 				        </f:facet>
 					    
-					    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-					    
-					    <p:column headerText="Id" sortBy="#{usr.id}" style="width: 10%;">
-					        <h:outputText value="#{usr.id}" />
+					    <p:column headerText="Idface" sortBy="#{usr.idfacebook}" style="width: 10%;">
+					        <h:outputText value="#{usr.idfacebook}" />
 					    </p:column>
 					 
-					    <p:column headerText="Name" filterBy="#{usr.name}" filterMatchMode="contains" sortBy="#{usr.name}">
-					        <h:outputText value="#{usr.name}" />
+					    <p:column headerText="Nombre" filterBy="#{usr.nombre}" filterMatchMode="contains" sortBy="#{usr.nombre}">
+					        <h:outputText value="#{usr.nombre}" />
 					    </p:column>
 					 
-					    <p:column headerText="Apellido" filterBy="#{usr.apellido}" filterMatchMode="contains" sortBy="#{usr.apellido}">
-					        <h:outputText value="#{usr.apellido}" />
+					    <p:column headerText="Edad" filterBy="#{usr.edad}" filterMatchMode="contains" sortBy="#{usr.edad}">
+					        <h:outputText value="#{usr.edad}" />
 					    </p:column>
 					 
-					    <p:column headerText="Cumple" filterBy="#{usr.anioNac}" filterMatchMode="contains" sortBy="#{usr.anioNac}">
-					        <h:outputText value="#{usr.anioNac}" />
+					    <p:column headerText="Sexo" filterBy="#{usr.sexo}" filterMatchMode="contains" sortBy="#{usr.sexo}">
+					        <h:outputText value="#{usr.sexo}" />
 					    </p:column>
 			
-						<p:column headerText="Registrado" filterBy="#{usr.anioReg}" filterMatchMode="contains" sortBy="#{usr.anioReg}">
-					        <h:outputText value="#{usr.anioReg}" />
+						<p:column headerText="Pais" filterBy="#{usr.pais}" filterMatchMode="contains" sortBy="#{usr.pais}">
+					        <h:outputText value="#{usr.pais}" />
 					    </p:column>
 					    
-					    <p:column headerText="Casado" filterBy="#{usr.iscasado}" filterMatchMode="contains" sortBy="#{usr.iscasado}">
-					        <h:outputText value="#{usr.iscasado}" />
+					    <p:column headerText="Bloqueado" filterBy="#{usr.bloqueado}" filterMatchMode="contains" sortBy="#{usr.bloqueado}">
+					        <h:outputText value="#{usr.bloqueado}" />
+					    </p:column>
+					    
+					    <p:column headerText="Fin Subscripcion" filterBy="#{usr.fechaFinSuscripcion}" filterMatchMode="contains" sortBy="#{usr.fechaFinSuscripcion}">
+					        <h:outputText value="#{usr.fechaFinSuscripcion}" />
+					    </p:column>
+					    
+					    <p:column headerText="Foto" filterBy="#{usr.urlFoto}" filterMatchMode="contains" sortBy="#{usr.urlFoto}">
+					        <h:outputText value="#{usr.urlFoto}" />
 					    </p:column>
 					    
 					    <p:column style="width: 5%;">

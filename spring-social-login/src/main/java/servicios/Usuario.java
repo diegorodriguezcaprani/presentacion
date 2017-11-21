@@ -1,68 +1,82 @@
 package servicios;
 
+import java.util.Date;
+
 public class Usuario {
-	private String id;
-	private String name;
-	private int anioNac;
-	private String apellido;
-	private int anioReg;
-	private boolean iscasado;
+	private String idfacebook;
+	private String nombre;
+	private int edad;
+	private char sexo;
+	private String pais;
+	private Date fechaFinSuscripcion;
+	private boolean bloqueado;
+	private String urlFoto;
 	
-	Usuario (String id, String nombre, int anioNac, String apellido, int anioAct, boolean casado){
-		this.id = id;
-		this.name = nombre;
-		this.anioNac = anioNac;
-		this.apellido = apellido;
-		this.anioReg = anioAct;
-		this.iscasado = casado;
+	
+	
+	public String getUrlFoto() {
+		return urlFoto;
 	}
-
-	public String getId() {
-		return id;
+	public void setUrlFoto(String urlFoto) {
+		this.urlFoto = urlFoto;
 	}
-
-	public void setId(String id) {
-		this.id = id;
+	public String getidfacebook() {
+		return idfacebook;
 	}
-
-	public String getName() {
-		return name;
+	public void setidfacebook(String idfacebook) {
+		this.idfacebook = idfacebook;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public String getNombre() {
+		return nombre;
 	}
-
-	public int getAnioNac() {
-		return anioNac;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
-
-	public void setAnioNac(int anioNac) {
-		this.anioNac = anioNac;
+	public int getEdad() {
+		return edad;
 	}
-
-	public String getApellido() {
-		return apellido;
+	public void setEdad(int edad) {
+		this.edad = edad;
 	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
+	public char getSexo() {
+		return sexo;
 	}
-
-	public int getAnioReg() {
-		return anioReg;
+	public void setSexo(char sexo) {
+		this.sexo = sexo;
 	}
-
-	public void setAnioReg(int anioReg) {
-		this.anioReg = anioReg;
+	public String getPais() {
+		return pais;
 	}
-
-	public boolean isIscasado() {
-		return iscasado;
+	public void setPais(String pais) {
+		this.pais = pais;
 	}
-
-	public void setIscasado(boolean iscasado) {
-		this.iscasado = iscasado;
+	public Date getFechaFinSuscripcion() {
+		return fechaFinSuscripcion;
+	}
+	public void setFechaFinSuscripcion(Date fechaFinSuscripcion) {
+		this.fechaFinSuscripcion = fechaFinSuscripcion;
+	}
+	
+	public Usuario(String idfacebook, String nombre, int edad, char sexo, String pais, Date fechaFinSuscripcion, boolean bloqueado, String urlFoto) {
+		super();
+		this.idfacebook = idfacebook;
+		this.nombre = nombre;
+		this.edad = edad;
+		this.sexo = sexo;
+		this.bloqueado = bloqueado;
+		this.pais = pais;
+		this.fechaFinSuscripcion = fechaFinSuscripcion;
+		this.urlFoto = urlFoto;
+	}
+	public Usuario() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public boolean isBloqueado() {
+		return bloqueado;
+	}
+	public void setBloqueado(boolean bloqueado) {
+		this.bloqueado = bloqueado;
 	}
 	
 	

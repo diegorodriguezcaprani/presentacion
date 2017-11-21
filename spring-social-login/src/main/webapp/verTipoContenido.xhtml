@@ -22,7 +22,11 @@
 					    </p:column>
 					 
 					    <p:column headerText="Atributos" filterMatchMode="contains" sortBy="#{tipocontenido.atributos}">
-					    	<h:outputText value="#{tipocontenido.atributos}" />
+					    	<h:outputText value="#{tipocontenido.atributos}"/>
+					    </p:column>
+					    
+					    <p:column headerText="Categoria" filterMatchMode="contains" sortBy="#{tipocontenido.categorias}">
+					    	<h:outputText value="#{tipocontenido.categorias}" />
 					    </p:column>
 					    
 					    <p:column style="width:40px">
@@ -43,6 +47,9 @@
 						        
 						        <p:outputLabel value="Atributos:"/>
 						        <p:inputText value="#{contenidoView.atributosTipoContenido}"/>
+						        
+						        <p:outputLabel value="Categorias:"/>
+						        <p:inputText value="#{contenidoView.categoriasTipoContenido}"/>
 				 
 				            </h:panelGrid>
 				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
@@ -62,6 +69,9 @@
 						        
 						        <p:outputLabel value="Atributos:"/>
 						        <p:inputText />
+						        
+						        <p:outputLabel value="Categorias:"/>
+						        <p:inputText />
 				 
 				            </h:panelGrid>
 				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
@@ -71,7 +81,6 @@
 				            </div>
 				        </h:form>
 				    </p:dialog>
-					
 		</ui:define>
 	</ui:composition>
 </h:body> 

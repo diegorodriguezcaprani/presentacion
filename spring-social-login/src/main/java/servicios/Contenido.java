@@ -7,22 +7,22 @@ public class Contenido {
 	private String titulo;
 	private String descripcion;
 	private int cantPuntuaciones;
-	private int puntuacion;
+	private Double puntuacion;
 	private boolean destacado;
 	private boolean bloqueado;
 	private String portada;
-	private String comienzo;
-	private String fin;
-	private List<String> categorias;
+	private List<Categoria> categorias;
 	private List<String> elenco;
 	private List<String> directores;
+	private String tipoContenido;
+	private List<DatosAtributoContenido> atributos;
 	
 	public Contenido() {
 	}
 
-	public Contenido(String titulo, String descripcion, int cantPuntuaciones, int puntuacion, boolean destacado,
-			boolean bloqueado, String portada, String comienzo, String fin, List<String> categorias,
-			List<String> elenco, List<String> directores) {
+	public Contenido(String titulo, String descripcion, int cantPuntuaciones, Double puntuacion, boolean destacado,
+			boolean bloqueado, String portada, List<Categoria> categorias, List<String> elenco,
+			List<String> directores, String tipoContenido, List<DatosAtributoContenido> atributos) {
 		super();
 		this.titulo = titulo;
 		this.descripcion = descripcion;
@@ -31,11 +31,11 @@ public class Contenido {
 		this.destacado = destacado;
 		this.bloqueado = bloqueado;
 		this.portada = portada;
-		this.comienzo = comienzo;
-		this.fin = fin;
 		this.categorias = categorias;
 		this.elenco = elenco;
 		this.directores = directores;
+		this.tipoContenido = tipoContenido;
+		this.atributos = atributos;
 	}
 
 	public String getTitulo() {
@@ -62,11 +62,11 @@ public class Contenido {
 		this.cantPuntuaciones = cantPuntuaciones;
 	}
 
-	public int getPuntuacion() {
+	public Double getPuntuacion() {
 		return puntuacion;
 	}
 
-	public void setPuntuacion(int puntuacion) {
+	public void setPuntuacion(Double puntuacion) {
 		this.puntuacion = puntuacion;
 	}
 
@@ -94,27 +94,11 @@ public class Contenido {
 		this.portada = portada;
 	}
 
-	public String getComienzo() {
-		return comienzo;
-	}
-
-	public void setComienzo(String comienzo) {
-		this.comienzo = comienzo;
-	}
-
-	public String getFin() {
-		return fin;
-	}
-
-	public void setFin(String fin) {
-		this.fin = fin;
-	}
-
-	public List<String> getCategorias() {
+	public List<Categoria> getCategorias() {
 		return categorias;
 	}
 
-	public void setCategorias(List<String> categorias) {
+	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
 	}
 
@@ -132,6 +116,22 @@ public class Contenido {
 
 	public void setDirectores(List<String> directores) {
 		this.directores = directores;
+	}
+
+	public String getTipoContenido() {
+		return tipoContenido;
+	}
+
+	public void setTipoContenido(String tipoContenido) {
+		this.tipoContenido = tipoContenido;
+	}
+
+	public List<DatosAtributoContenido> getAtributos() {
+		return atributos;
+	}
+
+	public void setAtributos(List<DatosAtributoContenido> atributos) {
+		this.atributos = atributos;
 	}
 	
 }

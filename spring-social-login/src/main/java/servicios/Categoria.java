@@ -9,6 +9,7 @@ public class Categoria {
 	
 	public Categoria(int id, String nombre) {
 		super();
+		this.id = id;
 		this.nombre = nombre;
 	}
 

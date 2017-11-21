@@ -4,17 +4,17 @@ import java.util.List;
 
 public class TipoContenido {
 	
-	private int id;
 	private String nombre;
-	private List<String> atributos;
+	private List<DatosIdNombre> atributos;
+	private List<Categoria> categorias;
 	
 	public TipoContenido(){
 	}
 	
-	public TipoContenido(int id, String nombre, List<String> atributos){
-		this.id = id;
+	public TipoContenido(String nombre, List<DatosIdNombre> atributos, List<Categoria> categorias){
 		this.nombre = nombre;
 		this.atributos = atributos;
+		this.categorias = categorias;
 	}
 
 	public String getNombre() {
@@ -25,20 +25,21 @@ public class TipoContenido {
 		this.nombre = nombre;
 	}
 
-	public List<String> getAtributos() {
+	public List<DatosIdNombre> getAtributos() {
 		return atributos;
 	}
 
-	public void setAtributos(List<String> atributos) {
+	public void setAtributos(List<DatosIdNombre> atributos) {
 		this.atributos = atributos;
 	}
 
-	public int getId() {
-		return id;
+	public List<Categoria> getCategorias() {
+		return categorias;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
+	
 	
 }

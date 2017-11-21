@@ -10,7 +10,7 @@
 	<ui:composition template="templates/template.xhtml">
 		<ui:define name="content">
 			<center>
-			<h:form id="form-contenido" style="margin-top: 2%;">
+			<h:form id="form-contenido" style="margin-top: 1%;">
 			
 				<p:growl id="msg" showDetail="true" life="3000" />
 		        <p:panel id="header-contenido" header="Crear un nuevo contenido" style="width: 50%;">
@@ -35,12 +35,18 @@
 		                    <f:validateLength minimum="3" />
 		                </p:inputText>
 		                <br/>
+		                <p:outputLabel for="tipocontenido" value="Tipo Contenido:" />
+				        <p:selectOneMenu id="tipocontenido" value="#{contenidoView.contenido.tipoContenido}" style="width:98%">
+				        	<p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" />
+				            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+				            <f:selectItems value="#{contenidoView.obtenerTiposContenidos()}" var="tipo" itemLabel="#{tipo.nombre}" itemValue="#{tipo.nombre}"/>
+				        </p:selectOneMenu>
+		                <br/>
 		                <p:outputLabel for="categoria" value="Categoria: " />
-			            <p:selectOneMenu id="categoria" value="#{contenidoView.categoria}" style="width:102%">
-			                <f:selectItem itemLabel="Seleccionar Categoria" itemValue="" noSelectionOption="true"/>
-			                <f:selectItems value="#{contenidoView.categorias}" />
-			            </p:selectOneMenu>
-		                
+				       	<p:selectOneMenu id="categoria" value="#{contenidoView.selectedCate}" style="width:98%">
+				      		<f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+				            <f:selectItems value="#{contenidoView.categorias}" var="cate" itemLabel="#{cate.nombre}" itemValue="#{cate}"/>
+				        </p:selectOneMenu>
 		                 <br/>
 						<h:outputLabel value="Elenco:" for="txt_elenco" style="margin-right: -6px"></h:outputLabel>
 						<h:panelGrid id="panelElenco" columns="2" cellpadding="7" style="margin-left: -6px; width: 115%;">
@@ -78,7 +84,6 @@
 			            </p:outputPanel>
 						
 					</h:panelGrid>
-					<br/>
 					<!-- SUBIR CONTENIDO -->
 					<h:panelGrid id="chooseFile" columns="1" cellpadding="7" style="margin-left: -6px; width: 115%;">
 						<input type="file" id="file-chooser" style="width: 150%;"
@@ -145,10 +150,10 @@
 					    
 	   				</script>
 					<!-- FIN SUBIR CONTENIDO -->
-					<br/>
+					
 					<!-- id="upload-button" -->
 					<p:commandButton id="upload-button" value="Guardar" style="width: 100%; background-color: #9ACD32;" />
-	 					<h:commandButton id="hdnBtn" actionListener="#{contenidoView.guardarContenido}" style="display: none;" />
+	 					<h:commandButton id="hdnBtn" actionListener="#{contenidoView.guardarContenido()}" style="display: none;" />
 				</p:panel>
 			</h:form>
 			</center>

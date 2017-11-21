@@ -59,15 +59,6 @@
 				        <p:column headerText="Portada" filterBy="#{contenido.portada}" filterMatchMode="contains" sortBy="#{contenido.portada}">
 					        <h:outputText value="#{contenido.portada}" />
 					    </p:column>
-					    <!-- 
-					    <p:column headerText="Comienzo" filterBy="#{contenido.comienzo}" filterMatchMode="contains" sortBy="#{contenido.comienzo}">
-					        <h:outputText value="#{contenido.comienzo}" />
-					    </p:column>
-					    
-					    <p:column headerText="Fin" filterBy="#{contenido.fin}" filterMatchMode="contains" sortBy="#{contenido.fin}">
-					        <h:outputText value="#{contenido.fin}" />
-					    </p:column>
-					     -->
 					    
 					    <p:column style="width:42px;text-align: center">
 				             <p:commandButton update=":form:contDetail" oncomplete="PF('contDialog').show()" icon="ui-icon-search" title="View">
@@ -110,6 +101,10 @@
 				                
 				                <h:outputText value="Categoria" />
 				                <h:outputText value="$#{contenidoView.selectedCont.categorias}" />
+				                
+				                <h:outputText value="Tipo Contenido" />
+				                <h:outputText value="$#{contenidoView.selectedCont.tipoContenido}" />
+				                
 				            </p:panelGrid>
 				            <br/>
 				            <p:commandButton value="Cerrar" oncomplete="PF('contDialog').hide()"></p:commandButton>
