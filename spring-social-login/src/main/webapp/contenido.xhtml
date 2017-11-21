@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+      
+     
+     
+    <ui:composition template="templates/templateUser.xhtml">  
+		<ui:define name="content">
+			<h:outputStylesheet library="css" name="main.css" />
+			<h:outputStylesheet library="css" name="contenido.css" />
+			<div class= "divContenidos contenido">
+				<h1 class= "nombreContenido">#{contenidoBean.id}</h1> 
+				<h2 class= "cantPuntuacionesContenido">#{contenidoBean.cantPuntuaciones}</h2> 
+	
+				<div class= "rating">
+					<c:forEach begin="1" end="#{contenidoBean.puntuacion}">
+   						<span class="fa fa-star checked"></span> 
+					</c:forEach>
+					<c:forEach begin="#{contenidoBean.puntuacion}" end="#{contenidoBean.maxEstrellas}">
+   						<span class="fa fa-star"></span> 
+					</c:forEach>
+				</div>
+				<h3 class= "descripcionContenido">#{contenidoBean.descripcion}</h3> 
+				<div class= "img-contenido-div">
+					<img src= "#{contenidoBean.url}"></img>
+				</div>
+				<h:panelGroup rendered="#{!contenidoBean.enVivo}">
+					<div>
+						<a class= "link-button" href="verContenido.xhtml?id=#{contenidoBean.id}&amp;urlvideo=#{contenidoBean.urlvideo}">Ver ahora <i class="fa fa-play-circle"></i></a>
+					</div>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{contenidoBean.enVivo}">
+					<div>
+						<a class= "link-button" href="player.xhtml?id=#{contenidoBean.id}">Ver ahora <i class="fa fa-play-circle"></i></a>
+					</div>
+				</h:panelGroup>
+			</div>
+		
+		</ui:define>
+	</ui:composition>
+</html>

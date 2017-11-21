@@ -6,56 +6,148 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
       
-	<ui:composition template="templates/template.xhtml"> 
+	<ui:composition template="templates/templateUser.xhtml"> 
     <ui:define name="content">
 	<h:outputStylesheet library="css" name="welcome.css" />
+	<h:outputStylesheet library="css" name="favoritos.css" />
+	<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+	<h:outputScript library="js" name="searchform.js" />
 	<h:outputScript library="js" name="dropdown.js" />
-    <div class= "divC">
-     <h:graphicImage library="images" name="Mantel_cont.png" style= "margin: 0 auto" />
-     <table class= "home-table">
-	  			<tr>
-	    			<th>Home</th>
-	  			</tr>
-	  			<tr>
-	    			<td><a href="favoritos.xhtml">Favoritos</a></td>
-	  			</tr>
-			</table>
-    </div>
-    <div class= "divContenidos">
-    	  <header>
-    	  	<div class="dropdown">
-	  			<button onclick="myFunction()" class="dropbtn">Contenidos</button>
-	 			 <div id="myDropdown" class="dropdown-content">
-	   				<a href="hello.xhtml">Link 1</a>
-	    			<a href="#">Link 2</a>
-	    			<a href="#">Link 3</a>
-	  			</div>
-			</div>
-			<div class="dropdown">
-	  			<button onclick="myFunction()" class="dropbtn">Categorias</button>
-	 			 <div id="myDropdown" class="dropdown-content">
-	   				<a href="hello.xhtml">Link 1</a>
-	    			<a href="#">Link 2</a>
-	    			<a href="#">Link 3</a>
-	  			</div>
-			</div>
-    	  	<form class= "search-form">
-  				<input type="text" name="search" placeholder="Search.."> </input>
-			</form>
-    	  </header>
-    	<div class= "divContenidos1">
-    		<h2 class="interesante"> Te puede interesar...</h2>
-	    	
-		</div>
-		<div class= "divContenidos2">
-			<h2 class= "popular"> Popular en Mantel</h2>
-			<div class="gallery">
-			  <a target="_blank" href="img_fjords.jpg">
-			    <img src="https://play3r.net/wp-content/uploads/2015/11/TTG_GoT_Logo.png" alt="Trolltunga Norway" width="300" height="200"></img>
-			  </a>
+	
+	
+	<h:panelGroup rendered="#{!homeBean.updated}">
+     	<div class= "divContenidos">
+	    	<header class="home-header">
+	    		<h:form class= "search-form">
+		            <h:inputText id="search" value="#{homeBean.algo}" placeholder="Search.."
+		                onkeypress="if (event.keyCode == 13) {onchange(event); return false;}"
+		                onchange="return event.keyCode !== undefined" 
+		            >
+		                <f:ajax listener="#{homeBean.searchContenido}" render=":container" />
+		            </h:inputText>
+	        	</h:form>
+	    		
+	    		<div class="dropdown-profile">
+		  			<button onclick="myFunction()" class="dropbtn button-img">
+		  				<h:graphicImage library="images" name="profile-icon-9.png" style= "width:15px; border-radius: 50%"/>
+		  			</button>
+		 			 <div id="myDropdown" class="dropdown-content">
+		   				<a href="verPerfil.xhtml">Ver Perfil</a>
+		  			</div>
+				</div>
+				<div class="dropdown1">
+		  			 <h:commandButton value="Todos" action="#{homeBean.Todos}"  class="dropbtn background-button">
+                		<f:ajax execute="@form" render=":container" />
+           			 </h:commandButton>
+				</div>
+	    	  	<div class="dropdown1">
+		  			<button onclick="myFunction()" class="dropbtn background-button">Vivo</button>
+		 			
+				</div>
+				<div class="dropdown1">
+		  			<button onclick="myFunction()" class="dropbtn background-button">Películas</button>
+		 			
+				</div>
+				<div class="dropdown1">
+		  			<button onclick="myFunction()" class="dropbtn background-button">Series</button>
+		 			 
+				</div>
+				<div class="dropdown2">
+		  			<button onclick="myFunction()" class="dropbtn background-button">Género</button>
+		 			 <div id="myDropdown" class="dropdown-content">
+		   				<a href="welcome.xhtml">Link 1</a>
+		    			<a href="#">Link 2</a>
+		    			<a href="#">Link 3</a>
+		  			</div>
+				</div>
+	    	</header>
+	    	<div class= "divContenidos1">
+	    		<h2 class="interesante"> Te puede interesar...</h2>
+		    	<div class="flex-container-home1">
+			   	 <ui:repeat var="o" value="#{homeBean.contenidosSugeridos}" >
+			    	<div class="flex-item-home1">
+			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}">
+		        			<img src= "#{o.portada}"></img>
+				  		 </a>
+		   			</div>	
+			    </ui:repeat>
 			 </div>
-		</div>	
-    </div>
+			</div>
+			<div class= "divContenidos2">
+				<h2 class= "popular"> Popular en Mantel</h2>
+				<div class="flex-container-home">
+			   	 <ui:repeat var="o" value="#{homeBean.contenidos}" >
+			    	<div class="flex-item-home">
+			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}&amp;urlvideo=#{o.url}">
+		        			<img src= "#{o.portada}"></img>
+				  		 </a>
+		   			</div>	
+			    </ui:repeat>
+			 </div>
+			</div>	
+    	</div>  
+	</h:panelGroup>
+    
+    <h:panelGroup rendered="#{homeBean.search}">
+        <div class= "divContenidos">
+	    	<header class="home-header">
+	    		<h:form class= "search-form">
+		            <h:inputText id="search" value="#{homeBean.algo}" placeholder="Search.."
+		                onkeypress="if (event.keyCode == 13) {onchange(event); return false;}"
+		                onchange="return event.keyCode !== undefined" 
+		            >
+		                <f:ajax listener="#{homeBean.searchContenido}" render=":container" />
+		            </h:inputText>
+	        	</h:form>
+	    		
+	    		<div class="dropdown-profile">
+		  			<button onclick="myFunction()" class="dropbtn button-img">
+		  				<h:graphicImage library="images" name="profile-icon-9.png" style= "width:15px; border-radius: 50%"/>
+		  			</button>
+		 			 <div id="myDropdown" class="dropdown-content">
+		   				<a href="verPerfil.xhtml">Ver Perfil</a>
+		  			</div>
+				</div>
+				<h:commandButton value="Todos" action="#{homeBean.Todos}" class="dropbtn background-button">
+                		<f:ajax execute="@form" render=":container" />
+           			 </h:commandButton>
+           			 
+	    	  	<div class="dropdown1">
+		  			<button onclick="myFunction()" class="dropbtn background-button">Vivo</button>
+		 			
+				</div>
+				<div class="dropdown1">
+		  			<button onclick="myFunction()" class="dropbtn background-button">Películas</button>
+		 			
+				</div>
+				<div class="dropdown1">
+		  			<button onclick="myFunction()" class="dropbtn background-button">Series</button>
+		 			 
+				</div>
+				<div class="dropdown2">
+		  			<button onclick="myFunction()" class="dropbtn background-button">Género</button>
+		 			 <div id="myDropdown" class="dropdown-content">
+		   				<a href="welcome.xhtml">Link 1</a>
+		    			<a href="#">Link 2</a>
+		    			<a href="#">Link 3</a>
+		  			</div>
+				</div>
+	    	</header>
+	    	<div class= "divContenidos1">
+	    		<h2 class="interesante"> Resultado...</h2>
+		    	<div class="flex-container-home1">
+			   	 <ui:repeat var="o" value="#{homeBean.contenidosFiltrados}" >
+			    	<div class="flex-item-home1">
+			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}">
+		        			<img src= "#{o.portada}"></img>
+				  		 </a>
+		   			</div>	
+			    </ui:repeat>
+			 </div>
+			</div>	
+    	</div>  
+    </h:panelGroup>
+
     </ui:define>
 	</ui:composition>
 </html>

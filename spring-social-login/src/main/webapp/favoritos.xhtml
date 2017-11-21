@@ -7,27 +7,19 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
       
-	<ui:composition template="templates/template.xhtml"> 
+	<ui:composition template="templates/templateUser.xhtml"> 
     <ui:define name="content">
+    <h:outputScript library="css" name="main.css" />
 	<h:outputStylesheet library="css" name="welcome.css" />
 	<h:outputStylesheet library="css" name="favoritos.css" />
+	
 	<h:outputScript library="js" name="dropdown.js" />
-    <div class= "divC">
-     <h:graphicImage library="images" name="Mantel_cont.png" style= "margin: 0 auto" />
-     <table class= "home-table">
-	  			<tr>
-	    			<th><a href="welcome.xhtml">Home</a></th>
-	  			</tr>
-	  			<tr>
-	    			<td><a href="url">Favoritos</a></td>
-	  			</tr>
-     </table>
-    </div>
+  
     <div class= "divContenidos">
 	     <header>
 	   	  	<h2 class= "Mis-favoritos"> Mis favoritos </h2>
 	   	  	<form class= "search-form">
-	 				<input type="text" name="search" placeholder="Search.."> </input>
+	 				<input class="input" type="text" name="search" placeholder="Search.."> </input>
 			</form>
 	   	 </header>
 	   	 <div class="flex-container">
@@ -36,7 +28,7 @@
 	        		<img src= "#{o}"></img>
 	   			</div>	
 		    </ui:repeat>
-		  </div>
+		 </div>
     </div>
     </ui:define>
 	</ui:composition>

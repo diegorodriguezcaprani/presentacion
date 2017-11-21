@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	  xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+      
+	<ui:composition template="templates/templateUser.xhtml"> 
+    <ui:define name="content">
+	<h:outputStylesheet library="css" name="contenido.css" />
+
+   
+    <div class= "divContenidos">
+    	 <div id="player"></div>
+    <script type="text/javascript">
+      var conf = {
+        key: "3d0d01da-eafc-4cf9-8423-07029bab247f",
+        source:    {
+          dash: "http://localhost:1935/live/myStream/manifest.mpd"
+        }
+      };
+      bitmovin.player("player").setup(conf);
+    </script>
+    </div>
+    </ui:define>
+	</ui:composition>
+</html>

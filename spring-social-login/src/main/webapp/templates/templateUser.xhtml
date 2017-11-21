@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:head>
+        <title>JSF 2.0 Hello World</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <link href="https://fonts.googleapis.com/css?family=Kavivanar" rel="stylesheet"/>
+         <script type="text/javascript" src="https://bitmovin-a.akamaihd.net/bitmovin-player/stable/7.4/bitmovinplayer.js"></script>
+    </h:head>
+     <h:body>
+        <h:outputStylesheet library="css" name="main.css" />
+        <h:panelGroup layout="block" id="container" class="container">
+	    	 <div class= "divC">
+     		 	<h:graphicImage library="images" name="Mantel_cont.png" style= "margin: 0 auto" />
+     			<table class= "home-table">
+	  				<tr>
+	    				<th><a href="welcome.xhtml">Home</a></th>
+	  				</tr>
+	  				<tr>
+	    				<td><a href="favoritos.xhtml">Favoritos</a></td>
+	  				</tr>
+				</table>
+    		</div>
+		    <ui:insert name="content">
+		    
+		   		 holaaaaa
+			</ui:insert>
+		</h:panelGroup>
+ 	</h:body>
+
+</html>

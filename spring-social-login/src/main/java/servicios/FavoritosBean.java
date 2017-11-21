@@ -10,7 +10,7 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class FavoritosBean {
 	
-	private List <String> imageURLs = new ArrayList();;
+	private List <String> imageURLs = new ArrayList<String>();;
 	
 	@PostConstruct
     public void init() {

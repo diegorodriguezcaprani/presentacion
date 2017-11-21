@@ -1,0 +1,37 @@
+.contenido {
+	background: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(https://i.imgur.com/xnh5x47.jpg);
+}
+.cantPuntuacionesContenido {
+	display: inline
+}
+
+.img-contenido-div {
+    width: 180px;
+    margin: 10px; 
+}
+
+.img-contenido-div img {
+    width: 300px;
+    height: auto;
+}
+
+.checked {
+    color: orange;
+}
+.rating {
+	z-index: 2;
+	display: inline;
+}
+
+.link-button:link, a:visited {
+    background-color: #f44336;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.link-button:hover, a:active {
+    background-color: red;
+}

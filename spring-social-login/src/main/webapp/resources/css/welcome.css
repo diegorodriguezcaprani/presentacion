@@ -1,78 +1,105 @@
-.divC {
-		float: left;
-		background-color:#b9090b;
-		height: 100%;
-		width: 30%;
-}
-
-table {
-	color: white;
-    border-collapse: collapse;
-}
-
-th, td {
-    border-bottom: 1px solid #ddd;
-    color: white;
-}
-
-.divContenidos {
-	height: 100%;
-	width: 70%;
-	float: left
-}
-.divContenidos1 {
-	margin-left: 10px;
-	margin-right: 10px;
-	float: left;
-	height: 100%
-}
-.divContenidos2 {
-	margin-left: 10px;
-	margin-right: 10px;
-	float: left;
-	height: 100%
-}
-.home-table {
-	margin-left: auto;
-    margin-right: auto;
-}
 .popular {
 	color:white;
 }
 .interesante {
 	color:white;
 }
-input[type=text] {
-    width: 130px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
-    background-image: url("#{resource['images:searchicon.png']}");
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    padding: 12px 20px 12px 40px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
+
+.home-header {
+	height:10%	
+}
+.dropdown1 {
+	display: inline;
+	float:left;
+	margin-right: 0.5%;
+}
+.dropdown2 {
+	display: inline;
+	float:left;
+	margin-left: 0.5%;
+}
+.dropdown-profile {
+	display: inline;
+	margin-left: 0.5%;
 }
 
-input[type=text]:focus {
-    width: 100%;
+.home-header form{
+	float:right;
 }
-.search-form {
-	display: inline-block;
+
+.divContenidos1 {
+	margin: 1%;
+	float: left;
+	height: 92%;
+	width: 48%;
 }
+.divContenidos1 h2 {
+	height: 2%;
+}
+.divContenidos2 {
+	margin: 1%;
+	float: left;
+	height: 92%;
+	width: 48%;
+}
+.divContenidos2 h2 {
+	height: 2%;
+}
+/************flex-box**************************************/
+
+.flex-container-home {
+	width: 95%;
+	height: 90%;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+}
+
+.flex-item-home {
+    width: 127px;
+    margin: 10px; 
+}
+
+.flex-item-home img {
+    width: 126px;
+    height: auto;
+}
+
+.flex-container-home1 {
+	width: 95%;
+	height: 90%;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+}
+
+.flex-item-home1 {
+    width: 127px;
+    margin: 10px; 
+}
+
+.flex-item-home1 img {
+    width: 126px;
+    height: auto;
+}
+
+
 
 /***dropdown****************************************/
 /* Dropdown Button */
 .dropbtn {
-    background-color: #4CAF50;
     color: white;
     padding: 16px;
     font-size: 16px;
     border: none;
     cursor: pointer;
+    height: 40px;
+}
+.background-button {
+	 background-color: silver;
+}
+.button-img {
+	border-radius: 50%;
 }
 
 /* Dropdown button on hover & focus */
