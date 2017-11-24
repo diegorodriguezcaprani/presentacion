@@ -2,9 +2,18 @@ package servicios;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 public class DatosContenido {
-	private String url;
+
+	private String empresa;
 	private String titulo;
+	private String url;
 	private String descripcion;
 	private int cantPuntuaciones;
 	private Double puntuacion;
@@ -14,8 +23,9 @@ public class DatosContenido {
 	private List<String> elenco;
 	private List<String> directores;
 	private List<DatosIdNombre> categorias;
-	private String tipoContenido;
+	private DatosTipoContenido tipoContenido;
 	private List<DatosAtributoContenido> atributos;
+	
 	
 	public String getUrl() {
 		return url;
@@ -83,10 +93,10 @@ public class DatosContenido {
 	public void setCategorias(List<DatosIdNombre> categorias) {
 		this.categorias = categorias;
 	}
-	public String getTipoContenido() {
+	public DatosTipoContenido getTipoContenido() {
 		return tipoContenido;
 	}
-	public void setTipoContenido(String tipoContenido) {
+	public void setTipoContenido(DatosTipoContenido tipoContenido) {
 		this.tipoContenido = tipoContenido;
 	}
 	public List<DatosAtributoContenido> getAtributos() {
@@ -95,12 +105,11 @@ public class DatosContenido {
 	public void setAtributos(List<DatosAtributoContenido> atributos) {
 		this.atributos = atributos;
 	}
-	public DatosContenido(String url,String titulo, String descripcion, int cantPuntuaciones, Double puntuacion, boolean destacado,
+	public DatosContenido(String titulo, String descripcion, int cantPuntuaciones, Double puntuacion, boolean destacado,
 			boolean bloqueado, String portada, List<String> elenco, List<String> directores, List<DatosIdNombre> categorias,
-			String tipoContenido, List<DatosAtributoContenido> atributos) {
-		
+			DatosTipoContenido tipoContenido, List<DatosAtributoContenido> atributos, String url, String empresa) {
+		super();
 		this.titulo = titulo;
-		this.url= url;
 		this.descripcion = descripcion;
 		this.cantPuntuaciones = cantPuntuaciones;
 		this.puntuacion = puntuacion;
@@ -112,13 +121,15 @@ public class DatosContenido {
 		this.categorias = categorias;
 		this.tipoContenido = tipoContenido;
 		this.atributos = atributos;
+		this.url = url;
+		this.empresa = empresa;
 	}
 	public DatosContenido() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public DatosContenido(String titulo, String descripcion, String portada, List<String> elenco,
-			List<String> directores, List<DatosIdNombre> categorias, String tipoContenido, List<DatosAtributoContenido> atributos) {
+			List<String> directores, List<DatosIdNombre> categorias, DatosTipoContenido tipoContenido, List<DatosAtributoContenido> atributos, String url, String empresa) {
 		super();
 		this.titulo = titulo;
 		this.descripcion = descripcion;
@@ -128,6 +139,14 @@ public class DatosContenido {
 		this.categorias = categorias;
 		this.tipoContenido = tipoContenido;
 		this.atributos = atributos;
+		this.url = url;
+		this.empresa = empresa;
+	}
+	public String getEmpresa() {
+		return empresa;
+	}
+	public void setEmpresa(String empresa) {
+		this.empresa = empresa;
 	}
 	
 	

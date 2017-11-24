@@ -39,25 +39,29 @@
 					    <p:column headerText="Descripcion" filterBy="#{contenido.descripcion}" filterMatchMode="contains" sortBy="#{contenido.descripcion}">
 					        <h:outputText value="#{contenido.descripcion}" />
 					    </p:column>
-					 	<!-- 
-					    <p:column headerText="#Puntuaciones" filterBy="#{contenido.cantPuntuaciones}" filterMatchMode="contains" sortBy="#{contenido.cantPuntaciones}">
-					        <h:outputText value="#{contenido.cantPuntuaciones}" />
+					 	 
+					    <p:column headerText="url contenido" filterBy="#{contenido.url}" filterMatchMode="contains" sortBy="#{contenido.url}">
+					        <a href="#{contenido.url}">
+						        <h:outputText value="#{contenido.url}" />  
+						    </a>
 					    </p:column>
-					 	 -->
-					    <p:column headerText="Puntuacion" filterBy="#{contenido.puntuacion}" filterMatchMode="contains" sortBy="#{contenido.puntuacion}">
+					 	
+					    <p:column headerText="Puntuacion" filterBy="#{contenido.puntuacion}" filterMatchMode="contains" sortBy="#{contenido.puntuacion}" style="width: 2cm;">
 					        <h:outputText value="#{contenido.puntuacion}" />
 					    </p:column>
 			
-						<p:column headerText="Destacado" filterBy="#{contenido.destacado}" filterMatchMode="contains" sortBy="#{contenido.destacado}">
+						<p:column headerText="Destacado" filterBy="#{contenido.destacado}" filterMatchMode="contains" sortBy="#{contenido.destacado}" style="width: 1.5cm;">
 					        <h:outputText value="#{contenido.destacado}" />
 					    </p:column>
 					    
-					    <p:column headerText="Bloqueado" filterBy="#{contenido.bloqueado}" filterMatchMode="contains" sortBy="#{contenido.bloqueado}">
+					    <p:column headerText="Bloqueado" filterBy="#{contenido.bloqueado}" filterMatchMode="contains" sortBy="#{contenido.bloqueado}" style="width: 1.5cm;">
 					        <h:outputText value="#{contenido.bloqueado}" />
 					    </p:column>
 					    
-				        <p:column headerText="Portada" filterBy="#{contenido.portada}" filterMatchMode="contains" sortBy="#{contenido.portada}">
-					        <h:outputText value="#{contenido.portada}" />
+				        <p:column headerText="Portada" filterBy="#{contenido.portada}" filterMatchMode="contains" sortBy="#{contenido.portada}" style="width: 2cm;">
+					        <a href="#{contenido.portada}">
+						        <h:outputText value="portada" />  
+						    </a>
 					    </p:column>
 					    
 					    <p:column style="width:42px;text-align: center">
@@ -103,7 +107,7 @@
 				                <h:outputText value="$#{contenidoView.selectedCont.categorias}" />
 				                
 				                <h:outputText value="Tipo Contenido" />
-				                <h:outputText value="$#{contenidoView.selectedCont.tipoContenido}" />
+				                <h:outputText value="$#{contenidoView.selectedCont.tipoContenido.nombre}" />
 				                
 				            </p:panelGrid>
 				            <br/>

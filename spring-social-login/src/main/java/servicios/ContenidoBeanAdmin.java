@@ -24,13 +24,13 @@ public class ContenidoBeanAdmin {
 	private Contenido nuevoContenido;
 	
 	//private String URL_Back = "http://172.16.145.186:8080/ServidorTsi2-0.0.1-SNAPSHOT/contenido/contenidos/";
-	private String URL_Back = "http://localhost:8080/ServidorTsi2-0.0.1-SNAPSHOT";
+	private String URL_Back = "http://localhost:8080/ServidorTsi2";
 	
-	private Map<Integer,List<Categoria>> data = new HashMap<Integer, List<Categoria>>();
-	private Categoria categoria;
+	private Map<Integer,List<DatosIdNombre>> data = new HashMap<Integer, List<DatosIdNombre>>();
+	private DatosIdNombre categoria;
 	private String[] selectedCategorias;
-	private List<Categoria> categorias;
-	private Categoria selectedCate;
+	private List<DatosIdNombre> categorias;
+	private DatosIdNombre selectedCate;
 	
 	private String elencoi;
 	private List<String> elencos;
@@ -38,46 +38,57 @@ public class ContenidoBeanAdmin {
 	private List<String> directores;
 	
 	//CONTENIDOS
-	private Contenido selectedCont;
-	List<Contenido> contenidos;
-	List<Contenido> contenidoFiltrado;
-	private Contenido contenido;
+	private DatosContenido selectedCont;
+	List<DatosContenido> contenidos;
+	List<DatosContenido> contenidoFiltrado;
+	private DatosContenido contenido;
+	String nombre_tipocontenido;
 	
 	//TIPOS CONTENIDO
-	List<TipoContenido> tiposcontenido;
-	private TipoContenido tipo;
+	List<DatosTipoContenido> tiposcontenido;
+	private DatosTipoContenido tipo;
 	private String nombreTipoContenido;
 	private String atributosTipoContenido;
 	private String categoriasTipoContenido;
-	private TipoContenido selectedTipo;
+	private DatosTipoContenido selectedTipo;
 	
 	@PostConstruct
 	public void init(){
-		tipo = new TipoContenido();
-		selectedTipo = new TipoContenido();
-		contenido = new Contenido();
-		contenidos = new ArrayList<Contenido>();
+		tiposcontenido = new ArrayList<DatosTipoContenido>();
+		tipo = new DatosTipoContenido();
+		selectedTipo = new DatosTipoContenido();
+		contenido = new DatosContenido();
+		contenidos = new ArrayList<DatosContenido>();
 		
-		selectedCate = new Categoria();
-		categoria = new Categoria();
-		categorias  = new ArrayList<Categoria>();
-    	/*categorias.add(new Categoria(1,"USA"));
-    	categorias.add(new Categoria(2,"Germany"));
-    	categorias.add(new Categoria(3,"Brazil"));
-    	*/
+		selectedCate = new DatosIdNombre();
+		categoria = new DatosIdNombre();
+		categorias  = new ArrayList<DatosIdNombre>();
+
     	elencoi = null;
         elencos = new ArrayList<String>();
     	directori = null;
         directores = new ArrayList<String>();
+        nombre_tipocontenido=null;
 	}
 	
-	public boolean guardarContenido(){
+	public void guardarContenido(){
     	Client client = ClientBuilder.newClient();
     	System.out.println("El titulo es: "+contenido.getTitulo());
     	System.out.println("La descripcion es: "+contenido.getDescripcion());
     	System.out.println("El tipo es: "+contenido.getTipoContenido());
-    	contenido.setElenco(elencos);
-    	contenido.setDirectores(directores);
+    	System.out.println("El nombre del contenido es: "+this.nombre_tipocontenido);
+    	if (nombre_tipocontenido != null){
+	    	for (DatosTipoContenido dtc: this.tiposcontenido){
+	    		if (dtc.getNombre().equals(this.nombre_tipocontenido)){
+	    			contenido.setTipoContenido(dtc);
+	    			break;
+	    		}
+	    	}
+    	}
+    	contenido.setEmpresa("Fox");
+    	//contenido.setUrl("hola");
+    	//contenido.setElenco(elencos);
+    	//contenido.setDirectores(directores);
     	Response postResponse = client
     	.target(URL_Back + "/contenido/agregarContenido")
     	.request().post(Entity.json(contenido));
@@ -87,19 +98,22 @@ public class ContenidoBeanAdmin {
     	}
     	else{
     		System.out.println("Se consumio correctamente mediante post.");
-    		contenido = new Contenido();
+    		contenido = new DatosContenido();
     		elencos = new ArrayList<String>();
     		directores = new ArrayList<String>();
-    		reset("header-contenido");
+    		//reset("header-contenido");
     	}
-    	
-		return true;
 	}
 	
-	public List<String> toList(String[] array){
+	public String salvar(){
+		guardarContenido();
+		return "subir";
+	}
+	
+	public List<String> toList(List<DatosTipoContenido> array){
 		List<String> lista = new ArrayList<String>();
-		for(String c: array){
-			lista.add(c);
+		for(DatosTipoContenido c: array){
+			lista.add(c.getNombre());
 		}
 		return lista;
 	}
@@ -126,7 +140,7 @@ public class ContenidoBeanAdmin {
     	}
     	else{
     		System.out.println("Se consumio correctamente mediante post.");
-    		tipo = new TipoContenido();
+    		tipo = new DatosTipoContenido();
     		reset("nuevodialogo");
     	}
     	
@@ -143,7 +157,7 @@ public class ContenidoBeanAdmin {
     		System.out.println("Error al consumir mediante post.");
     	}
     	else{
-    		categoria = new Categoria();
+    		categoria = new DatosIdNombre();
     		reset("nuevodialogo");
     		System.out.println("Se consumio correctamente mediante post.");
     	}
@@ -151,34 +165,39 @@ public class ContenidoBeanAdmin {
 		return true;
 	}
 	
-	public List<Contenido> obtenerContenidos(){
+	public List<DatosContenido> obtenerContenidos(){
 		Client client = ClientBuilder.newClient();
-    	List<Contenido> contenidos = client
-    	.target(URL_Back+"/contenido/obtenerContenidos")
-    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Contenido>>() {});
+    	List<DatosContenido> contenidos = client
+    	.target(URL_Back+"/contenido/Mantel/obtenerContenidos")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosContenido>>() {});
 			this.contenidos = contenidos;
 		return contenidos;
 	}
 	
-	public List<TipoContenido> obtenerTiposContenidos(){
+	public List<DatosTipoContenido> obtenerTiposContenidos(){
 		Client client = ClientBuilder.newClient();
-    	List<TipoContenido> tiposcontenidos = client
+    	List<DatosTipoContenido> tiposcontenidos = client
     	.target(URL_Back+"/contenido/tipoContenido")
-    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<TipoContenido>>() {});
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosTipoContenido>>() {});
 			this.tiposcontenido = tiposcontenidos;
-		return tiposcontenidos;
+		return tiposcontenido;
 	}
 	
-	public List<Categoria> obtenerCategorias(){
+	public List<String> obtenerStringTiposContenidos(){
+		return toList(obtenerTiposContenidos());
+	}
+	
+	
+	public List<DatosIdNombre> obtenerCategorias(){
 		Client client = ClientBuilder.newClient();
-    	List<Categoria> categorias = client
+    	List<DatosIdNombre> categorias = client
     	.target(URL_Back+"/contenido/getCategorias")
-    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Categoria>>() {});
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosIdNombre>>() {});
 		this.categorias = categorias;
 		return categorias;
 	}
 	
-	public List<Categoria> obtenerCategoriasPorTipo(String nombTipo){
+	public List<DatosIdNombre> obtenerCategoriasPorTipo(String nombTipo){
 		Client client = ClientBuilder.newClient();
 		System.out.println(URL_Back +"/contenido/getCategoriasTipoContenido");
 		System.out.println("Paso: "+Entity.text(nombTipo));
@@ -186,7 +205,7 @@ public class ContenidoBeanAdmin {
 		    	.target(URL_Back +"/contenido/getCategoriasTipoContenido")
 		    	.request().post(Entity.text(nombTipo));
 		System.out.println("Entity respuesta: "+postResponse.getEntity());
-		List<Categoria> categorias = postResponse.readEntity(new GenericType<List<Categoria>>() {});
+		List<DatosIdNombre> categorias = postResponse.readEntity(new GenericType<List<DatosIdNombre>>() {});
 		if (!categorias.isEmpty()){
 			this.categorias = categorias;
 		}
@@ -213,10 +232,10 @@ public class ContenidoBeanAdmin {
 	
 	public void onTipoChange() {
         if((contenido.getTipoContenido() !=null) && (!contenido.getTipoContenido().equals(""))){
-            categorias = obtenerCategoriasPorTipo(contenido.getTipoContenido());
+            categorias = contenido.getTipoContenido().getCategorias();
         }
         else{
-            categorias = new ArrayList<Categoria>();
+            categorias = new ArrayList<DatosIdNombre>();
         }
     }
 	
@@ -232,19 +251,19 @@ public class ContenidoBeanAdmin {
 		this.nuevoContenido = nuevoContenido;
 	}
 
-	public Categoria getCategoria() {
+	public DatosIdNombre getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(Categoria categoria) {
+	public void setCategoria(DatosIdNombre categoria) {
 		this.categoria = categoria;
 	}
 
-	public List<Categoria> getCategorias() {
+	public List<DatosIdNombre> getCategorias() {
 		return categorias;
 	}
 
-	public void setCategorias(List<Categoria> categorias) {
+	public void setCategorias(List<DatosIdNombre> categorias) {
 		this.categorias = categorias;
 	}
 
@@ -280,67 +299,67 @@ public class ContenidoBeanAdmin {
 		this.directores = directores;
 	}
 
-	public List<Contenido> getContenidos() {
+	public List<DatosContenido> getContenidos() {
 		return contenidos;
 	}
 
-	public void setContenidos(List<Contenido> contenidos) {
+	public void setContenidos(List<DatosContenido> contenidos) {
 		this.contenidos = contenidos;
 	}
 
-	public Contenido getContenido() {
+	public DatosContenido getContenido() {
 		return contenido;
 	}
 
-	public void setContenido(Contenido contenido) {
+	public void setContenido(DatosContenido contenido) {
 		this.contenido = contenido;
 	}
 
-	public List<Contenido> getContenidoFiltrado() {
+	public List<DatosContenido> getContenidoFiltrado() {
 		return contenidoFiltrado;
 	}
 
-	public void setContenidoFiltrado(List<Contenido> contenidoFiltrado) {
+	public void setContenidoFiltrado(List<DatosContenido> contenidoFiltrado) {
 		this.contenidoFiltrado = contenidoFiltrado;
 	}
 
-	public Contenido getSelectedCont() {
+	public DatosContenido getSelectedCont() {
 		return selectedCont;
 	}
 
-	public void setSelectedCont(Contenido selectedCont) {
+	public void setSelectedCont(DatosContenido selectedCont) {
 		this.selectedCont = selectedCont;
 	}
 
-	public List<TipoContenido> getTiposcontenido() {
+	public List<DatosTipoContenido> getTiposcontenido() {
 		return tiposcontenido;
 	}
 
-	public void setTiposcontenido(List<TipoContenido> tiposcontenido) {
+	public void setTiposcontenido(List<DatosTipoContenido> tiposcontenido) {
 		this.tiposcontenido = tiposcontenido;
 	}
 
-	public TipoContenido getTipo() {
+	public DatosTipoContenido getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(TipoContenido tipo) {
+	public void setTipo(DatosTipoContenido tipo) {
 		this.tipo = tipo;
 	}
 
-	public Categoria getSelectedCate() {
+	public DatosIdNombre getSelectedCate() {
 		return selectedCate;
 	}
 
-	public void setSelectedCate(Categoria selectedCate) {
+	public void setSelectedCate(DatosIdNombre selectedCate) {
 		this.selectedCate = selectedCate;
 	}
 
-	public TipoContenido getSelectedTipo() {
+	public DatosTipoContenido getSelectedTipo() {
 		return selectedTipo;
 	}
 
-	public void setSelectedTipo(TipoContenido selectedTipo) {
+	public void setSelectedTipo(DatosTipoContenido selectedTipo) {
 		this.selectedTipo = selectedTipo;
 	}
 	
@@ -384,6 +403,14 @@ public class ContenidoBeanAdmin {
 
 	public void setCategoriasTipoContenido(String categoriasTipoContenido) {
 		this.categoriasTipoContenido = categoriasTipoContenido;
+	}
+
+	public String getNombre_tipocontenido() {
+		return nombre_tipocontenido;
+	}
+
+	public void setNombre_tipocontenido(String nombre_tipocontenido) {
+		this.nombre_tipocontenido = nombre_tipocontenido;
 	}
 	
 	

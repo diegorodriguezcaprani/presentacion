@@ -1,9 +1,11 @@
 package servicios;
+
 import java.util.List;
 
 public class DatosTipoContenido {
 
 	private String nombre;
+	private boolean vivo;
 	private List<DatosIdNombre> categorias;
 	private List<DatosIdNombre> atributos;
 	
@@ -39,11 +41,12 @@ public class DatosTipoContenido {
 
 
 
-	public DatosTipoContenido(String nombre, List<DatosIdNombre> categorias, List<DatosIdNombre> atributos) {
+	public DatosTipoContenido(String nombre, List<DatosIdNombre> categorias, List<DatosIdNombre> atributos, boolean vivo) {
 		super();
 		this.nombre = nombre;
 		this.categorias = categorias;
 		this.atributos = atributos;
+		this.vivo = vivo;
 	}
 
 
@@ -53,6 +56,18 @@ public class DatosTipoContenido {
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+
+
+	public boolean isVivo() {
+		return vivo;
+	}
+
+
+
+	public void setVivo(boolean vivo) {
+		this.vivo = vivo;
 	}
 
 	

@@ -10,44 +10,44 @@
 	<ui:composition template="templates/template.xhtml">
 		<ui:define name="content">
 			<center>
-			<h:form id="form-contenido" style="margin-top: 1%;">
+			<h:form id="form-contenido">
 			
 				<p:growl id="msg" showDetail="true" life="3000" />
 		        <p:panel id="header-contenido" header="Crear un nuevo contenido" style="width: 50%;">
 					
-		            <h:panelGrid id="contenidoPanel" columns="3" cellpadding="7">
-		
-						<p:outputLabel for="titulo" value="Titulo:" />
-					    <p:inputText id="titulo" value="#{contenidoView.contenido.titulo}"
-		                     label="Titulo" style="width: 100%;">
-		                    <f:validateLength minimum="3" />
+		            <h:panelGrid id="contenidoPanel" columns="2" cellpadding="7">
+						<p:outputLabel for="titulo" value="Titulo:" style="width: 15%;"/>
+					    <p:inputText id="titulo" required="true" value="#{contenidoView.contenido.titulo}"
+		                     label="Titulo" style="width: 150%;">
 		                </p:inputText>
-					    <br/>
-					    <p:outputLabel for="descripcion" value="Descripción:" />
+					    
+					    <p:outputLabel for="descripcion" value="Descripción:" style="width: 150px;"/>
 				    	<p:inputText id="descripcion" value="#{contenidoView.contenido.descripcion}"
 		                    label="Descripcion" style="width: 100%;">
-		                    <f:validateLength minimum="3" />
 		                </p:inputText>
-		                <br/>
-		                <p:outputLabel for="portada" value="URL foto portada:" />
+		                
+		                <p:outputLabel for="portada" value="URL foto portada:" style="width: 150px;"/>
 					    <p:inputText id="portada" value="#{contenidoView.contenido.portada}"
 		                    label="Portada" style="width: 100%;">
-		                    <f:validateLength minimum="3" />
 		                </p:inputText>
-		                <br/>
+		            </h:panelGrid>
+		            
+		            <h:panelGrid id="contenidoPanel2" columns="4" cellpadding="7">
 		                <p:outputLabel for="tipocontenido" value="Tipo Contenido:" />
-				        <p:selectOneMenu id="tipocontenido" value="#{contenidoView.contenido.tipoContenido}" style="width:98%">
-				        	<p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" />
+				        <p:selectOneMenu id="tipocontenido" required="true" value="#{contenidoView.nombre_tipocontenido}" style="width:125px;">
+				        	<!-- <p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" /> -->
 				            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-				            <f:selectItems value="#{contenidoView.obtenerTiposContenidos()}" var="tipo" itemLabel="#{tipo.nombre}" itemValue="#{tipo.nombre}"/>
+				            <f:selectItems value="#{contenidoView.obtenerStringTiposContenidos()}"/>
 				        </p:selectOneMenu>
-		                <br/>
+				        
 		                <p:outputLabel for="categoria" value="Categoria: " />
-				       	<p:selectOneMenu id="categoria" value="#{contenidoView.selectedCate}" style="width:98%">
+				       	<p:selectOneMenu id="categoria" value="#{contenidoView.selectedCate}" style="width:125px;">
 				      		<f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
 				            <f:selectItems value="#{contenidoView.categorias}" var="cate" itemLabel="#{cate.nombre}" itemValue="#{cate}"/>
 				        </p:selectOneMenu>
-		                 <br/>
+				    </h:panelGrid>
+		            
+		            <h:panelGrid id="contenidoPanel3" columns="2" cellpadding="7">
 						<h:outputLabel value="Elenco:" for="txt_elenco" style="margin-right: -6px"></h:outputLabel>
 						<h:panelGrid id="panelElenco" columns="2" cellpadding="7" style="margin-left: -6px; width: 115%;">
 							<p:inputText id="txt_elenco" value="#{contenidoView.elencoi}" placeholder="Ingresar nombre" style="width: 100%;"/>
@@ -55,7 +55,7 @@
 				                <p:collector value="#{contenidoView.elencoi}" addTo="#{contenidoView.elencos}" unique="true"/>
 				            </p:commandButton>
 						</h:panelGrid>
-						<br/>
+						
 						<h:panelGroup />
 						<p:outputPanel id="int_elenco">
 			            	<p:dataTable value="#{contenidoView.elencos}" var="elencoi" id="elencotable" style="width: 103%;">
@@ -65,7 +65,6 @@
 			            	</p:dataTable>
 			            </p:outputPanel>
 
-						<br/>
 						<h:outputLabel value="Directores:" for="txt_directores"></h:outputLabel>
 						<h:panelGrid id="panelDirector" columns="2" cellpadding="7" style="margin-left: -6px; width: 115%;">
 							<p:inputText id="txt_directores" value="#{contenidoView.directori}" placeholder="Ingresar nombre" style="width: 100%;"/>
@@ -73,7 +72,7 @@
 				                <p:collector value="#{contenidoView.directori}" addTo="#{contenidoView.directores}" unique="true"/>
 				            </p:commandButton>
 						</h:panelGrid>
-						<br/>
+						
 						<h:panelGroup />
 						<p:outputPanel id="int_directores">
 			            	<p:dataTable value="#{contenidoView.directores}" var="directori" id="directortable" style="width: 103%;">
@@ -84,12 +83,12 @@
 			            </p:outputPanel>
 						
 					</h:panelGrid>
-					<!-- SUBIR CONTENIDO -->
+					
+					<!-- SUBIR CONTENIDO  
 					<h:panelGrid id="chooseFile" columns="1" cellpadding="7" style="margin-left: -6px; width: 115%;">
-						<input type="file" id="file-chooser" style="width: 150%;"
-						onclick="llamarJavascriptPostRendering()"/>
+						<input type="file" id="file" name="file" accept="video/mp4" />
            				<div id="results"></div>
-					</h:panelGrid>
+					</h:panelGrid> -->
 					
 					
 					
@@ -98,64 +97,40 @@
 				     <button id="upload-button">Subir contenido</button> 
 				    <div id="results"></div>-->
 				    
-				    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
-					<script type="text/javascript">
-						function llamarJavascriptPostRendering(){
-						AWS.config.region = 'us-east-1';
-					
-					    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-					        IdentityPoolId: 'us-east-1:7f3d22e5-92e7-437f-bf32-ebf76ec926da'
+	   					<script type="text/javascript">
+					    var player;
+					    $(document).ready(function() {
+					    	
+					    	$("#upload").click(function() {
+					    		var fileValue = $("#file").val();
+					    		if(!fileValue || fileValue.indexOf('.mp4', fileValue.length - 4) == -1) {
+					    			alert('Invalid file type or no file selected. Only mp4 files allowed');
+					    			return false;
+					    		}
+					    		 
+			    				return true;
+					    	});
 					    });
-					
-					    AWS.config.credentials.get(function(err) {
-					        if (err) alert(err);
-					        console.log(AWS.config.credentials);
-					    });
-					
-					    var bucketName = 'tsi2.testbucket';
-					    var bucket = new AWS.S3({
-					        params: {
-					            Bucket: bucketName
-					        }
-					    });
-					
-					    var fileChooser = document.getElementById('file-chooser');
-					    var button = document.getElementById('form-contenido:upload-button');
-					    button.addEventListener('click', function() {
-					
-					        var file = fileChooser.files[0];
-					
-					        if (file) {
-					
-					            var objKey = 'Fox/' + file.name;
-					            var params = {
-					                Key: objKey,
-					                ContentType: file.type,
-					                Body: file,
-					                ACL: 'public-read'
-					            };
-					
-					            bucket.putObject(params, function(err, data) {
-					                if (err) {
-					                    alert("fallo la subida!!");
-					                } else {
-					                	alert("funco la subida!!");
-										$('#form-contenido\\:hdnBtn').click();
-					                }
-					            });
-					        } else {
-					            alert('Nothing to upload.');
-					        }
-					    }, false); }
-					    
-	   				</script>
+					    function uploadEnded(){
+					    	alert('video subido con exito');
+					    }
+					 </script>
 					<!-- FIN SUBIR CONTENIDO -->
 					
 					<!-- id="upload-button" -->
-					<p:commandButton id="upload-button" value="Guardar" style="width: 100%; background-color: #9ACD32;" />
-	 					<h:commandButton id="hdnBtn" actionListener="#{contenidoView.guardarContenido()}" style="display: none;" />
+					<p:commandButton value="Siguiente" action="#{contenidoView.salvar()}" style="width: 100%; background-color: #9ACD32;" />
+	 				<!-- <input type="submit" onclick="#{contenidoView.guardarContenido()}" value="Guardar"/> -->
+	 				<!-- <input type="submit" id="upload" value="Guardar" /> -->
+	 					
+	 				<!-- <input type="submit" id="upload" value="Upload" action="/spring-social-login/videoEnArchivo" onclick="#{contenidoView.guardarContenido()}" />-->	
 				</p:panel>
 			</h:form>
+			 <!-- <form id="form-load" method="post" enctype="multipart/form-data" action="/spring-social-login/videoEnArchivo" onsubmit="uploadEnded()" >
+				<h5>Subir contenido:</h5>
+				<input type="file" id="file" name="file" accept="video/mp4" /> <input
+					type="submit" id="upload" value="Subir" />
+				<p:inputText id="nombre_tipocontenido" value="#{contenidoView.nombre_tipocontenido}" />
+			</form> -->
 			</center>
 		</ui:define>
 	</ui:composition>

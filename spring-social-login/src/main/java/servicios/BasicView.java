@@ -30,45 +30,45 @@ import org.primefaces.model.chart.LineChartSeries;
 @ViewScoped
 public class BasicView implements Serializable {
 	
-	private String URL_Back = "http://localhost:8080/ServidorTsi2-0.0.1-SNAPSHOT";
+	private String URL_Back = "http://localhost:8080/ServidorTsi2";
 	
-	private List<Usuario> usrs;
+	private List<DatosCliente> usrs;
 	
-	private List<Usuario> filteredUsrs;
+	private List<DatosCliente> filteredUsrs;
 	
-	private List<Usuario> selectedUsrs;
+	private List<DatosCliente> selectedUsrs;
  
     @PostConstruct
     public void init() {
-    	usrs = new ArrayList<Usuario>();
+    	usrs = new ArrayList<DatosCliente>();
     	
     }
      
-    public List<Usuario> retornarUsuarios(){
+    public List<DatosCliente> retornarUsuarios(){
     	Client client = ClientBuilder.newClient();
-    	List<Usuario> usuarios = client
-    	.target(URL_Back+"/cliente/obtenerClientes")
-    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Usuario>>() {});
+    	List<DatosCliente> usuarios = client
+    	.target(URL_Back+"/cliente/Mantel/obtenerClientes")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosCliente>>() {});
 		return usuarios;
     }
     
-    public List<Usuario> getUsrs() {
+    public List<DatosCliente> getUsrs() {
         return usrs;
     }
 
-	public List<Usuario> getFilteredUsrs() {
+	public List<DatosCliente> getFilteredUsrs() {
 		return filteredUsrs;
 	}
 
-	public void setFilteredUsrs(List<Usuario> filteredUsrs) {
+	public void setFilteredUsrs(List<DatosCliente> filteredUsrs) {
 		this.filteredUsrs = filteredUsrs;
 	}
     
-	public List<Usuario> getSelectedUsrs() {
+	public List<DatosCliente> getSelectedUsrs() {
 		return selectedUsrs;
 	}
 
-	public void setSelectedUsrs(List<Usuario> selectedUsrs) {
+	public void setSelectedUsrs(List<DatosCliente> selectedUsrs) {
 		this.selectedUsrs = selectedUsrs;
 	}
 	

@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<script type="text/javascript">
+					    var player;
+					    $(document).ready(function() {
+					    	
+					    	$("#upload").click(function() {
+					    		var fileValue = $("#file").val();
+					    		if(!fileValue || fileValue.indexOf('.mp4', fileValue.length - 4) == -1) {
+					    			alert('Invalid file type or no file selected. Only mp4 files allowed');
+					    			return false;
+					    		}
+					    		 
+			    				return true;
+					    	});
+					    });
+					    function uploadEnded(){
+					    	alert('video subido con exito');
+					    }
+					 </script>
+</h:head> 
+<h:body> 
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+			<center>
+			<form id="form-load" method="post" enctype="multipart/form-data" action="/spring-social-login/videoEnArchivo" onsubmit="uploadEnded()" >
+				<p:panel header="Subir contenido">
+					<p:outputLabel value="#{contenidoView.contenido.titulo}:"/>
+					<input type="file" id="file" name="file" accept="video/mp4" /> <input
+						type="submit" id="upload" value="Guardar" />
+				</p:panel>
+			</form>
+			</center>
+		</ui:define>
+	</ui:composition>
+</h:body> 
+</html>

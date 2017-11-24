@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -36,7 +37,7 @@ public class VideoFilePlayerController {
 
 	@Autowired
     private UserRepository userRepository;
-	private String videoLocation = "/home/alejandro/presentacion/spring-social-login/src/main/webapp/resources/videos";
+	private String videoLocation = "C:\\Users\\toshiba\\git\\presentacion\\spring-social-login\\src\\main\\webapp\\resources\\videos";
 
 	private ConcurrentHashMap<String, File> videos = new ConcurrentHashMap<String, File>();
 
