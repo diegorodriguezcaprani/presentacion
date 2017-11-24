@@ -14,7 +14,7 @@
 		<ui:define name="content">
 			<h:outputStylesheet library="css" name="main.css" />
 			<h:outputStylesheet library="css" name="contenido.css" />
-			<div class= "divContenidos contenido">
+			<div class= "divContenidos contenido" style= " background: linear-gradient(rgba(255,255,255,.6), rgba(0,0,0,1)), url(#{contenidoBean.url})">
 				<h1 class= "nombreContenido">#{contenidoBean.id}</h1> 
 				<h2 class= "cantPuntuacionesContenido">#{contenidoBean.cantPuntuaciones}</h2> 
 	
@@ -31,15 +31,26 @@
 					<img src= "#{contenidoBean.url}"></img>
 				</div>
 				<h:panelGroup rendered="#{!contenidoBean.enVivo}">
-					<div>
-						<a class= "link-button" href="verContenido.xhtml?id=#{contenidoBean.id}&amp;urlvideo=#{contenidoBean.urlvideo}">Ver ahora <i class="fa fa-play-circle"></i></a>
-					</div>
+				<div>
+					<a class= "link-button" href="player.xhtml?enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}">Ver ahora <i class="fa fa-play-circle"></i></a>
+				</div>
 				</h:panelGroup>
 				<h:panelGroup rendered="#{contenidoBean.enVivo}">
 					<div>
-						<a class= "link-button" href="player.xhtml?id=#{contenidoBean.id}">Ver ahora <i class="fa fa-play-circle"></i></a>
+						<a class= "link-button" href="player.xhtml?>enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}">Ver ahora <i class="fa fa-play-circle"></i></a>
 					</div>
 				</h:panelGroup>
+				
+					<h:form id="form">
+					 
+					  <h:commandLink id="btnFavourite"
+   						 action="#{homeBean.addToFavourite}" styleClass="btn btn-default">
+   						  <f:param name="idContenidoFavorito" value="#{contenidoBean.id}" />
+    						<i class="fa fa-heart"  style="color:white;"></i> Añadir a Favoritos
+					  </h:commandLink>
+				
+					</h:form>
+				
 			</div>
 		
 		</ui:define>
