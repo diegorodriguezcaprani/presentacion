@@ -22,13 +22,15 @@
 	 				<input class="input" type="text" name="search" placeholder="Search.."> </input>
 			</form>
 	   	 </header>
-	   	 <div class="flex-container">
-		   	 <ui:repeat var="o" value="#{favoritosBean.imageURLs}" >
-		    	<div class="flex-item">
-	        		<img src= "#{o}"></img>
-	   			</div>	
-		    </ui:repeat>
-		 </div>
+	   	 <div class="flex-container-home">
+			   	 <ui:repeat var="o" value="#{favoritosBean.contenidosFavoritos}" >
+			    	<div class="flex-item-home">
+			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}&amp;urlvideo=#{o.url}">
+		        			<img src= "#{o.portada}"></img>
+				  		 </a>
+		   			</div>	
+			    </ui:repeat>
+			 </div>
     </div>
     </ui:define>
 	</ui:composition>

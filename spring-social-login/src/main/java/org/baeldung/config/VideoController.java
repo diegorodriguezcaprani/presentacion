@@ -58,7 +58,7 @@ public class VideoController {
 			throws MalformedURLException, IOException {
 		File videoFile = videos.get(video);
 		//final InputStream videoFileStream = new FileInputStream(videoFile);
-		final InputStream videoFileStream = new URL("http://192.168.1.46:8080/").openStream();
+		final InputStream videoFileStream = new URL("http://172.20.10.3:8080/").openStream();
 		return (os) -> {
 			readAndWrite(videoFileStream, os);
 		};
