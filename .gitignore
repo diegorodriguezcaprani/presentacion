@@ -3,4 +3,4 @@ spring-social-login/.factorypath
 spring-social-login/.project
 spring-social-login/.settings/
 spring-social-login/.settings/*
-spring-social-login/.class/*
+spring-social-login/src/main/webapp/WEB-INF/classes/*.class
