@@ -4,13 +4,15 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 @ManagedBean(name="favoritosBean")
 @ViewScoped
 public class FavoritosBean {
-	
-	private List <String> imageURLs = new ArrayList<String>();;
+	@ManagedProperty(value = "#{homeBean.contenidosFavoritos}") //contenidos del beanhome
+	private List <DatosContenido> contenidosFavoritos;
+	private List <String> imageURLs = new ArrayList<String>();
 	
 	@PostConstruct
     public void init() {
@@ -29,6 +31,15 @@ public class FavoritosBean {
 
 	public FavoritosBean() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	
+	public List<DatosContenido> getContenidosFavoritos() {
+		return contenidosFavoritos;
+	}
+
+	public void setContenidosFavoritos(List<DatosContenido> contenidosFavoritos) {
+		this.contenidosFavoritos = contenidosFavoritos;
 	}
 
 	public List<String> getImageURLs() {

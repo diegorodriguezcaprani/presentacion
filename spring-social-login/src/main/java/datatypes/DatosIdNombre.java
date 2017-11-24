@@ -1,4 +1,4 @@
-package servicios;
+package datatypes;
 
 public class DatosIdNombre {
 

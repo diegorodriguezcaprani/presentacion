@@ -1,6 +1,6 @@
-package servicios;
+package datatypes;
 
-public class DatosIdNombre {
+public class DatosAtributoContenido {
 
 	private int id;
 	private String nombre;
@@ -16,13 +16,13 @@ public class DatosIdNombre {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public DatosIdNombre(int id, String nombre) {
+	public DatosAtributoContenido(int id, String nombre) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 	}
 	
-	public DatosIdNombre() {
+	public DatosAtributoContenido() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

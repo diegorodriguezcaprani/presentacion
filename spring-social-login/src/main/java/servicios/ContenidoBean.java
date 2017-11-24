@@ -9,6 +9,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import datatypes.DatosContenido;
+import datatypes.DatosIdNombre;
 
 @ManagedBean(name="contenidoBean")
 @RequestScoped
@@ -59,6 +61,7 @@ public class ContenidoBean {
 					this.categorias= contenido.getCategorias();
 					this.bloqueado= contenido.isBloqueado();
 					this.destacado= contenido.isDestacado();
+					this.enVivo= contenido.getTipoContenido().isVivo();
 			   }
 			}
 	}
