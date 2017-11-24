@@ -1,0 +1,27 @@
+.divContenidos header h2{
+	margin: 1% 17% 1% 40%;
+	color: white;
+}
+
+.flex-container {
+	width: 70%;
+	height: 90%;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+}
+
+.flex-item {
+    width: 180px;
+    margin: 10px; 
+}
+
+.flex-item img {
+    width: 180px;
+    height: auto;
+}
+
+.Mis-favoritos {
+	display: inline;
+    color: white;
+}
