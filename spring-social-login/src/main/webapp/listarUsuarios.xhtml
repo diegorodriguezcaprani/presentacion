@@ -12,7 +12,7 @@
 	<ui:composition template="templates/template.xhtml">
 		<ui:define name="content">
 					<h:form>
-					<p:dataTable var="usr" value="#{dtBasicView.retornarUsuarios()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="usrsTable"
+					<p:dataTable id="usrTable" var="usr" value="#{dtBasicView.retornarUsuarios()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="usrsTable"
 			                 emptyMessage="No users found with given criteria" filteredValue="#{dtBasicView.filteredUsrs}" rowKey="#{usr.id}">
 					    
 					    <f:facet name="header">
@@ -56,8 +56,9 @@
 					    </p:column>
 					    
 					    <p:column style="width: 5%;">
-					    	<p:commandButton icon="ui-icon-transferthick-e-w">
-					    	</p:commandButton>
+					    	<p:commandButton update="usrTable" oncomplete="#{dtBasicView.changeState()}" icon="ui-icon-transferthick-e-w" title="View">
+				                <f:setPropertyActionListener value="#{usr}" target="#{dtBasicView.usuarioSeleccionado}" />
+				            </p:commandButton>
 					    </p:column>
 					    
 					</p:dataTable>

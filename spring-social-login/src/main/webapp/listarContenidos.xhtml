@@ -21,7 +21,7 @@
 	<ui:composition template="templates/template.xhtml">
 		<ui:define name="content">
 					<h:form id="form">
-					<p:dataTable var="contenido" value="#{contenidoView.obtenerContenidos()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="contTable"
+					<p:dataTable id="contTable" var="contenido" value="#{contenidoView.obtenerContenidos()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="contTable"
 			                 emptyMessage="No users found with given criteria" filteredValue="#{contenidoView.contenidoFiltrado}" rowStyleClass="#{contenido.puntuacion le 5 ? 'colored' : 'colored'}" >
 					    
 					    <f:facet name="header">
@@ -64,9 +64,12 @@
 						    </a>
 					    </p:column>
 					    
-					    <p:column style="width:42px;text-align: center">
+					    <p:column style="width:10%;text-align: center">
 				             <p:commandButton update=":form:contDetail" oncomplete="PF('contDialog').show()" icon="ui-icon-search" title="View">
 				                <f:setPropertyActionListener value="#{contenido}" target="#{contenidoView.selectedCont}" />
+				            </p:commandButton>
+				            <p:commandButton update="contTable" action="#{contenidoView.changeState()}" icon="ui-icon-transferthick-e-w" title="View">
+				                <f:setPropertyActionListener value="#{usr}" target="#{contenidoView.selectedCont}" />
 				            </p:commandButton>
 				        </p:column>
 					    
@@ -86,28 +89,28 @@
 				                <h:outputText value="#{contenidoView.selectedCont.puntuacion}"/>
 				 
 				                <h:outputText value="Bloqueado" />
-				                <h:outputText value="$#{contenidoView.selectedCont.bloqueado}" />
+				                <h:outputText value="#{contenidoView.selectedCont.bloqueado}" />
 				                
 				                <h:outputText value="Destacado" />
-				                <h:outputText value="$#{contenidoView.selectedCont.destacado}" />
+				                <h:outputText value="#{contenidoView.selectedCont.destacado}" />
 				                
 				                <h:outputText value="Portada" />
-				                <h:outputText value="$#{contenidoView.selectedCont.portada}" />
+				                <h:outputText value="#{contenidoView.selectedCont.portada}" />
 				                
 				                <h:outputText value="# Puntuaciones" />
-				                <h:outputText value="$#{contenidoView.selectedCont.cantPuntuaciones}" />
+				                <h:outputText value="#{contenidoView.selectedCont.cantPuntuaciones}" />
 				                
 				                <h:outputText value="Elenco" />
-				                <h:outputText value="$#{contenidoView.selectedCont.elenco}" />
+				                <h:outputText value="#{contenidoView.selectedCont.elenco}" />
 				                
 				                <h:outputText value="Directores" />
-				                <h:outputText value="$#{contenidoView.selectedCont.directores}" />
+				                <h:outputText value="#{contenidoView.selectedCont.directores}" />
 				                
 				                <h:outputText value="Categoria" />
-				                <h:outputText value="$#{contenidoView.selectedCont.categorias}" />
+				                <h:outputText value="#{contenidoView.selectedCont.categorias}" />
 				                
 				                <h:outputText value="Tipo Contenido" />
-				                <h:outputText value="$#{contenidoView.selectedCont.tipoContenido.nombre}" />
+				                <h:outputText value="#{contenidoView.selectedCont.tipoContenido.nombre}" />
 				                
 				            </p:panelGrid>
 				            <br/>

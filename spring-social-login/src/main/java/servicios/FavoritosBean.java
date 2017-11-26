@@ -7,6 +7,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import datatypes.DatosContenido;
+
 @ManagedBean(name="favoritosBean")
 @ViewScoped
 public class FavoritosBean {

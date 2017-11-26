@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -17,14 +18,20 @@ import javax.ws.rs.core.Response;
 
 import org.primefaces.context.RequestContext;
 
+import datatypes.DatosContenido;
+import datatypes.DatosIdNombre;
+import datatypes.DatosTipoContenido;
+
 
 @ManagedBean(name="contenidoView")
 @ViewScoped
 public class ContenidoBeanAdmin {
-	private Contenido nuevoContenido;
 	
-	//private String URL_Back = "http://172.16.145.186:8080/ServidorTsi2-0.0.1-SNAPSHOT/contenido/contenidos/";
-	private String URL_Back = "http://localhost:8080/ServidorTsi2";
+	@ManagedProperty(value = "#{mainBean.URL_Back}")
+	private String URL_Back;
+	
+	@ManagedProperty(value = "#{mainBean.nombreEmpresa}")
+	private String nombreEmpresa;
 	
 	private Map<Integer,List<DatosIdNombre>> data = new HashMap<Integer, List<DatosIdNombre>>();
 	private DatosIdNombre categoria;
@@ -54,6 +61,8 @@ public class ContenidoBeanAdmin {
 	
 	@PostConstruct
 	public void init(){
+		System.out.println("La empresa es: "+nombreEmpresa);
+		
 		tiposcontenido = new ArrayList<DatosTipoContenido>();
 		tipo = new DatosTipoContenido();
 		selectedTipo = new DatosTipoContenido();
@@ -146,6 +155,15 @@ public class ContenidoBeanAdmin {
     	
 		return true;
 	}
+	
+	public void changeState(){
+    	boolean state = selectedCont.isBloqueado();
+    	selectedCont.setBloqueado(!state);
+    	Client client = ClientBuilder.newClient();
+    	Response postResponse = client
+    	.target(URL_Back +"/contenido/bloquear")
+    	.request().post(Entity.json(selectedCont));
+    }
 	
 	public boolean guardarCategoria(){
     	Client client = ClientBuilder.newClient();
@@ -242,14 +260,6 @@ public class ContenidoBeanAdmin {
 	public void reset(String lugar) {
         RequestContext.getCurrentInstance().reset(lugar);
     }
-	
-	public Contenido getNuevoContenido() {
-		return nuevoContenido;
-	}
-
-	public void setNuevoContenido(Contenido nuevoContenido) {
-		this.nuevoContenido = nuevoContenido;
-	}
 
 	public DatosIdNombre getCategoria() {
 		return categoria;
@@ -363,10 +373,6 @@ public class ContenidoBeanAdmin {
 		this.selectedTipo = selectedTipo;
 	}
 	
-	public void seleccionarTipoContenido(TipoContenido tipocont){
-		this.nombreTipoContenido = tipocont.getNombre();
-	}
-	
 	public void updateTipoContenido(){
 		this.tipo.setNombre(this.nombreTipoContenido);
 		//this.tipo.setAtributos(Arrays.asList(this.atributosTipoContenido));
@@ -411,6 +417,22 @@ public class ContenidoBeanAdmin {
 
 	public void setNombre_tipocontenido(String nombre_tipocontenido) {
 		this.nombre_tipocontenido = nombre_tipocontenido;
+	}
+
+	public String getURL_Back() {
+		return URL_Back;
+	}
+
+	public void setURL_Back(String uRL_Back) {
+		URL_Back = uRL_Back;
+	}
+
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
 	}
 	
 	

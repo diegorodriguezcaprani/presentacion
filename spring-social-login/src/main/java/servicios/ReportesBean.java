@@ -2,6 +2,7 @@ package servicios;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.chart.Axis;
@@ -14,7 +15,11 @@ import org.primefaces.model.chart.LineChartSeries;
 @ManagedBean(name="reportesView")
 @ViewScoped
 public class ReportesBean {
-	private String URL_Back = "http://localhost:8080/ServidorTsi2-0.0.1-SNAPSHOT/";
+	@ManagedProperty(value = "#{mainBean.URL_Back}")
+	private String URL_Back;
+	
+	@ManagedProperty(value = "#{mainBean.nombreEmpresa}")
+	private String nombreEmpresa;
 	
 	private LineChartModel zoomModel;
 	
@@ -121,5 +126,22 @@ public class ReportesBean {
         yAxis.setMin(0);
         yAxis.setMax(200);
     }
+
+	public String getURL_Back() {
+		return URL_Back;
+	}
+
+	public void setURL_Back(String uRL_Back) {
+		URL_Back = uRL_Back;
+	}
+
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
+	}
 	
+    
 }
