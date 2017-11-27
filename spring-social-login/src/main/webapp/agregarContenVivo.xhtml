@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+<h:body>
+	<ui:composition template="templates/template.xhtml">
+		<ui:define name="content">
+			<center>
+			<h:form id="form-contenido">
+			
+				<p:growl id="msg" showDetail="true" life="3000" />
+		        <p:panel id="header-contenido" header="Crear contenido en vivo" style="width: 50%;">
+					
+		            <h:panelGrid id="contenidoPanel" columns="2" cellpadding="7">
+						<p:outputLabel for="titulo" value="Titulo:" style="width: 15%;"/>
+					    <p:inputText id="titulo" required="true" value="#{contenidoView.contenido.titulo}"
+		                     label="Titulo" style="width: 150%;">
+		                </p:inputText>
+					    
+					    <p:outputLabel for="descripcion" value="Descripción:" style="width: 150px;"/>
+				    	<p:inputText id="descripcion" value="#{contenidoView.contenido.descripcion}"
+		                    label="Descripcion" style="width: 100%;">
+		                </p:inputText>
+		                
+		                <p:outputLabel for="portada" value="URL foto portada:" style="width: 150px;"/>
+					    <p:inputText id="portada" value="#{contenidoView.contenido.portada}"
+		                    label="Portada" style="width: 100%;">
+		                </p:inputText>
+		            </h:panelGrid>
+		            
+		            <h:panelGrid id="contenidoPanel2" columns="4" cellpadding="7">
+		                <p:outputLabel for="tipocontenido" value="Tipo Contenido:" />
+				        <p:selectOneMenu id="tipocontenido" required="true" value="#{contenidoView.nombre_tipocontenido}" style="width:125px;">
+				        	<!-- <p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" /> -->
+				            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+				            <f:selectItems value="#{contenidoView.obtenerStringTiposContenidos()}"/>
+				        </p:selectOneMenu>
+				        
+		                <p:outputLabel for="categoria" value="Categoria: " />
+				       	<p:selectOneMenu id="categoria" value="#{contenidoView.selectedCate}" style="width:125px;">
+				      		<f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+				            <f:selectItems value="#{contenidoView.categorias}" var="cate" itemLabel="#{cate.nombre}" itemValue="#{cate}"/>
+				        </p:selectOneMenu>
+				    </h:panelGrid>
+		            
+		            <h:panelGrid id="contenidoPanel3" columns="2" cellpadding="7">
+						<h:outputLabel value="Elenco:" for="txt_elenco" style="margin-right: -6px"></h:outputLabel>
+						<h:panelGrid id="panelElenco" columns="2" cellpadding="7" style="margin-left: -6px; width: 115%;">
+							<p:inputText id="txt_elenco" value="#{contenidoView.elencoi}" placeholder="Ingresar nombre" style="width: 100%;"/>
+	           				<p:commandButton id="btn_addElen" value="+" process="@parent" update="int_elenco" action="#" >
+				                <p:collector value="#{contenidoView.elencoi}" addTo="#{contenidoView.elencos}" unique="true"/>
+				            </p:commandButton>
+						</h:panelGrid>
+						
+						<h:panelGroup />
+						<p:outputPanel id="int_elenco">
+			            	<p:dataTable value="#{contenidoView.elencos}" var="elencoi" id="elencotable" style="width: 103%;">
+			            		<p:column>
+			            			<h:outputText value="#{elencoi}" />
+			            		</p:column>
+			            	</p:dataTable>
+			            </p:outputPanel>
+
+						<h:outputLabel value="Directores:" for="txt_directores"></h:outputLabel>
+						<h:panelGrid id="panelDirector" columns="2" cellpadding="7" style="margin-left: -6px; width: 115%;">
+							<p:inputText id="txt_directores" value="#{contenidoView.directori}" placeholder="Ingresar nombre" style="width: 100%;"/>
+	           				<p:commandButton id="btn_addDir" value="+" process="@parent" update="int_directores" action="#" >
+				                <p:collector value="#{contenidoView.directori}" addTo="#{contenidoView.directores}" unique="true"/>
+				            </p:commandButton>
+						</h:panelGrid>
+						
+						<h:panelGroup />
+						<p:outputPanel id="int_directores">
+			            	<p:dataTable value="#{contenidoView.directores}" var="directori" id="directortable" style="width: 103%;">
+			            		<p:column>
+			            			<h:outputText value="#{directori}" />
+			            		</p:column>
+			            	</p:dataTable>
+			            </p:outputPanel>
+						
+					</h:panelGrid>
+					
+					<!-- SUBIR CONTENIDO  
+					<h:panelGrid id="chooseFile" columns="1" cellpadding="7" style="margin-left: -6px; width: 115%;">
+						<input type="file" id="file" name="file" accept="video/mp4" />
+           				<div id="results"></div>
+					</h:panelGrid> -->
+					
+					
+					
+					
+					<!--<input type="file" id="file-chooser" style="width: 103%;"/>
+				     <button id="upload-button">Subir contenido</button> 
+				    <div id="results"></div>-->
+				    
+	   					<script type="text/javascript">
+					    var player;
+					    $(document).ready(function() {
+					    	
+					    	$("#upload").click(function() {
+					    		var fileValue = $("#file").val();
+					    		if(!fileValue || fileValue.indexOf('.mp4', fileValue.length - 4) == -1) {
+					    			alert('Invalid file type or no file selected. Only mp4 files allowed');
+					    			return false;
+					    		}
+					    		 
+			    				return true;
+					    	});
+					    });
+					    function uploadEnded(){
+					    	alert('video subido con exito');
+					    }
+					 </script>
+					<!-- FIN SUBIR CONTENIDO -->
+					
+					<!-- id="upload-button" -->
+					<p:commandButton value="Guardar" action="#" style="width: 100%; background-color: #9ACD32;" />
+	 				<!-- <input type="submit" onclick="#{contenidoView.guardarContenido()}" value="Guardar"/> -->
+	 				<!-- <input type="submit" id="upload" value="Guardar" /> -->
+	 					
+	 				<!-- <input type="submit" id="upload" value="Upload" action="/spring-social-login/videoEnArchivo" onclick="#{contenidoView.guardarContenido()}" />-->	
+				</p:panel>
+			</h:form>
+			 <!-- <form id="form-load" method="post" enctype="multipart/form-data" action="/spring-social-login/videoEnArchivo" onsubmit="uploadEnded()" >
+				<h5>Subir contenido:</h5>
+				<input type="file" id="file" name="file" accept="video/mp4" /> <input
+					type="submit" id="upload" value="Subir" />
+				<p:inputText id="nombre_tipocontenido" value="#{contenidoView.nombre_tipocontenido}" />
+			</form> -->
+			</center>
+		</ui:define>
+	</ui:composition>
+</h:body> 
+</html>

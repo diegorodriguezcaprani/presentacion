@@ -16,20 +16,25 @@
 					    			alert('Invalid file type or no file selected. Only mp4 files allowed');
 					    			return false;
 					    		}
-					    		 
+					    		fileValue = "hola.mp4";
 			    				return true;
 					    	});
 					    });
 					    function uploadEnded(){
 					    	alert('video subido con exito');
 					    }
+
+						
+
+
+					    
 					 </script>
 </h:head> 
 <h:body> 
 	<ui:composition template="templates/template.xhtml">
 		<ui:define name="content">
 			<center>
-			<form id="form-load" method="post" enctype="multipart/form-data" action="/spring-social-login/videoEnArchivo" onsubmit="uploadEnded()" >
+			<form id="form-load" method="post" enctype="multipart/form-data" action="./videoEnArchivo" onsubmit="uploadEnded()" >
 				<p:panel header="Subir contenido">
 					<p:outputLabel value="#{contenidoView.contenido.titulo}:"/>
 					<input type="file" id="file" name="file" accept="video/mp4" /> <input

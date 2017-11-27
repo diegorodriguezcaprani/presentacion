@@ -14,7 +14,6 @@ public class DatosCliente {
 	private String urlFoto;
 	private String nombreEmpresa;
 	
-	
 	public String getNombreEmpresa() {
 		return nombreEmpresa;
 	}
