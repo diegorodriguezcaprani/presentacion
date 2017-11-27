@@ -1,0 +1,26 @@
+.userProfile {
+	margin: 10% auto;
+	width: 50%
+}
+
+.profile-table {
+	margin: 0 auto;
+	width: 50%;
+	border-spacing: 10px;
+}
+
+.profile-img-div {
+	width: 130px;
+	margin: 0 auto;
+}
+
+.profile-img-div img {
+    width: 126px;
+    height: auto;
+}
+
+.profile-table td {
+	border: 1px solid #ddd;
+	border-radius: 10px;
+}
+    

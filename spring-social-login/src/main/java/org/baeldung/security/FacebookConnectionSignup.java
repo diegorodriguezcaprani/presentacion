@@ -3,7 +3,10 @@ package org.baeldung.security;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 import java.awt.PageAttributes.MediaType;
+import java.io.File;
+import java.util.Properties;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -12,22 +15,28 @@ import javax.ws.rs.core.Response;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 @Service
 public class FacebookConnectionSignup implements ConnectionSignUp {
 
-    private static final String URL_Back = "http://172.20.10.12:8180/ServidorTsi2/";
-	private static final String Separador = "/";
+    private static final String URL_Back ="http://localhost:8080/ServidorTsi2/";
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private ConfigurableApplicationContext context;
 
     @Override
     public String execute(Connection<?> connection) {
-    	String Target = "";
+		String Target = "";
         System.out.println("signup === ");
         final Usuario user = new Usuario();
         user.setUsername(connection.getDisplayName());
@@ -35,14 +44,22 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
         user.setImageUrl(connection.getImageUrl());
         user.setProfileUrl(connection.getProfileUrl());
         //connection.getProfileUrl();
-        /*Client client = ClientBuilder.newClient();
-        Target=(URL_Back)+("cliente/altaCliente/")+this.Separador+ (user.getProfileUrl())+(this.Separador)+(user.getImageUrl())+(this.Separador)+(user.getUsername().trim());
-        
+        Client client = ClientBuilder.newClient();
+        Target=URL_Back + "cliente/altaCliente";
+        datatypes.DatosJson dj = new datatypes.DatosJson();
+        String nomEmpresa = context.getApplicationName();
+        nomEmpresa = nomEmpresa.substring(1); // saco el /
+        System.out.println("Empresa============="+nomEmpresa);
+        dj.addParameter("idFacebook", user.getProfileUrl());
+        dj.addParameter("urlFoto", user.getImageUrl());
+        dj.addParameter("nombre", user.getUsername());
+        dj.addParameter("empresa", nomEmpresa);
+                
         System.out.println(Target);
                 
     	Response postResponse = client
     	.target(Target)
-    	.request().post(Entity.text("Pruebauser"));
+    	.request().post(Entity.json(dj));
     	
     	if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
     		System.out.println("Error al consumir mediante post.");
@@ -50,7 +67,7 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
     	else{
     		System.out.println("Se consumio correctamente mediante post.");
     		
-    	}*/
+    	}
         userRepository.save(user);
         return user.getUsername();
     }

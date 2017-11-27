@@ -7,32 +7,26 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
       
 	<ui:composition template="templates/templateUser.xhtml"> 
-    <ui:define name="content">
+    <ui:define name="homeTemplate">
+    <h:outputStylesheet library="css" name="profile.css" />
 	<h:outputStylesheet library="css" name="contenido.css" />
 
    
     <div class= "divContenidos">
- <!--     	<h:form>
-     	   <h:dataTable value="#{homeBean.cliente}" var="o" 
-    		styleClass="order-table" 
-    		headerClass="order-table-header" 
-    		rowClasses="order-table-odd-row,order-table-even-row" 
-     	   > 
-
-     	     <h:column>
-
-                <f:facet name="header">Order No</f:facet> 
-
-    		<h:inputText value="#{o.orderNo}" size="10" rendered="#{o.editable}" /> 
-
-    		<h:outputText value="#{o.orderNo}" rendered="#{not o.editable}" /> 
-
-     	     </h:column> 
-     	  
-
-    	  <h:commandButton value="Save Changes" action="#{order.saveAction}" /> 
-		</h:dataTable>
-       </h:form>  -->
+    <div class= "userProfile">
+    	<div class= "profile-img-div">
+    		<img src= "#{homeBean.user.imageUrl}"></img>
+    	</div>
+    	
+    	<table class= "profile-table">
+	  				<tr>
+	    				<td><a href="suscripcion.xhtml">ver Cuenta</a></td>
+	  				</tr>
+	  				<tr>
+	    				<td><a href="#">Cerrar Sesión</a></td>
+	  				</tr>
+	   </table>
+    </div>
 	
     </div>
     </ui:define>

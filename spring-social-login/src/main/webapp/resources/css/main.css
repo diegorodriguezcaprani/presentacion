@@ -19,17 +19,23 @@ a {
 	height: 100%;
 	width: 30%;
 }
+.profile-div {
+	width: 100%;
+	margin: 5% auto;
+}
+
+.profile-div a {
+	margin-left: 10%;
+}
 
 .home-table {
 	margin-left: auto;
     margin-right: auto;
-}
-table {
-	color: white;
+    color: white;
     border-collapse: collapse;
 }
 
-th, td {
+.home-table th, .home-table td {
     border-bottom: 1px solid #ddd;
     color: white;
 }

@@ -14,7 +14,7 @@
         </style>
     </head>
     <body>
-        <form action='/spring-social-login/charge' method='POST' id='checkout-form'>
+        <form action='./charge' method='POST' id='checkout-form'>
             <input type='hidden' th:value='${amount}' name='amount' />
             <label>Price:<span th:text='${amount/100}' /></label>
             <!-- NOTE: data-key/data-amount/data-currency will be rendered by Thymeleaf -->

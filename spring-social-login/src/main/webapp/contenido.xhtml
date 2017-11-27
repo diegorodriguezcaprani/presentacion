@@ -9,9 +9,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
       
      
-     
     <ui:composition template="templates/templateUser.xhtml">  
-		<ui:define name="content">
+		<ui:define name="homeTemplate">
 			<h:outputStylesheet library="css" name="main.css" />
 			<h:outputStylesheet library="css" name="contenido.css" />
 			<div class= "divContenidos contenido" style= " background: linear-gradient(rgba(255,255,255,.6), rgba(0,0,0,1)), url(#{contenidoBean.url})">
@@ -32,12 +31,12 @@
 				</div>
 				<h:panelGroup rendered="#{!contenidoBean.enVivo}">
 				<div>
-					<a class= "link-button" href="player.xhtml?enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}">Ver ahora <i class="fa fa-play-circle"></i></a>
+					<a class= "link-button" href="player.xhtml?enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}&amp;videoTime=#{contenidoBean.videoTime}">Ver ahora <i class="fa fa-play-circle"></i></a>
 				</div>
 				</h:panelGroup>
 				<h:panelGroup rendered="#{contenidoBean.enVivo}">
 					<div>
-						<a class= "link-button" href="player.xhtml?>enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}">Ver ahora <i class="fa fa-play-circle"></i></a>
+						<a class= "link-button" href="player.xhtml?>enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}&amp;videoTime=#{contenidoBean.videoTime}">Ver ahora <i class="fa fa-play-circle"></i></a>
 					</div>
 				</h:panelGroup>
 				

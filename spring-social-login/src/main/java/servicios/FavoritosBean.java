@@ -14,6 +14,8 @@ import datatypes.DatosContenido;
 public class FavoritosBean {
 	@ManagedProperty(value = "#{homeBean.contenidosFavoritos}") //contenidos del beanhome
 	private List <DatosContenido> contenidosFavoritos;
+//	@ManagedProperty(value = "#{homeBean.home}") //contenidos del beanhome
+//	private boolean home;
 	private List <String> imageURLs = new ArrayList<String>();
 	
 	@PostConstruct
@@ -34,7 +36,6 @@ public class FavoritosBean {
 	public FavoritosBean() {
 		// TODO Auto-generated constructor stub
 	}
-	
 	
 	public List<DatosContenido> getContenidosFavoritos() {
 		return contenidosFavoritos;

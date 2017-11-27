@@ -18,10 +18,6 @@
 	float:left;
 	margin-left: 0.5%;
 }
-.dropdown-profile {
-	display: inline;
-	margin-left: 0.5%;
-}
 
 .home-header form{
 	float:right;
@@ -83,6 +79,19 @@
     height: auto;
 }
 
+/***Tabs******************************************************************************/
+.active {
+    background-color: red;
+}
+.todos-button{
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
 
 
 /***dropdown****************************************/
