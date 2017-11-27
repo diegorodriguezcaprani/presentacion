@@ -73,7 +73,7 @@ public class VideoFilePlayerController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void upload(@RequestParam("file") MultipartFile file) throws IOException {
-		OutputStream os = new FileOutputStream(new File(videoLocation, file.getOriginalFilename()));
+		OutputStream os = new FileOutputStream(new File(videoLocation, file.getName()));
 		System.out.println(file.getName());
 		readAndWrite(file.getInputStream(), os);
 		init();

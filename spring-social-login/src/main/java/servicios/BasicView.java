@@ -27,6 +27,8 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
 import datatypes.DatosCliente;
+import datatypes.DatosContenido;
+import datatypes.DatosJson;
 
 @ManagedBean(name="dtBasicView")
 @ViewScoped
@@ -59,13 +61,22 @@ public class BasicView implements Serializable {
 		return usuarios;
     }
     
-    public void changeState(){
-    	boolean state = usuarioSeleccionado.isBloqueado();
-    	usuarioSeleccionado.setBloqueado(!state);
+    public String changeState(DatosCliente cli){
+    	String accion = "/desbloquear";
+		if (!cli.isBloqueado()){
+			accion = "/bloquear";
+		}
+		System.out.println("ID DE FACEBOOK: "+cli.getidfacebook());
+    	DatosJson dj = new DatosJson();
+    	dj.addParameter("idFacebook", cli.getidfacebook());
+    	System.out.println("EMPRESA: "+cli.getNombreEmpresa());
+    	dj.addParameter("empresa", nombreEmpresa);
     	Client client = ClientBuilder.newClient();
     	Response postResponse = client
-    	.target(URL_Back +"/cliente/bloquear")
-    	.request().post(Entity.json(usuarioSeleccionado));
+    	.target(URL_Back +"/cliente"+accion)
+    	.request().post(Entity.json(dj));
+    	
+    	return null;
     }
     
     public List<DatosCliente> getUsrs() {

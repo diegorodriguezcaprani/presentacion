@@ -7,7 +7,7 @@
 
 <h:head></h:head> 
 <h:body> 
-	<ui:composition template="templates/template.xhtml">
+	<ui:composition template="templates/templateMantel.xhtml">
 		<ui:define name="content">
 			<p:commandButton value="Nuevo" update=":nuevodialogo" oncomplete="PF('newDialog').show()" icon="ui-icon-plus"/>
 			<h:form id="form">
@@ -21,17 +21,29 @@
 					        	<h:outputText value="#{tipocontenido.nombre}" />
 					    </p:column>
 					 
-					    <p:column headerText="Atributos" filterMatchMode="contains" sortBy="#{tipocontenido.atributos}">
-					    	<h:outputText value="#{tipocontenido.atributos}"/>
+					    <p:column headerText="Atributos" filterMatchMode="contains" sortBy="#{tipocontenido}">
+					    	<center>
+					    	<p:selectOneMenu id="atributo" required="true" value="#{contenidoView.nombre_atributo}" style="width:80%;">
+					        	<!-- <p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" /> -->
+					            <f:selectItem itemLabel="" itemValue="" noSelectionOption="true"/>
+					            <f:selectItems value="#{contenidoView.toListStr(tipocontenido.atributos)}"/>
+					        </p:selectOneMenu>
+					        </center>
 					    </p:column>
 					    
-					    <p:column headerText="Categoria" filterMatchMode="contains" sortBy="#{tipocontenido.categorias}">
-					    	<h:outputText value="#{tipocontenido.categorias}" />
+					    <p:column headerText="Categoria" filterMatchMode="contains" sortBy="#{tipocontenido}">
+					    	<p:selectOneMenu id="categoria" required="true" value="#{contenidoView.nombre_categoria}" style="width:80%;">
+					        	<!-- <p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" /> -->
+					            <f:selectItem itemLabel="" itemValue="" noSelectionOption="true"/>
+					            <f:selectItems value="#{contenidoView.toListStr(tipocontenido.categorias)}"/>
+					        </p:selectOneMenu>
+					    	
 					    </p:column>
 					    
 					    <p:column style="width:40px">
-				           <p:commandButton update="editdialogo" actionListener="#{contenidoView.seleccionarTipoContenido(tipocontenido)}" oncomplete="PF('editDialog').show()" icon="ui-icon-pencil">
-					    	</p:commandButton>
+					    	<p:commandButton update="editdialogo" oncomplete="PF('editDialog').show()" icon="ui-icon-pencil" style="width: 30px; height: 30px;" title="View">
+				                <f:setPropertyActionListener value="#{tipocontenido}" target="#{contenidoView.tipo}" />
+				            </p:commandButton>
 				       </p:column>
 					    
 					</p:dataTable>
@@ -43,13 +55,21 @@
 				            <h:panelGrid id="editdisplay" columns="2">
 
 				                <p:outputLabel value="Nombre:"/>
-						        <p:inputText value="#{contenidoView.nombreTipoContenido}"/>
+						        <p:inputText value="#{contenidoView.tipo.nombre}"/>
 						        
 						        <p:outputLabel value="Atributos:"/>
-						        <p:inputText value="#{contenidoView.atributosTipoContenido}"/>
+						        <p:selectOneMenu id="atributo" value="#{contenidoView.nombre_atributo}" style="width:80%;">
+						        	<!-- <p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" /> -->
+						            <f:selectItem itemLabel="" itemValue="" noSelectionOption="true"/>
+						            <f:selectItems value=""/>
+						        </p:selectOneMenu>
 						        
 						        <p:outputLabel value="Categorias:"/>
-						        <p:inputText value="#{contenidoView.categoriasTipoContenido}"/>
+						        <p:selectOneMenu id="categoria" value="#{contenidoView.nombre_categoria}" style="width:80%;">
+						        	<!-- <p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" /> -->
+						            <f:selectItem itemLabel="" itemValue="" noSelectionOption="true"/>
+						            <f:selectItems value=""/>
+						        </p:selectOneMenu>
 				 
 				            </h:panelGrid>
 				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
@@ -60,27 +80,55 @@
 				        </h:form>
 				    </p:dialog>
 					
-					<p:dialog id="nuevodialogo" header="Nuevo tipo de contenido" widgetVar="newDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				        <h:form>
-				            <h:panelGrid id="newdisplay" columns="2">
+					<p:dialog id="nuevodialogo" header="Nuevo tipo de contenido" widgetVar="newDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" style="width: 70%;">
+				        <h:form id="form2">
+				            <h:panelGrid columns="2">
 
 				                <p:outputLabel value="Nombre:"/>
-						        <p:inputText value="#{contenidoView.tipo.nombre}"/>
-						        
-						        <p:outputLabel value="Atributos:"/>
-						        <p:inputText />
-						        
-						        <p:outputLabel value="Categorias:"/>
-						        <p:inputText />
-				 
+						        <p:inputText value="#{contenidoView.tipo.nombre}" style="width: 100%;"/>
+						     
+								<h:outputLabel value="Atributos:" for="txt_atr" style="margin-right: -6px"></h:outputLabel>
+								<h:panelGrid id="panelAtributos" columns="2" cellpadding="7" style="margin-left: -6px; width: 100%;">
+									<p:inputText id="txt_atr" value="#{contenidoView.nombre_atributo}" placeholder="Ingresar nombre" style="width: 100%;"/>
+			           				<p:commandButton id="btn_addElen" value="+" process="@parent" update="int_atrib" action="#" >
+						                <p:collector value="#{contenidoView.nombre_atributo}" addTo="#{contenidoView.atributosTipoContenido}" unique="true"/>
+						            </p:commandButton>
+								</h:panelGrid>
+								
+								<h:panelGroup />
+								<p:outputPanel id="int_atrib">
+					            	<p:dataTable value="#{contenidoView.atributosTipoContenido}" var="atribi" id="atribtable" style="width: 100%;">
+					            		<p:column>
+					            			<h:outputText value="#{atribi}" />
+					            		</p:column>
+					            	</p:dataTable>
+					            </p:outputPanel>
+		
+								<h:outputLabel value="Categorias:" for="txt_categorias"></h:outputLabel>
+								<h:panelGrid id="panelCategoria" columns="2" cellpadding="7" style="margin-left: -6px; width: 100%;">
+									<p:inputText id="txt_categorias" value="#{contenidoView.nombre_categoria}" placeholder="Ingresar nombre" style="width: 100%;"/>
+			           				<p:commandButton id="btn_addDir" value="+" process="@parent" update="int_categorias" action="#" >
+						                <p:collector value="#{contenidoView.nombre_categoria}" addTo="#{contenidoView.categoriasTipoContenido}" unique="true"/>
+						            </p:commandButton>
+								</h:panelGrid>
+								
+								<h:panelGroup />
+								<p:outputPanel id="int_categorias">
+					            	<p:dataTable value="#{contenidoView.categoriasTipoContenido}" var="catei" id="catetable" style="width: 103%;">
+					            		<p:column>
+					            			<h:outputText value="#{catei}" />
+					            		</p:column>
+					            	</p:dataTable>
+					            </p:outputPanel>
 				            </h:panelGrid>
 				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
 				            <p:commandButton value="Agregar" actionListener="#{contenidoView.guardarTipoContenido()}" update=":form:tablaTipo" oncomplete="PF('newDialog').hide()"></p:commandButton>
 							<p:spacer width="40" height="10" />
-						    <p:commandButton value="Cancelar" oncomplete="PF('newDialog').hide()"></p:commandButton>
+						    <p:commandButton value="Cancelar" actionListener="#{contenidoView.reset('nuevodialogo')}" oncomplete="PF('newDialog').hide()"></p:commandButton>
 				            </div>
 				        </h:form>
 				    </p:dialog>
+				    
 		</ui:define>
 	</ui:composition>
 </h:body> 

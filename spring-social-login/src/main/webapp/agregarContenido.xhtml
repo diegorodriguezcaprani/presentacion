@@ -5,7 +5,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"> 
 
-<h:head></h:head> 
+<h:head>
+</h:head> 
 <h:body>
 	<ui:composition template="templates/template.xhtml">
 		<ui:define name="content">
@@ -16,9 +17,9 @@
 		        <p:panel id="header-contenido" header="Crear contenido" style="width: 50%;">
 					
 		            <h:panelGrid id="contenidoPanel" columns="2" cellpadding="7">
-						<p:outputLabel for="titulo" value="Titulo:" style="width: 15%;"/>
+						<p:outputLabel for="titulo" value="Titulo:" style="width: 15%; paddint-left: -20px;"/>
 					    <p:inputText id="titulo" required="true" value="#{contenidoView.contenido.titulo}"
-		                     label="Titulo" style="width: 150%;">
+		                     label="Titulo" style="width: 100%;">
 		                </p:inputText>
 					    
 					    <p:outputLabel for="descripcion" value="Descripción:" style="width: 150px;"/>
@@ -30,20 +31,28 @@
 					    <p:inputText id="portada" value="#{contenidoView.contenido.portada}"
 		                    label="Portada" style="width: 100%;">
 		                </p:inputText>
+		                
+		                <p:outputLabel value="Pay-Per-View: " />
+		                <h:panelGrid id="panelPayper" columns="2" cellpadding="7">
+	        				<p:selectBooleanButton id="payperview" value="#{contenidoView.payperview}" onLabel="Yes" offLabel="No" style="width:60px">
+	        				</p:selectBooleanButton>
+					        <p:inputText placeholder="Precio"/> 
+				        </h:panelGrid>
+		                
 		            </h:panelGrid>
 		            
 		            <h:panelGrid id="contenidoPanel2" columns="4" cellpadding="7">
 		                <p:outputLabel for="tipocontenido" value="Tipo Contenido:" />
 				        <p:selectOneMenu id="tipocontenido" required="true" value="#{contenidoView.nombre_tipocontenido}" style="width:125px;">
-				        	<!-- <p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" /> -->
+				        	<p:ajax listener="#{contenidoView.onTipoChange()}" update=":form-contenido:categoria" />
 				            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
 				            <f:selectItems value="#{contenidoView.obtenerStringTiposContenidos()}"/>
 				        </p:selectOneMenu>
 				        
 		                <p:outputLabel for="categoria" value="Categoria: " />
-				       	<p:selectOneMenu id="categoria" value="#{contenidoView.selectedCate}" style="width:125px;">
+				       	<p:selectOneMenu id="categoria" value="#{contenidoView.categ}" style="width:125px;">
 				      		<f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-				            <f:selectItems value="#{contenidoView.categorias}" var="cate" itemLabel="#{cate.nombre}" itemValue="#{cate}"/>
+				            <f:selectItems value="#{contenidoView.categoriasStr}"/>
 				        </p:selectOneMenu>
 				    </h:panelGrid>
 		            

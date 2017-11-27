@@ -18,7 +18,7 @@
 	  	background: blue !important;
 	  }
 	</style>
-	<ui:composition template="templates/template.xhtml">
+	<ui:composition template="templates/templateMantel.xhtml">
 		<ui:define name="content">
 					<h:form id="form">
 					<p:dataTable id="contTable" var="contenido" value="#{contenidoView.obtenerContenidos()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="contTable"
@@ -68,6 +68,8 @@
 				             <p:commandButton update=":form:contDetail" oncomplete="PF('contDialog').show()" icon="ui-icon-search" title="Ver">
 				                <f:setPropertyActionListener value="#{contenido}" target="#{contenidoView.selectedCont}" />
 				            </p:commandButton>
+				            <p:commandButton update="contTable" action="#{contenidoView.changeState(contenido)}" icon="ui-icon-locked" title="Bloqueo">
+				            </p:commandButton>
 				            <p:commandButton update="contTable" action="#{contenidoView.changeDest(contenido)}" icon="ui-icon-star" title="Destacar">
 				            </p:commandButton>
 				        </p:column>
@@ -114,53 +116,6 @@
 				            </p:panelGrid>
 				            <br/>
 				            <p:commandButton value="Cerrar" oncomplete="PF('contDialog').hide()"></p:commandButton>
-				        </p:outputPanel>
-				    </p:dialog>
-				    
-				    <p:dialog header="Editar contenido" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-				        <p:outputPanel id="editDetail" style="text-align:center;">
-				            <p:panelGrid  columns="2" rendered="#{not empty contenidoView.selectedCont}" columnClasses="label,value">
-				 
-				                <h:outputText value="Titulo:" />
-				                <h:outputText value="#{contenidoView.selectedCont.titulo}" />
-				 
-				                <h:outputText value="Descripcion" />
-				                <p:inputText value="#{contenidoView.selectedCont.descripcion}" />
-				 
-				                <h:outputText value="Puntuacion:" />
-				                <p:inputText value="#{contenidoView.selectedCont.puntuacion}"/>
-				 
-				                <h:outputText value="Bloqueado" />
-				                <h:outputText value="#{contenidoView.selectedCont.bloqueado}" />
-				                
-				                <h:outputText value="Destacado" />
-				                <h:outputText value="#{contenidoView.selectedCont.destacado}" />
-				                
-				                <h:outputText value="Portada" />
-				                <p:inputText value="#{contenidoView.selectedCont.portada}" />
-				                
-				                <h:outputText value="# Puntuaciones" />
-				                <h:outputText value="#{contenidoView.selectedCont.cantPuntuaciones}" />
-				                
-				                <h:outputText value="Elenco" />
-				                <h:outputText value="#{contenidoView.selectedCont.elenco}" />
-				                
-				                <h:outputText value="Directores" />
-				                <h:outputText value="#{contenidoView.selectedCont.directores}" />
-				                
-				                <h:outputText value="Categoria" />
-				                <h:outputText value="#{contenidoView.selectedCont.categorias}" />
-				                
-				                <h:outputText value="Tipo Contenido" />
-				                <h:outputText value="#{contenidoView.selectedCont.tipoContenido.nombre}" />
-				                
-				            </p:panelGrid>
-				            <br/>
-				            <div style="text-align: center; margin: 0 auto auto; padding-top: 5px;">
-					            <p:commandButton value="Guardar" oncomplete="PF('editDialog').hide()"></p:commandButton>
-								<p:spacer width="40" height="10" />
-							    <p:commandButton value="Cancelar" oncomplete="PF('editDialog').hide()"></p:commandButton>
-				            </div>
 				        </p:outputPanel>
 				    </p:dialog>
 					

@@ -12,9 +12,16 @@ public class DatosCliente {
 	private Date fechaFinSuscripcion;
 	private boolean bloqueado;
 	private String urlFoto;
+	private String nombreEmpresa;
 	
 	
 	
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
+	}
 	public String getUrlFoto() {
 		return urlFoto;
 	}

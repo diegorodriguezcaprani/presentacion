@@ -25,8 +25,16 @@ public class DatosContenido {
 	private List<DatosIdNombre> categorias;
 	private DatosTipoContenido tipoContenido;
 	private List<DatosAtributoContenido> atributos;
+	private Double precioPayPerView;
 	
 	
+	
+	public Double getPrecioPayPerView() {
+		return precioPayPerView;
+	}
+	public void setPrecioPayPerView(Double precioPayPerView) {
+		this.precioPayPerView = precioPayPerView;
+	}
 	public String getUrl() {
 		return url;
 	}

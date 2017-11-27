@@ -8,6 +8,7 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
@@ -52,37 +53,28 @@ public class ReportesBean {
         zoomModel.setTitle("Visualizaciones");
         zoomModel.setZoom(true);
         zoomModel.setLegendPosition("e");
+        zoomModel.setShowPointLabels(true);
+        
+        zoomModel.getAxes().put(AxisType.X, new CategoryAxis("Meses/Año"));
         Axis yAxis = zoomModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Cantidad de visualizaciones");
         yAxis.setMin(0);
         yAxis.setMax(10);
-        yAxis.setLabel("Cantidad de visualizaciones");
-        Axis xAxis = zoomModel.getAxis(AxisType.X);
-        xAxis.setLabel("Meses/Año");
     }
      
     private LineChartModel initLinearModel() {
         LineChartModel model = new LineChartModel();
  
-        LineChartSeries series1 = new LineChartSeries();
+        ChartSeries series1 = new ChartSeries();
         series1.setLabel("Hombres");
  
-        series1.set(1, 2);
-        series1.set(2, 1);
-        series1.set(3, 3);
-        series1.set(4, 6);
-        series1.set(5, 8);
- 
-        LineChartSeries series2 = new LineChartSeries();
-        series2.setLabel("Mujeres");
- 
-        series2.set(1, 6);
-        series2.set(2, 3);
-        series2.set(3, 2);
-        series2.set(4, 7);
-        series2.set(5, 9);
+        series1.set("2019", 2);
+        series1.set("2015", 1);
+        series1.set("2016", 3);
+        series1.set("2017", 6);
+        series1.set("2018", 8);
  
         model.addSeries(series1);
-        model.addSeries(series2);
          
         return model;
     }
