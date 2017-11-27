@@ -9,8 +9,18 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import datatypes.DatosContenido;
 import datatypes.DatosIdNombre;
+import datatypes.DatosJson;
 
 @ManagedBean(name="contenidoBean")
 @RequestScoped
@@ -19,6 +29,8 @@ public class ContenidoBean {
 	private String id;
 	@ManagedProperty(value = "#{homeBean.contenidos}") //todos los contenidos del beanhome
 	private List <DatosContenido> contenidos;
+	@ManagedProperty(value = "#{homeBean.idFacebook}") //idFacebook del BeanHome
+	private String idFacebook;
 	@ManagedProperty(value = "#{param.url}")// portada
 	private String url;// portada
 	@ManagedProperty(value = "#{param.urlvideo}")// t�tulo
@@ -36,14 +48,16 @@ public class ContenidoBean {
 	private List<String> elenco;
 	private List<String> directores;
 	private List<DatosIdNombre> categorias;
+	private String URL= "http://192.168.1.5:8080/ServidorTsi2/";
+	private String videoTime;
 
 	@PostConstruct
     public void init() {
-		this.maxEstrellas=(int) (5-this.puntuacion-1);
+		
 		System.out.println("_______"+"contonidoBean");
 		System.out.println("_______"+this.getId());
 		System.out.println("siiiiiiiiiiiiiii___"+this.getContenidos().get(0).getTitulo());
-		 System.out.println("____encontreeURL_"+this.getUrl());
+		System.out.println("____encontreeURL_"+this.getUrl());
 	
 		//Busco contenido con titulo id
 		for(DatosContenido contenido : contenidos) { 
@@ -63,8 +77,54 @@ public class ContenidoBean {
 					this.destacado= contenido.isDestacado();
 					this.enVivo= contenido.getTipoContenido().isVivo();
 			   }
-			}
+		}
+		obtenerTiempoReproduccion(this.id);
+		this.maxEstrellas=(int) (5-this.puntuacion-1);
 	}
+	
+	
+
+	public String getIdFacebook() {
+		return idFacebook;
+	}
+
+
+
+	public void setIdFacebook(String idFacebook) {
+		this.idFacebook = idFacebook;
+	}
+
+
+
+	public String getVideoTime() {
+		return videoTime;
+	}
+
+	public void setVideoTime(String currentVideoTime) {
+		this.videoTime = currentVideoTime;
+	}
+
+
+	public void obtenerTiempoReproduccion(String id) {
+		
+		this.setVideoTime("5");
+//		DatosJson dj = new DatosJson();
+//		dj.addParameter("idFacebook",idFacebook);
+//		String nomEmpresa = "Fox";
+//        dj.addParameter("empresa", nomEmpresa);
+//        dj.addParameter("titulo",id);
+//	    
+//	    Client client = ClientBuilder.newClient();
+//    	Response postResponse = client
+//	    	.target(URL+"contenido/guardarTiempoReproduccion")
+//	    	.request().post(Entity.json(dj));
+//    	
+//    	String cont= (String)postResponse.getEntity();
+//    	System.out.println(cont);
+//    	this.setVideoTime(cont);
+	
+	}
+
 	
 	
 	public String getUrlvideo() {

@@ -15,6 +15,8 @@
     </h:head>
      <h:body>
         <h:outputStylesheet library="css" name="main.css" />
+        <h:outputStylesheet library="css" name="welcome.css" />
+        <h:outputScript library="js" name="tab.js" />
         <h:panelGroup layout="block" id="container" class="container">
 	    	 <div class= "divC">
      		 	<h:graphicImage library="images" name="Mantel_cont.png" style= "margin: 0 auto" />
@@ -26,10 +28,69 @@
 	    				<td><a href="favoritos.xhtml">Favoritos</a></td>
 	  				</tr>
 				</table>
+	 			 <div class= "profile-div">
+	   				<a href="verPerfil.xhtml">#{homeBean.user.username}<h:graphicImage library="images" name="profile-icon-9.png" style= "width:30px; vertical-align: middle"/></a>
+	  			</div>
+			
     		</div>
 		    <ui:insert name="content">
-		    
-		   		 holaaaaa
+			</ui:insert>
+			 <ui:insert name="homeTemplate">
+			 	
+				 	<div class= "divContenidos">
+				 		<header class="home-header">
+		    	
+			 					<h:form class= "search-form">
+			            <h:inputText id="search" value="#{homeBean.algo}" placeholder="Search.."
+			                onkeypress="if (event.keyCode == 13) {onchange(event); return false;}"
+			                onchange="return event.keyCode !== undefined" 
+			            >
+			                <f:ajax listener="#{homeBean.searchContenido}" render=":container" />
+			            </h:inputText>
+		        	</h:form>
+		    		
+		    		
+					<div class="tab-todos">
+			  			 <h:commandButton value="Destacados" action="#{homeBean.Todos}" onclick="tabFunction(event)" class="todos-button">
+	                		<f:ajax execute="@form" render=":container"/>
+	           			 </h:commandButton>
+					</div>
+		    	  	<div class="dropdown1">
+			  			<button onclick="myFunction()" class="dropbtn background-button">Vivo</button>
+			 			
+					</div>
+					<div class="dropdown1">
+			  			<button onclick="myFunction()" class="dropbtn background-button">Películas</button>
+			 			
+					</div>
+					<div class="dropdown1">
+			  			<button onclick="myFunction()" class="dropbtn background-button">Series</button>
+			 			 
+					</div>
+					<div class="dropdown2">
+			  			<button onclick="myFunction()" class="dropbtn background-button">Género</button>
+			 			 <div id="myDropdown" class="dropdown-content">
+			   				<a href="welcome.xhtml">Link 1</a>
+			    			<a href="#">Link 2</a>
+			    			<a href="#">Link 3</a>
+			  			</div>
+					</div>
+						<!-- <div class="dropdown-profile">
+				  			<button onclick="myFunction()" class="dropbtn button-img">
+				  				<h:graphicImage library="images" name="profile-icon-9.png" style= "width:15px; border-radius: 50%"/>
+				  			</button>
+				 			 <div id="myDropdown" class="dropdown-content">
+				   				<a href="verPerfil.xhtml">Ver Perfil</a>
+				  			</div>
+						</div> -->
+		    		
+		    		</header>
+		    			
+		    		<ui:insert name="homeContent">
+		    			
+		    		</ui:insert>
+				 	</div> 
+			 
 			</ui:insert>
 		</h:panelGroup>
  	</h:body>

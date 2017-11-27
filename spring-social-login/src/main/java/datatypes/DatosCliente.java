@@ -12,9 +12,15 @@ public class DatosCliente {
 	private Date fechaFinSuscripcion;
 	private boolean bloqueado;
 	private String urlFoto;
+	private String nombreEmpresa;
 	
 	
-	
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
+	}
 	public String getUrlFoto() {
 		return urlFoto;
 	}
@@ -58,7 +64,7 @@ public class DatosCliente {
 		this.fechaFinSuscripcion = fechaFinSuscripcion;
 	}
 	
-	public DatosCliente(String idfacebook, String nombre, int edad, char sexo, String pais, Date fechaFinSuscripcion, boolean bloqueado, String urlFoto) {
+	public DatosCliente(String idfacebook, String nombre, int edad, char sexo, String pais, Date fechaFinSuscripcion, boolean bloqueado, String urlFoto, String nombreEmpresa) {
 		super();
 		this.idfacebook = idfacebook;
 		this.nombre = nombre;
@@ -68,6 +74,7 @@ public class DatosCliente {
 		this.pais = pais;
 		this.fechaFinSuscripcion = fechaFinSuscripcion;
 		this.urlFoto = urlFoto;
+		this.nombreEmpresa= nombreEmpresa;
 	}
 	public DatosCliente() {
 		super();

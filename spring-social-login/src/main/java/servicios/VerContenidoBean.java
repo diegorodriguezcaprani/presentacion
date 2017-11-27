@@ -13,8 +13,33 @@ public class VerContenidoBean {
 	private String urlvideo;
 	@ManagedProperty(value = "#{param.enVivo}")
 	private boolean enVivo;
+	@ManagedProperty(value = "#{param.videoTime}")
+	private String videoTime;
 	
 	private String videoType;
+	private String urlVideoTime;
+	
+	
+
+	public String getUrlVideoTime() {
+		return urlVideoTime;
+	}
+
+
+	public void setUrlVideoTime(String urlVideoTime) {
+		this.urlVideoTime = urlVideoTime;
+	}
+
+
+	public String getVideoTime() {
+		return videoTime;
+	}
+
+
+	public void setVideoTime(String videoTime) {
+		this.videoTime = videoTime;
+	}
+
 
 	public boolean isEnVivo() {
 		return enVivo;
@@ -47,6 +72,9 @@ public class VerContenidoBean {
 
 	@PostConstruct
     public void init() {
+		System.out.println("videoTimeeeee"+this.videoTime);
+		this.urlVideoTime= this.urlvideo+ "#t="+ this.videoTime;
+		System.out.println("videoTimeeeee"+this.urlVideoTime);
 		if (this.isEnVivo()) {
 			this.videoType= "video/ogg";
 		}else {

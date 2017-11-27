@@ -1,0 +1,4 @@
+function functionPago() { 
+	alert("holaaa");
+	
+}

@@ -25,8 +25,16 @@ public class DatosContenido {
 	private List<DatosIdNombre> categorias;
 	private DatosTipoContenido tipoContenido;
 	private List<DatosAtributoContenido> atributos;
+	private Double precioPayPerView;
 	
 	
+	
+	public Double getPrecioPayPerView() {
+		return precioPayPerView;
+	}
+	public void setPrecioPayPerView(Double precioPayPerView) {
+		this.precioPayPerView = precioPayPerView;
+	}
 	public String getUrl() {
 		return url;
 	}
@@ -107,7 +115,7 @@ public class DatosContenido {
 	}
 	public DatosContenido(String titulo, String descripcion, int cantPuntuaciones, Double puntuacion, boolean destacado,
 			boolean bloqueado, String portada, List<String> elenco, List<String> directores, List<DatosIdNombre> categorias,
-			DatosTipoContenido tipoContenido, List<DatosAtributoContenido> atributos, String url, String empresa) {
+			DatosTipoContenido tipoContenido, List<DatosAtributoContenido> atributos, String url, String empresa, Double  precioPayPerView) {
 		super();
 		this.titulo = titulo;
 		this.descripcion = descripcion;
@@ -123,6 +131,7 @@ public class DatosContenido {
 		this.atributos = atributos;
 		this.url = url;
 		this.empresa = empresa;
+		this.precioPayPerView= precioPayPerView;
 	}
 	public DatosContenido() {
 		super();

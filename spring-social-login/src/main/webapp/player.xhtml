@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
       
 	<ui:composition template="templates/templateUser.xhtml"> 
-    <ui:define name="content">
+    <ui:define name="homeTemplate">
 	<h:outputStylesheet library="css" name="contenido.css" />
 	<h:outputStylesheet library="css" name="liveStreaming.css" />
 
@@ -15,7 +15,7 @@
     <div class= "divContenidos">
    		<div>
 			<video id="myVideo" width="420" height="320" controls="controls" onplaying="myFunctionPlay()" onpause="myFunctionPause()">
-			  <source id="mySource" src="#{verContenidoBean.urlvideo}" type="#{verContenidoBean.videoType}"/>
+			  <source id="mySource" src="#{verContenidoBean.urlVideoTime}" type="#{verContenidoBean.videoType}"/>
 			</video>
 		</div>
 		
