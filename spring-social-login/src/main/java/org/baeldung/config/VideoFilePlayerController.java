@@ -1,5 +1,7 @@
 package org.baeldung.config;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,6 +30,7 @@ import org.baeldung.persistence.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.social.connect.Connection;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,7 +43,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import datatypes.DatosJson;
 
 @RestController
-@RequestMapping("/videoEnArchivo")
+@RequestMapping("/adminvideoEnArchivo")
 public class VideoFilePlayerController {
 	
 	@Autowired 
@@ -48,7 +51,7 @@ public class VideoFilePlayerController {
 	@Autowired
     private UserRepository userRepository;
 	private String videoLocation = "../../Empresas/";
-	private String target = "http://localhost/ServidorTsi2";
+	private String target = "http://localhost:8080/ServidorTsi2";
 
 	private ConcurrentHashMap<String, File> videos = new ConcurrentHashMap<String, File>();
 
@@ -73,16 +76,48 @@ public class VideoFilePlayerController {
 		Usuario user = userRepository.findByUsername(principal.getName());
 		Client client = ClientBuilder.newClient();
 		DatosJson dj = new DatosJson();
+		DatosJson djbloqueado = new DatosJson();
+		DatosJson djVerificarppv = new DatosJson();
+		DatosJson djesPPV = new DatosJson();
+		
+		djbloqueado.addParameter("idFacebook", user.getProfileUrl());
+		djVerificarppv.addParameter("idFacebook", user.getProfileUrl());
 		dj.addParameter("idFacebook",user.getProfileUrl());
+		
 		String nomEmpresa = context.getDisplayName();
         nomEmpresa = nomEmpresa.substring(1); // saco el /
         System.out.println(nomEmpresa);
-    
-		dj.addParameter(empresa, nomEmpresa);
-		Response postResponse = client
+        
+        djbloqueado.addParameter("empresa", nomEmpresa);
+        dj.addParameter("empresa", nomEmpresa);
+		djVerificarppv.addParameter("empresa", nomEmpresa);
+		djesPPV.addParameter("empresa", nomEmpresa);
+		
+		djVerificarppv.addParameter("titulo", video);
+		djesPPV.addParameter("titulo", video);
+		
+		Response postResponseesPPV = client
+		    	.target(this.target+ "/contenido/contenidoEsPPV")
+		    	.request().post(Entity.json(djesPPV));
+		
+		Response postResponsePPV = client
+		    	.target(this.target+ "/cliente/tieneCompradoPPV")
+		    	.request().post(Entity.json(djVerificarppv));
+		Response postResponseSubscripto = client
 		    	.target(this.target+ "/cliente/verificarSuscripcionVigente")
 		    	.request().post(Entity.json(dj));
-		if (((Boolean)postResponse.getEntity()).equals(true))
+		Response postResponseBloqueado = client
+		    	.target(this.target+ "/cliente/clienteEstaBloqueado")
+		    	.request().post(Entity.json(djbloqueado));
+		Boolean clienteBloqueado = ((Boolean)postResponseBloqueado.getEntity()).equals(false);
+		System.out.println("cliente bloqueado" + clienteBloqueado.toString());
+		Boolean esContenidoPPV = ((Boolean)postResponseesPPV.getEntity()).equals(true);
+		System.out.println("es contenido ppv" + esContenidoPPV.toString());
+		Boolean clienteSubscripto = ((Boolean)postResponseSubscripto.getEntity()).equals(true);
+		System.out.println("cliente subscripto" + clienteSubscripto.toString());
+		Boolean conenidoPPVComprado= ((Boolean)postResponseesPPV.getEntity()).equals(true);
+		System.out.println("cliente PPV Comprado" + conenidoPPVComprado.toString());
+		if (!clienteBloqueado && ((!esContenidoPPV && clienteSubscripto) || (esContenidoPPV && conenidoPPVComprado)))		
 		{
 			try {
 				MultipartFileSender.fromPath(videoFile.toPath())
@@ -119,13 +154,14 @@ public class VideoFilePlayerController {
 		return (os) -> {
 			readAndWrite(videoFileStream, os);
 		};*/
-	
-
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void upload(@RequestParam("file") MultipartFile file) throws IOException {
-		OutputStream os = new FileOutputStream(new File(videoLocation, file.getName()));
+	public void upload(@RequestParam("file") MultipartFile file, @RequestParam("name") String nombre) throws IOException {
+		String nomEmpresa = context.getApplicationName();
+        System.out.println("Empresa============="+nomEmpresa);
+        System.out.println("Nombre recibido============="+nombre);
+		OutputStream os = new FileOutputStream(new File(videoLocation+nomEmpresa, nombre));
 		System.out.println(file.getName());
 		readAndWrite(file.getInputStream(), os);
 		//init();

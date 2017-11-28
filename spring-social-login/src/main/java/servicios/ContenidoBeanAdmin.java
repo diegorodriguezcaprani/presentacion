@@ -34,7 +34,6 @@ public class ContenidoBeanAdmin {
 	@ManagedProperty(value = "#{mainBean.nombreEmpresa}")
 	private String nombreEmpresa;
 	
-	private Map<Integer,List<DatosIdNombre>> data = new HashMap<Integer, List<DatosIdNombre>>();
 	private DatosIdNombre categoria;
 	private String[] selectedCategorias;
 	private List<DatosIdNombre> categorias;
@@ -54,6 +53,7 @@ public class ContenidoBeanAdmin {
 	List<DatosContenido> contenidos;
 	List<DatosContenido> contenidoFiltrado;
 	private DatosContenido contenido;
+	private String new_nombrecontenido;
 	String nombre_tipocontenido;
 	
 	//TIPOS CONTENIDO
@@ -85,6 +85,7 @@ public class ContenidoBeanAdmin {
     	directori = null;
         directores = new ArrayList<String>();
         nombre_tipocontenido=null;
+        new_nombrecontenido=null;
         nombre_categoria=null;
         nombre_atributo=null;
         atributosTipoContenido = new ArrayList<String>();
@@ -97,8 +98,7 @@ public class ContenidoBeanAdmin {
     	Client client = ClientBuilder.newClient();
     	System.out.println("El titulo es: "+contenido.getTitulo());
     	System.out.println("La descripcion es: "+contenido.getDescripcion());
-    	System.out.println("El tipo es: "+contenido.getTipoContenido());
-    	System.out.println("El nombre del contenido es: "+this.nombre_tipocontenido);
+    	System.out.println("El tipo es: "+nombre_tipocontenido);
     	if (nombre_tipocontenido != null){
 	    	for (DatosTipoContenido dtc: this.tiposcontenido){
 	    		if (dtc.getNombre().equals(this.nombre_tipocontenido)){
@@ -107,10 +107,12 @@ public class ContenidoBeanAdmin {
 	    		}
 	    	}
     	}
-    	contenido.setEmpresa("Fox");
+    	contenido.setEmpresa(nombreEmpresa);
     	//contenido.setUrl("hola");
     	//contenido.setElenco(elencos);
     	//contenido.setDirectores(directores);
+        if (nombre_tipocontenido != null){
+        	new_nombrecontenido = contenido.getTitulo();
     	Response postResponse = client
     	.target(URL_Back + "/contenido/agregarContenido")
     	.request().post(Entity.json(contenido));
@@ -125,11 +127,14 @@ public class ContenidoBeanAdmin {
     		directores = new ArrayList<String>();
     		//reset("header-contenido");
     	}
+        }
 	}
 	
 	public String salvar(){
+		new_nombrecontenido = contenido.getTitulo();
+		System.out.println("Seteado nombre con: "+new_nombrecontenido);
 		guardarContenido();
-		return "subir";
+		return "adminSubir";
 	}
 	
 	public List<String> toList(List<DatosTipoContenido> array){
@@ -558,6 +563,14 @@ public class ContenidoBeanAdmin {
 
 	public void setCateg(String categ) {
 		this.categ = categ;
+	}
+
+	public String getNew_nombrecontenido() {
+		return new_nombrecontenido;
+	}
+
+	public void setNew_nombrecontenido(String new_nombrecontenido) {
+		this.new_nombrecontenido = new_nombrecontenido;
 	}
 	
 	

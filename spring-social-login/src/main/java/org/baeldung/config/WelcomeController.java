@@ -23,9 +23,14 @@ public class WelcomeController {
 				               .authorityListToSet(SecurityContextHolder.getContext()
 				                        .getAuthentication().getAuthorities());
 					 	System.out.println("PASE POR CONTROLLER !!!!!!!!!!!!!!!");
+					 	if (null == principal) return "redirect:" + request.getRequestURL().append("login").toString();
 				        if (roles.contains("ROLE_USER")) {
 				            return "redirect:" + request.getRequestURL().append("adminhome.xhtml").toString();
 				        }
-				        return "redirect:" + request.getRequestURL().append("welcome.xhtml").toString();
+				        else if (roles.contains("ROLE_FACEBOOK_USER")){
+				        	return "redirect:" + request.getRequestURL().append("welcome.xhtml").toString();
+				        }
+				        
+				        return "redirect:" + request.getRequestURL().toString();
 	    }
 }
