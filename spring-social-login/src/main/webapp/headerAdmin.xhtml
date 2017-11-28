@@ -18,31 +18,31 @@
 			        <h:graphicImage value="resources/images/logo.png" style="margin-left: 10px; margin-right: 10px" width="32px" height="32px" />
 				</p:menuitem>
 				
-				<p:menuitem value="Home" url="/home.xhtml" icon="ui-icon-home" /> 
+				<p:menuitem value="Home" url="/adminhome.xhtml" icon="ui-icon-home" /> 
 				
 				<p:submenu label="Usuarios" icon="ui-icon-person">
 
 			        <p:menuitem value="Modificar estado" url="#"/>
 			        <p:separator />
-			        <p:menuitem value="Listar todos" url="listarUsuarios.xhtml" />
+			        <p:menuitem value="Listar todos" url="adminlistarUsuarios.xhtml" />
 		        </p:submenu>
 		        
 		        <p:submenu label="Contenidos" icon="ui-icon-video">
 		        	<p:submenu label="Nuevo">
-			            <p:menuitem value="Contenido" url="/agregarContenido.xhtml" />
-			            <p:menuitem value="Tipo Contenido" url="/verTipoContenido.xhtml" />
+			            <p:menuitem value="Contenido" url="/adminAddContenido.xhtml" />
+			            <p:menuitem value="Tipo Contenido" url="/adminTipoContenido.xhtml" />
 			            <p:menuitem value="Categoria" url="/verCategorias.xhtml" />
 			        </p:submenu>
 		        	<p:separator />
-		        	<p:menuitem value="Listar tipos de contenidos" url="/verTipoContenido.xhtml"/>
+		        	<p:menuitem value="Listar tipos de contenidos" url="/adminTipoContenido.xhtml"/>
 		        	<p:menuitem value="Listar categorias" url="/verCategorias.xhtml"/>
-		            <p:menuitem value="Listar contenidos" url="/listarContenidos.xhtml"/>
+		            <p:menuitem value="Listar contenidos" url="/adminlistarContenidos.xhtml"/>
 		        </p:submenu>
 		 
 		        <p:submenu label="Reportes" icon="ui-icon-document">
 		            <p:submenu label="Balance Global">
 	                    <p:menuitem value="Monetario" url="#" />
-	                    <p:menuitem value="Visualizaciones" url="charts.xhtml" />
+	                    <p:menuitem value="Visualizaciones" url="adminReport.xhtml" />
 	                    <p:menuitem value="Usuarios" url="#" />
 	                </p:submenu>
 		            <p:submenu label="Balance por empresas">

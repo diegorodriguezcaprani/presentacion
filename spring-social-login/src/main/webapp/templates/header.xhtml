@@ -18,23 +18,23 @@
 			        <h:graphicImage value="resources/images/logo.png" style="margin-left: 10px; margin-right: 10px" width="32px" height="32px" />
 				</p:menuitem>
 				
-				<p:menuitem value="Home" url="/home.xhtml" icon="ui-icon-home" /> 
+				<p:menuitem value="Home" url="/adminhome.xhtml" icon="ui-icon-home" /> 
 				
 				<p:submenu label="Usuarios" icon="ui-icon-person">
-			        <p:menuitem value="Listar todos" url="listarUsuarios.xhtml" />
+			        <p:menuitem value="Listar todos" url="/adminlistarUsuarios.xhtml" />
 		        </p:submenu>
 		        
 		        <p:submenu label="Contenidos" icon="ui-icon-video">
-			        <p:menuitem value="Nuevo Contenido" url="/agregarContenido.xhtml"/>
-			        <p:menuitem value="Nuevo Contenido en Vivo" url="/agregarContenVivo.xhtml"/>
+			        <p:menuitem value="Nuevo Contenido" url="/adminAddContenido.xhtml"/>
+			        <p:menuitem value="Nuevo Contenido en Vivo" url="/adminAddContenVivo.xhtml"/>
 		        	<p:separator />
 		        	<p:menuitem value="Habilitar Contenido en Vivo" url="#"/>
-		            <p:menuitem value="Listar contenidos" url="/listarContenidos.xhtml"/>
+		            <p:menuitem value="Listar contenidos" url="/adminlistarContenidos.xhtml"/>
 		        </p:submenu>
 		 
 		        <p:submenu label="Reportes" icon="ui-icon-document">
-		        	<p:menuitem value="Balance monetario anual" url="charts.xhtml"/>
-		        	<p:menuitem value="Top ten puntuadas" url="charts.xhtml"/>
+		        	<p:menuitem value="Balance monetario anual" url="/adminReport.xhtml"/>
+		        	<p:menuitem value="Top ten puntuadas" url="/adminReport.xhtml"/>
 		        </p:submenu>
 		 		
 		        <f:facet name="options">

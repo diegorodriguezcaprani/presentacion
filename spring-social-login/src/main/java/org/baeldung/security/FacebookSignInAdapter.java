@@ -15,7 +15,7 @@ public class FacebookSignInAdapter implements SignInAdapter {
     @Override
     public String signIn(String localUserId, Connection<?> connection, NativeWebRequest request) {
         System.out.println(" ====== Sign In adapter");
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(connection.getDisplayName(), null, Arrays.asList(new SimpleGrantedAuthority("FACEBOOK_USER"))));
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(connection.getDisplayName(), null, Arrays.asList(new SimpleGrantedAuthority("ROLE_FACEBOOK_USER"))));
         return null;
     }
 }

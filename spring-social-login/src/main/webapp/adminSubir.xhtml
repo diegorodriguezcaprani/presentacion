@@ -34,11 +34,12 @@
 	<ui:composition template="templates/template.xhtml">
 		<ui:define name="content">
 			<center>
-			<form id="form-load" method="post" enctype="multipart/form-data" action="./videoEnArchivo" onsubmit="uploadEnded()" >
+			<form id="form-load" method="post" enctype="multipart/form-data" action="./adminvideoEnArchivo" onsubmit="uploadEnded()" >
 				<p:panel header="Subir contenido">
 					<p:outputLabel value="#{contenidoView.contenido.titulo}:"/>
-					<input type="file" id="file" name="file" accept="video/mp4" /> <input
-						type="submit" id="upload" value="Guardar" />
+					<input type="file" id="file" name="file" accept="video/mp4" />
+					<input type="text" id="name" name="name" value="lola" style="display: none;" />
+					<input type="submit" id="upload" value="Guardar" />
 				</p:panel>
 			</form>
 			</center>
