@@ -58,6 +58,7 @@ public class ContenidoBean {
 		System.out.println("_______"+this.getId());
 		System.out.println("siiiiiiiiiiiiiii___"+this.getContenidos().get(0).getTitulo());
 		System.out.println("____encontreeURL_"+this.getUrl());
+		System.out.println(this.urlvideo+"URLVIDEO");
 	
 		//Busco contenido con titulo id
 		for(DatosContenido contenido : contenidos) { 

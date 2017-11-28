@@ -43,23 +43,21 @@
 	    			<td class="order-table-odd-row">#{o.tipo}</td>
 	    			<td class="order-table-odd-row">#{o.precio}</td>
 	    			<td> 
-	    				<!-- <form action='./charge' method="post" id='checkout-form'>
-				            <input type='hidden' th:value='${amount}' name='amount' />
-				            <label>Price:<span th:text='${amount/100}' /></label>
-				            NOTE: data-key/data-amount/data-currency will be rendered by Thymeleaf
+	    				  <form action='./charge' method="post" id='checkout-form'>
+				            <input type='hidden' value='#{homeBean.amount}' name='amount' />
 				            <script
 				                src='https://checkout.stripe.com/checkout.js' 
 				                class='stripe-button'
-				                th:attr='data-key=${stripePublicKey},
-				                         data-amount=${amount},
-				                         data-currency=${currency}'
+				                data-key='#{homeBean.stripePublicKey}'
+		                        data-amount='#{homeBean.amount}'
+		                        data-currency='#{homeBean.currency}'
 				                data-name='Baeldung'
 				                data-description='Spring course checkout'
 				                data-image='http://www.baeldung.com/wp-content/themes/baeldung/favicon/android-chrome-192x192.png'
 				                data-locale='auto'
 				                data-zip-code='false'>
 				            </script>
-				        </form> -->
+				        </form>
 	    			</td>
 	    		  </tr>
 		    		</ui:repeat>
@@ -73,7 +71,7 @@
 		    	<div class="flex-container-home1">
 			   	 <ui:repeat var="o" value="#{homeBean.contenidosSugeridos}" >
 			    	<div class="flex-item-home1">
-			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}">
+			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}&amp;urlvideo=#{o.url}">
 		        			<img src= "#{o.portada}"></img>
 				  		 </a>
 		   			</div>	
@@ -100,13 +98,25 @@
 		    	<div class="flex-container-home1">
 			   	 <ui:repeat var="o" value="#{homeBean.contenidosFiltrados}" >
 			    	<div class="flex-item-home1">
-			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}">
+			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}&amp;urlvideo=#{o.url}">
 		        			<img src= "#{o.portada}"></img>
 				  		 </a>
 		   			</div>	
 			    </ui:repeat>
 			 </div>
 			</div>	 
+    </h:panelGroup>
+     <h:panelGroup rendered="#{homeBean.contenidoFiltrado}">
+	    		<h2 class="interesante"> Resultado...</h2>
+		    	<div class="flex-container-home1">
+			   	 <ui:repeat var="o" value="#{homeBean.contenidosFiltradosTipoGenero}" >
+			    	<div class="flex-item-home1">
+			    		 <a href="contenido.xhtml?id=#{o.titulo}&amp;url=#{o.portada}&amp;urlvideo=#{o.url}">
+		        			<img src= "#{o.portada}"></img>
+				  		 </a>
+		   			</div>	
+			    </ui:repeat>
+			 </div>	 
     </h:panelGroup>
 
     </ui:define>
