@@ -1,9 +1,15 @@
 package servicios;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -12,6 +18,10 @@ import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
+
+import datatypes.DatosIdNombre;
+import datatypes.DatosIngresoMensual;
+import datatypes.DatosPuntuacionContenido;
 
 @ManagedBean(name="reportesView")
 @ViewScoped
@@ -50,73 +60,101 @@ public class ReportesBean {
 
 	private void createZoomModel() {
         zoomModel = initLinearModel();
-        zoomModel.setTitle("Visualizaciones");
+        zoomModel.setTitle("Balance anual");
         zoomModel.setZoom(true);
         zoomModel.setLegendPosition("e");
         zoomModel.setShowPointLabels(true);
+        zoomModel.setSeriesColors("58BA27");
         
-        zoomModel.getAxes().put(AxisType.X, new CategoryAxis("Meses/Año"));
+        zoomModel.getAxes().put(AxisType.X, new CategoryAxis("Mes/Año"));
         Axis yAxis = zoomModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Cantidad de visualizaciones");
+        yAxis.setLabel("Ingresos");
         yAxis.setMin(0);
-        yAxis.setMax(10);
     }
      
     private LineChartModel initLinearModel() {
         LineChartModel model = new LineChartModel();
  
         ChartSeries series1 = new ChartSeries();
-        series1.setLabel("Hombres");
- 
-        series1.set("2019", 2);
+        series1.setLabel("Ingresos");
+        
+        List<DatosIngresoMensual> ingresos = obtenerIngresosUltimoAnio();
+        for (int i=0; i<12; i++){
+	        for(DatosIngresoMensual dim : ingresos){
+	        	if (dim.getPosicion() == i){
+	        		series1.set(dim.getMes()+"/"+dim.getAnio(), ((int)dim.getIngreso()));
+	        		System.out.println("Clave: " + dim.getMes()+"/"+dim.getAnio() + " Valor: "+((int)dim.getIngreso()));
+	        		break;
+	        	}
+	        }
+        }
+        
+        /*series1.set("2019", 2);
         series1.set("2015", 1);
         series1.set("2016", 3);
         series1.set("2017", 6);
         series1.set("2018", 8);
- 
+         */
+        
         model.addSeries(series1);
          
         return model;
+    }
+    
+    public List<DatosIngresoMensual> obtenerIngresosUltimoAnio(){
+    	Client client = ClientBuilder.newClient();
+    	List<DatosIngresoMensual> ingresos = client
+    	.target(URL_Back+"/empresa/"+nombreEmpresa+"/obtenerIngresosSuscripcionesMensuales")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosIngresoMensual>>() {});
+    	return ingresos;
     }
     
     private BarChartModel initBarModel() {
         BarChartModel model = new BarChartModel();
  
         ChartSeries boys = new ChartSeries();
-        boys.setLabel("Hombres");
+        boys.setLabel("Top five");
+        
+        List<DatosPuntuacionContenido> topfive = obtenerTopFive();
+        for(DatosPuntuacionContenido dpc : topfive){
+    		boys.set(dpc.getTitulo(), ((int)dpc.getPuntuacion()));
+    		System.out.println("Clave: " + dpc.getTitulo() + " Valor: "+((int)dpc.getPuntuacion()));
+        }
+        
+        /*
         boys.set("2004", 120);
         boys.set("2005", 100);
         boys.set("2006", 44);
         boys.set("2007", 150);
         boys.set("2008", 25);
- 
-        ChartSeries girls = new ChartSeries();
-        girls.setLabel("Mujeres");
-        girls.set("2004", 52);
-        girls.set("2005", 60);
-        girls.set("2006", 110);
-        girls.set("2007", 135);
-        girls.set("2008", 120);
- 
+ 		*/
+        
         model.addSeries(boys);
-        model.addSeries(girls);
          
         return model;
+    }
+    
+    public List<DatosPuntuacionContenido> obtenerTopFive(){
+    	Client client = ClientBuilder.newClient();
+    	List<DatosPuntuacionContenido> topten = client
+    	.target(URL_Back+"/empresa/"+nombreEmpresa+"/obtenerTopFiveContenidos")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosPuntuacionContenido>>() {});
+    	return topten;
     }
     
     private void createBarModel() {
         barModel = initBarModel();
          
-        barModel.setTitle("Reportes anuales");
+        barModel.setTitle("Top five contenidos");
         barModel.setLegendPosition("ne");
-         
+        barModel.setSeriesColors("FFCC33");
+        
         Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Año");
+        xAxis.setLabel("Contenidos");
          
         Axis yAxis = barModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Cantidad usuarios");
+        yAxis.setLabel("Puntuación");
         yAxis.setMin(0);
-        yAxis.setMax(200);
     }
 
 	public String getURL_Back() {

@@ -34,9 +34,9 @@
 		                
 		                <p:outputLabel value="Pay-Per-View: " />
 		                <h:panelGrid id="panelPayper" columns="2" cellpadding="7">
-	        				<p:selectBooleanButton id="payperview" value="#{contenidoView.payperview}" onLabel="Yes" offLabel="No" style="width:60px">
+	        				<p:selectBooleanButton id="payperview" value="#{contenidoView.payperview}" update="form-contenido:panelPayper" onLabel="Yes" offLabel="No" style="width:60px">
 	        				</p:selectBooleanButton>
-					        <p:inputText placeholder="Precio"/> 
+					        <p:inputText placeholder="Precio" value="#{contenidoView.precioPayPerView}" /> 
 				        </h:panelGrid>
 		                
 		            </h:panelGrid>
@@ -50,10 +50,10 @@
 				        </p:selectOneMenu>
 				        
 		                <p:outputLabel for="categoria" value="Categoria: " />
-				       	<p:selectOneMenu id="categoria" value="#{contenidoView.categ}" style="width:125px;">
-				      		<f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-				            <f:selectItems value="#{contenidoView.categoriasStr}"/>
-				        </p:selectOneMenu>
+		                <p:selectCheckboxMenu id="categoria" value="#{contenidoView.categoriasSeleccionadas}" label="Categorias"
+				                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+				            <f:selectItems value="#{contenidoView.categoriasStr}" />
+				        </p:selectCheckboxMenu>
 				    </h:panelGrid>
 		            
 		            <h:panelGrid id="contenidoPanel3" columns="2" cellpadding="7">
@@ -127,7 +127,7 @@
 					<!-- FIN SUBIR CONTENIDO -->
 					
 					<!-- id="upload-button" -->
-					<p:commandButton value="Siguiente" action="#{contenidoView.salvar()}" style="width: 100%; background-color: #9ACD32;" />
+					<p:commandButton value="Siguiente" update="form-contenido:header-contenido" action="#{contenidoView.salvar()}" style="width: 100%; background-color: #9ACD32;" />
 	 				<!-- <input type="submit" onclick="#{contenidoView.guardarContenido()}" value="Guardar"/> -->
 	 				<!-- <input type="submit" id="upload" value="Guardar" /> -->
 	 					

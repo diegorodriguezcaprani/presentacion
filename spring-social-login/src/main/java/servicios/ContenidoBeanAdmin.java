@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -38,6 +41,7 @@ public class ContenidoBeanAdmin {
 	private String[] selectedCategorias;
 	private List<DatosIdNombre> categorias;
 	private List<String> categoriasStr;
+	private List<String> categoriasSeleccionadas;
 	private String categ;
 	private DatosIdNombre selectedCate;
 	String nombre_categoria;
@@ -47,13 +51,18 @@ public class ContenidoBeanAdmin {
 	private String directori;
 	private List<String> directores;
 	private boolean payperview;
+	private Double precioPayPerView;
 	
 	//CONTENIDOS
 	private DatosContenido selectedCont;
 	List<DatosContenido> contenidos;
+	List<DatosContenido> contenidosvivo;
+	List<String> contvivostr;
 	List<DatosContenido> contenidoFiltrado;
 	private DatosContenido contenido;
 	private String new_nombrecontenido;
+	String contenidoseleccionado;
+	String URLcontenidovivo;
 	String nombre_tipocontenido;
 	
 	//TIPOS CONTENIDO
@@ -75,6 +84,8 @@ public class ContenidoBeanAdmin {
 		selectedTipo = new DatosTipoContenido();
 		contenido = new DatosContenido();
 		contenidos = new ArrayList<DatosContenido>();
+		contenidosvivo = new ArrayList<DatosContenido>();
+		contvivostr = new ArrayList<String>();
 		
 		selectedCate = new DatosIdNombre();
 		categoria = new DatosIdNombre();
@@ -88,9 +99,14 @@ public class ContenidoBeanAdmin {
         new_nombrecontenido=null;
         nombre_categoria=null;
         nombre_atributo=null;
+    	contenidoseleccionado = null;
+    	URLcontenidovivo = null;
         atributosTipoContenido = new ArrayList<String>();
         categoriasTipoContenido = new ArrayList<String>();
+        categoriasSeleccionadas = new ArrayList<String>();
         nuevosatributos = new ArrayList<String>();
+        
+        obtenerContenidosVivoPorHabilitar();
         
 	}
 	
@@ -100,41 +116,108 @@ public class ContenidoBeanAdmin {
     	System.out.println("La descripcion es: "+contenido.getDescripcion());
     	System.out.println("El tipo es: "+nombre_tipocontenido);
     	if (nombre_tipocontenido != null){
+    		List<DatosIdNombre> catg = new ArrayList<DatosIdNombre>();
 	    	for (DatosTipoContenido dtc: this.tiposcontenido){
 	    		if (dtc.getNombre().equals(this.nombre_tipocontenido)){
 	    			contenido.setTipoContenido(dtc);
+	    			for(String cat: categoriasSeleccionadas){
+	    				for(DatosIdNombre din: dtc.getCategorias()){
+	    					if (din.getNombre().equals(cat)){
+	    						catg.add(new DatosIdNombre(din.getId(),din.getNombre()));
+	    					}
+	    				}
+	    			}
 	    			break;
 	    		}
 	    	}
+	    	contenido.setCategorias(catg);
     	}
     	contenido.setEmpresa(nombreEmpresa);
+    	contenido.setUrl("./videoEnArchivo/"+nombreEmpresa+"/"+contenido.getTitulo());
     	//contenido.setUrl("hola");
     	//contenido.setElenco(elencos);
     	//contenido.setDirectores(directores);
         if (nombre_tipocontenido != null){
         	new_nombrecontenido = contenido.getTitulo();
-    	Response postResponse = client
-    	.target(URL_Back + "/contenido/agregarContenido")
-    	.request().post(Entity.json(contenido));
-    	
-    	if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
-    		System.out.println("Error al consumir mediante post.");
-    	}
-    	else{
-    		System.out.println("Se consumio correctamente mediante post.");
-    		contenido = new DatosContenido();
-    		elencos = new ArrayList<String>();
-    		directores = new ArrayList<String>();
-    		//reset("header-contenido");
-    	}
+        	if (payperview){
+        		contenido.setPrecioPayPerView(precioPayPerView);
+        	}
+	    	Response postResponse = client
+	    	.target(URL_Back + "/contenido/agregarContenido")
+	    	.request().post(Entity.json(contenido));
+	    	
+	    	if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
+	    		System.out.println("Error al consumir mediante post.");
+	    	}
+	    	else{
+	    		System.out.println("Se consumio correctamente mediante post.");
+	    		contenido = new DatosContenido();
+	    		elencos = new ArrayList<String>();
+	    		directores = new ArrayList<String>();
+	    		reset("form-contenido:header-contenido");
+	    	}
         }
+	}
+	
+	public void habilitarContVIVO(){
+			DatosJson in = new DatosJson();
+			in.addParameter("titulo", contenidoseleccionado);
+			System.out.println("Contenido a actualizar: "+contenidoseleccionado);
+			in.addParameter("empresa", nombreEmpresa);
+			System.out.println("Empresa a actualizar: "+nombreEmpresa);
+			in.addParameter("url", URLcontenidovivo);
+			System.out.println("URL a actualizar: "+URLcontenidovivo);
+			
+			Client client = ClientBuilder.newClient();
+	    	Boolean habilitado = client
+	    	.target(URL_Back +"/contenido/setearURL")
+	    	.request().post(Entity.json(in),Boolean.class);
+	    	
+	    	boolean conthabilitado = habilitado.booleanValue();
+	    	
+	    	if (conthabilitado){
+		    	List<String> actualizada = new ArrayList<String>();
+		    	for(String cont: contvivostr){
+		    		if (!cont.equals(contenidoseleccionado)){
+		    			actualizada.add(cont);
+		    		}
+		    	}
+		    	contvivostr = actualizada;
+		    	URLcontenidovivo=null;
+		    	contenidoseleccionado=null;
+		    	
+		    	FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("Contenido habilitado correctamente."));
+		    	
+	    	}
+	    	else{
+	    		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("No se ha podido habilitar su contenido."));
+	    	}
+	}
+	
+	public void obtenerContenidosVivoPorHabilitar(){
+		Client client = ClientBuilder.newClient();
+    	List<DatosContenido> contenidos = client
+    	.target(URL_Back+"/contenido/"+nombreEmpresa+"/contenidosParaTransmitir")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosContenido>>() {});
+    	this.contenidosvivo = contenidos;
+    	this.contvivostr = toListCont(contenidos);
 	}
 	
 	public String salvar(){
 		new_nombrecontenido = contenido.getTitulo();
 		System.out.println("Seteado nombre con: "+new_nombrecontenido);
 		guardarContenido();
+		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.getRequestMap().put("titulo", new_nombrecontenido);
 		return "adminSubir";
+	}
+	
+	public List<String> toListCont(List<DatosContenido> array){
+		List<String> lista = new ArrayList<String>();
+		for(DatosContenido c: array){
+			lista.add(c.getTitulo());
+		}
+		return lista;
 	}
 	
 	public List<String> toList(List<DatosTipoContenido> array){
@@ -336,6 +419,8 @@ public class ContenidoBeanAdmin {
         }
         else{
             categorias = new ArrayList<DatosIdNombre>();
+            categoriasStr = new ArrayList<String>();
+            categoriasSeleccionadas = new ArrayList<String>();
         }
     }
 	
@@ -571,6 +656,54 @@ public class ContenidoBeanAdmin {
 
 	public void setNew_nombrecontenido(String new_nombrecontenido) {
 		this.new_nombrecontenido = new_nombrecontenido;
+	}
+
+	public String getContenidoseleccionado() {
+		return contenidoseleccionado;
+	}
+
+	public void setContenidoseleccionado(String contenidoseleccionado) {
+		this.contenidoseleccionado = contenidoseleccionado;
+	}
+
+	public String getURLcontenidovivo() {
+		return URLcontenidovivo;
+	}
+
+	public void setURLcontenidovivo(String uRLcontenidovivo) {
+		URLcontenidovivo = uRLcontenidovivo;
+	}
+
+	public Double getPrecioPayPerView() {
+		return precioPayPerView;
+	}
+
+	public void setPrecioPayPerView(Double precioPayPerView) {
+		this.precioPayPerView = precioPayPerView;
+	}
+
+	public List<DatosContenido> getContenidosvivo() {
+		return contenidosvivo;
+	}
+
+	public void setContenidosvivo(List<DatosContenido> contenidosvivo) {
+		this.contenidosvivo = contenidosvivo;
+	}
+
+	public List<String> getContvivostr() {
+		return contvivostr;
+	}
+
+	public void setContvivostr(List<String> contvivostr) {
+		this.contvivostr = contvivostr;
+	}
+
+	public List<String> getCategoriasSeleccionadas() {
+		return categoriasSeleccionadas;
+	}
+
+	public void setCategoriasSeleccionadas(List<String> categoriasSeleccionadas) {
+		this.categoriasSeleccionadas = categoriasSeleccionadas;
 	}
 	
 	
