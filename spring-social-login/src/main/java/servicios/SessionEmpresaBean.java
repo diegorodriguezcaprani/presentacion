@@ -15,7 +15,7 @@ public class SessionEmpresaBean {
 	
 	private String call=null;
 	private String nombreEmpresa;
-	private String URL_Back = "http://localhost:8080/ServidorTsi2/";
+	private String URL_Back = "http://localhost:8080/ServidorTsi2";
 	
 	@PostConstruct
 	public void init(){
@@ -30,7 +30,7 @@ public class SessionEmpresaBean {
 	}
 	
 	public boolean ismantel(){
-		return "Mantel".equals(nombreEmpresa);
+		return "mantel".equals(nombreEmpresa.toLowerCase());
 	}
 
 	public String getCall() {

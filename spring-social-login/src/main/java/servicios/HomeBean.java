@@ -160,7 +160,7 @@ public class HomeBean {
     	.target(URL+"contenido/tipoContenido")
     	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosTipoContenido>>() {});
 		this.setTiposContenido(cont);
-		System.out.println(cont.get(1).getNombre()+"NombreeeX_______");
+		//System.out.println(cont.get(1).getNombre()+"NombreeeX_______");
 	}
 	public void filtrarContenido() {
 		Client client = ClientBuilder.newClient();
@@ -229,7 +229,7 @@ public class HomeBean {
 		DatosJson dj= new DatosJson();
 		dj.addParameter("idFacebook", idFacebook);
 		dj.addParameter("titulo",idContenidoFavorito);
-		dj.addParameter("empresa","Fox");
+		dj.addParameter("empresa",nombreEmpresa);
 		
     	Client client = ClientBuilder.newClient();
     	Response postResponse = client

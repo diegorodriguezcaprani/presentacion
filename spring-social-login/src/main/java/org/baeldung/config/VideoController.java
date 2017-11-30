@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 
 import org.baeldung.config.enviarContenidos.MultipartFileSender;
 import org.baeldung.persistence.dao.UserRepository;
@@ -44,6 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import datatypes.DatosContenido;
 import datatypes.DatosJson;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -60,8 +64,8 @@ public class VideoController {
 	private String target = "http://localhost:8080/ServidorTsi2";
 
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{empresa:.+}/{video:.+}")
-	public StreamingResponseBody stream(@PathVariable String empresa, @PathVariable String video, Principal principal, HttpServletRequest request, HttpServletResponse response)
+	@RequestMapping(method = RequestMethod.GET, value = "/{video:.+}")
+	public StreamingResponseBody stream(@PathVariable String video, Principal principal, HttpServletRequest request, HttpServletResponse response)
 			throws MalformedURLException, IOException {
 		
 		//File videoFile = new File(videoLocation+empresa+"/"+video);
@@ -78,7 +82,7 @@ public class VideoController {
 		
 		String nomEmpresa = context.getApplicationName();
         nomEmpresa = nomEmpresa.substring(1); // saco el /
-        System.out.println(nomEmpresa);
+        System.out.println("Nombre empresa:      "+nomEmpresa);
         
         djbloqueado.addParameter("empresa", nomEmpresa);
         dj.addParameter("empresa", nomEmpresa);
@@ -109,7 +113,14 @@ public class VideoController {
 		System.out.println("cliente subscripto" + clienteSubscripto.toString());
 		
 		System.out.println("cliente PPV Comprado" + conenidoPPVComprado.toString());
-		final InputStream videoFileStream = new URL("http://172.20.10.3:8080/").openStream();
+		
+		String url = client
+    	.target(this.target+"/contenido/obtenerURL/"+nomEmpresa+"/"+video)
+    	.request(MediaType.APPLICATION_JSON).get(String.class);
+		if (url == null){
+			return (os) -> {};
+		}
+		final InputStream videoFileStream = new URL(url).openStream();
 		return (os) -> {
 			if (!clienteBloqueado && ((!esContenidoPPV && clienteSubscripto) || (esContenidoPPV && conenidoPPVComprado)))
 			{

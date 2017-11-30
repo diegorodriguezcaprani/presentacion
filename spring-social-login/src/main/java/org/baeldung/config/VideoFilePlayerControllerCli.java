@@ -69,9 +69,9 @@ public class VideoFilePlayerControllerCli {
 		djVerificarppv.addParameter("idFacebook", user.getProfileUrl());
 		dj.addParameter("idFacebook",user.getProfileUrl());
 		
-		String nomEmpresa = context.getDisplayName();
+		String nomEmpresa = context.getApplicationName();
         nomEmpresa = nomEmpresa.substring(1); // saco el /
-        System.out.println(nomEmpresa);
+        System.out.println("Nombre empresa:      "+nomEmpresa);
         
         djbloqueado.addParameter("empresa", nomEmpresa);
         dj.addParameter("empresa", nomEmpresa);
@@ -81,26 +81,26 @@ public class VideoFilePlayerControllerCli {
 		djVerificarppv.addParameter("titulo", video);
 		djesPPV.addParameter("titulo", video);
 		
-		Response postResponseesPPV = client
+		Boolean esContenidoPPV = client
 		    	.target(this.target+ "/contenido/contenidoEsPPV")
-		    	.request().post(Entity.json(djesPPV));
+		    	.request().post(Entity.json(djesPPV), Boolean.class);
 		
-		Response postResponsePPV = client
+		Boolean conenidoPPVComprado = client
 		    	.target(this.target+ "/cliente/tieneCompradoPPV")
-		    	.request().post(Entity.json(djVerificarppv));
-		Response postResponseSubscripto = client
+		    	.request().post(Entity.json(djVerificarppv), Boolean.class);
+		Boolean clienteSubscripto = client
 		    	.target(this.target+ "/cliente/verificarSuscripcionVigente")
-		    	.request().post(Entity.json(dj));
-		Response postResponseBloqueado = client
+		    	.request().post(Entity.json(dj), Boolean.class);
+		Boolean clienteBloqueado = client
 		    	.target(this.target+ "/cliente/clienteEstaBloqueado")
-		    	.request().post(Entity.json(djbloqueado));
-		Boolean clienteBloqueado = ((Boolean)postResponseBloqueado.getEntity()).equals(false);
+		    	.request().post(Entity.json(djbloqueado),Boolean.class);
+		
 		System.out.println("cliente bloqueado" + clienteBloqueado.toString());
-		Boolean esContenidoPPV = ((Boolean)postResponseesPPV.getEntity()).equals(true);
+		
 		System.out.println("es contenido ppv" + esContenidoPPV.toString());
-		Boolean clienteSubscripto = ((Boolean)postResponseSubscripto.getEntity()).equals(true);
+		
 		System.out.println("cliente subscripto" + clienteSubscripto.toString());
-		Boolean conenidoPPVComprado= ((Boolean)postResponseesPPV.getEntity()).equals(true);
+		
 		System.out.println("cliente PPV Comprado" + conenidoPPVComprado.toString());
 		if (!clienteBloqueado && ((!esContenidoPPV && clienteSubscripto) || (esContenidoPPV && conenidoPPVComprado)))		
 		{

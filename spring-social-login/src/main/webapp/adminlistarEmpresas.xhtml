@@ -9,7 +9,7 @@
 </h:head>
 <h:body>
 
-	<ui:composition template="templates/template.xhtml">
+	<ui:composition template="templates/templateMantel.xhtml">
 		<ui:define name="content">
 					<div style="width: 50%; margin: 0 auto auto;">
 					    <p:commandButton value="+" update=":nuevodialogo" oncomplete="PF('newDialog').show()" style="width: 12%; height: 32px; padding-left: -15px;"/>
@@ -30,7 +30,7 @@
 							                <f:setPropertyActionListener value="#{empresa}" target="#{empresaView.selectedEmpresa}" />
 							            </p:commandButton>
 								    	
-								    	<p:commandButton icon="ui-icon-minusthick" update=":form:tablaCat" actionListener="#{empresaView.eliminarEmpresa(empresa)}" style="width: 30px; height: 30px;">
+								    	<p:commandButton icon="ui-icon-minusthick" update=":form:tablaEmp" actionListener="#{empresaView.eliminarEmpresa(empresa)}" style="width: 30px; height: 30px;">
 								    		<p:confirm header="Eliminar empresa" message="Desea eliminar esta empresa #{empresa}?" icon="ui-icon-alert"/>
 								    	</p:commandButton>
 								    	</div>

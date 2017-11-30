@@ -37,6 +37,9 @@ public class ContenidoBeanAdmin {
 	@ManagedProperty(value = "#{mainBean.nombreEmpresa}")
 	private String nombreEmpresa;
 	
+	String empresaSeleccionada;
+	List<DatosContenido> contenidosempresa;
+	
 	private DatosIdNombre categoria;
 	private String[] selectedCategorias;
 	private List<DatosIdNombre> categorias;
@@ -78,6 +81,8 @@ public class ContenidoBeanAdmin {
 	@PostConstruct
 	public void init(){
 		System.out.println("La empresa es: "+nombreEmpresa);
+		empresaSeleccionada = null;
+		contenidosempresa = new ArrayList<DatosContenido>();
 		
 		tiposcontenido = new ArrayList<DatosTipoContenido>();
 		tipo = new DatosTipoContenido();
@@ -202,6 +207,56 @@ public class ContenidoBeanAdmin {
     	this.contenidosvivo = contenidos;
     	this.contvivostr = toListCont(contenidos);
 	}
+	
+	public void guardarContenidoVivo(){
+    	Client client = ClientBuilder.newClient();
+    	System.out.println("El titulo es: "+contenido.getTitulo());
+    	System.out.println("La descripcion es: "+contenido.getDescripcion());
+    	System.out.println("El tipo es: "+nombre_tipocontenido);
+    	if (nombre_tipocontenido != null){
+    		List<DatosIdNombre> catg = new ArrayList<DatosIdNombre>();
+	    	for (DatosTipoContenido dtc: this.tiposcontenido){
+	    		if (dtc.getNombre().equals(this.nombre_tipocontenido)){
+	    			contenido.setTipoContenido(dtc);
+	    			for(String cat: categoriasSeleccionadas){
+	    				for(DatosIdNombre din: dtc.getCategorias()){
+	    					if (din.getNombre().equals(cat)){
+	    						catg.add(new DatosIdNombre(din.getId(),din.getNombre()));
+	    					}
+	    				}
+	    			}
+	    			break;
+	    		}
+	    	}
+	    	contenido.setCategorias(catg);
+    	}
+    	contenido.setEmpresa(nombreEmpresa);
+    	contenido.setUrl("./video/"+contenido.getTitulo());
+    	//contenido.setUrl("hola");
+    	//contenido.setElenco(elencos);
+    	//contenido.setDirectores(directores);
+        if (nombre_tipocontenido != null){
+        	new_nombrecontenido = contenido.getTitulo();
+        	if (payperview){
+        		contenido.setPrecioPayPerView(precioPayPerView);
+        	}
+	    	Response postResponse = client
+	    	.target(URL_Back + "/contenido/agregarContenido")
+	    	.request().post(Entity.json(contenido));
+	    	
+	    	if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
+	    		System.out.println("Error al consumir mediante post.");
+	    	}
+	    	else{
+	    		System.out.println("Se consumio correctamente mediante post.");
+	    		contenido = new DatosContenido();
+	    		elencos = new ArrayList<String>();
+	    		directores = new ArrayList<String>();
+	    		reset("form-contenido:header-contenido");
+	    	}
+        }
+	}
+	
 	
 	public String salvar(){
 		new_nombrecontenido = contenido.getTitulo();
@@ -334,6 +389,23 @@ public class ContenidoBeanAdmin {
     	}
     	
 		return true;
+	}
+	
+	public void onEmpresaChange(){
+		if (empresaSeleccionada != null){
+		contenidosempresa = obtenerContenidosPorEmpresa(empresaSeleccionada);
+		}
+		else{
+			contenidosempresa = new ArrayList<DatosContenido>();
+		}
+	}
+	
+	public List<DatosContenido> obtenerContenidosPorEmpresa(String empresa){
+		Client client = ClientBuilder.newClient();
+    	List<DatosContenido> contenidos = client
+    	.target(URL_Back+"/contenido/"+empresa+"/obtenerContenidos")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosContenido>>() {});
+		return contenidos;
 	}
 	
 	public List<DatosContenido> obtenerContenidos(){
@@ -704,6 +776,22 @@ public class ContenidoBeanAdmin {
 
 	public void setCategoriasSeleccionadas(List<String> categoriasSeleccionadas) {
 		this.categoriasSeleccionadas = categoriasSeleccionadas;
+	}
+
+	public String getEmpresaSeleccionada() {
+		return empresaSeleccionada;
+	}
+
+	public void setEmpresaSeleccionada(String empresaSeleccionada) {
+		this.empresaSeleccionada = empresaSeleccionada;
+	}
+
+	public List<DatosContenido> getContenidosempresa() {
+		return contenidosempresa;
+	}
+
+	public void setContenidosempresa(List<DatosContenido> contenidosempresa) {
+		this.contenidosempresa = contenidosempresa;
 	}
 	
 	
