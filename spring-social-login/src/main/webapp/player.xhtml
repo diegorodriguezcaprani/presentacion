@@ -5,6 +5,18 @@
  	  xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
+ <head>
+<title>Reproductor de contenidos</title>
+    <!-- You can use Open Graph tags to customize link previews.
+    Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
+  <meta property="og:url"           content="http://tsi2mantel.herokuapp.com/spring-social-login/" />
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="mantel contenidos online" />
+  <meta property="og:description"   content="Plataforma para visualizar contenidos en vivos" />
+  <meta property="og:image"         content="http://www.imagen.com.mx/assets/img/imagen_share.png" />
+</head>
+<body>
+      
       
 	<ui:composition template="templates/templateUser.xhtml"> 
     <ui:define name="homeTemplate">
@@ -18,6 +30,23 @@
 			  <source id="mySource" src="#{verContenidoBean.urlVideoTime}" type="#{verContenidoBean.videoType}"/>
 			</video>
 		</div>
+		
+			<!-- Load Facebook SDK for JavaScript -->
+		 <div id="fb-root"></div>
+		 <script>(function(d, s, id) {
+		   var js, fjs = d.getElementsByTagName(s)[0];
+		   if (d.getElementById(id)) return;
+		   js = d.createElement(s); js.id = id;
+		   js.src = "https://connect.facebook.net/es_ES/sdk.js#xfbml=1&amp;version=v2.11&amp;appId=295243827631831";
+		   fjs.parentNode.insertBefore(js, fjs);
+		 }(document, 'script', 'facebook-jssdk'));</script>
+		
+		 <!-- Your share button code -->
+		 <div class="fb-share-button" 
+		   data-href="http://www.apasionadosdelmarketing.es/facebook-url-linter-indexa-paginas/" 
+		   data-layout="button_count">
+		 </div>
+	
 		
 		<div><input id="input" placeholder="you-chat-here" /></div>
 		
@@ -87,4 +116,5 @@
     </div>
     </ui:define>
 	</ui:composition>
+	</body>
 </html>
