@@ -168,7 +168,7 @@ public class HomeBean {
     	.target(URL+"contenido/tipoContenido")
     	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosTipoContenido>>() {});
 		this.setTiposContenido(cont);
-		System.out.println(cont.get(1).getNombre()+"NombreeeX_______");
+		//System.out.println(cont.get(1).getNombre()+"NombreeeX_______");
 	}
 	public void filtrarContenido() {
 		Client client = ClientBuilder.newClient();

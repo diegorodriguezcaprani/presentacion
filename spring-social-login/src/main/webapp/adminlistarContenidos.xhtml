@@ -21,11 +21,11 @@
 	<ui:composition template="templates/template.xhtml">
 		<ui:define name="content">
 					<h:form id="form">
-					<p:dataTable id="contTable" var="contenido" value="#{contenidoView.obtenerContenidos()}" reflow="true" rows="11" paginator="true" paginatorPosition="bottom" widgetVar="contTable"
+					<p:dataTable id="contTable" var="contenido" value="#{contenidoView.obtenerContenidos()}" reflow="true" rows="5" paginator="true" paginatorPosition="bottom" widgetVar="contTable"
 			                 emptyMessage="No existen contenidos" filteredValue="#{contenidoView.contenidoFiltrado}" rowStyleClass="#{contenido.puntuacion le 5 ? 'colored' : 'colored'}" >
 					    
 					    <f:facet name="header">
-					    	Contenidos del Sistema
+					    	Contenidos en el Sistema
 				            <p:outputPanel style="padding-left: 870px;" layout="block">
 				                <h:outputText value="Buscar contenido: " />
 				                <p:inputText id="globalFilter" onkeyup="PF('contTable').filter()" style="width:150px" placeholder=""/>

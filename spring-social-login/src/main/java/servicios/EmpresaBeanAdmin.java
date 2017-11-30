@@ -13,8 +13,11 @@ import javax.faces.bean.ViewScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import datatypes.DatosCliente;
 import datatypes.DatosJson;
 
 @ManagedBean(name="empresaView")
@@ -38,7 +41,11 @@ public class EmpresaBeanAdmin {
 	}
 	
 	public List<String> obtenerEmpresas(){
-		return null;
+		Client client = ClientBuilder.newClient();
+		List<String> empresas = client
+    	.target(URL_Back+"/empresa/obtenerEmpresas")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<String>>() {});
+		return empresas;
 	}
 	
 	public void eliminarEmpresa(String empresa){

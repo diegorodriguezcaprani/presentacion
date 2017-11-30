@@ -1,74 +1,63 @@
 package org.baeldung.config;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.Principal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.baeldung.config.enviarContenidos.MultipartFileSender;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import datatypes.DatosContenido;
 import datatypes.DatosJson;
 
-import org.springframework.web.multipart.MultipartFile;
-
 @RestController
-@RequestMapping("/video")
-public class VideoController {
+@RequestMapping("/videoEnArchivo")
+public class VideoFilePlayerControllerCli {
+
 
 	@Autowired 
 	private ConfigurableApplicationContext context;
 	@Autowired
     private UserRepository userRepository;
-	
+	private String videoLocation = "../../Empresas/";
 	private String target = "http://localhost:8080/ServidorTsi2";
 
+	private ConcurrentHashMap<String, File> videos = new ConcurrentHashMap<String, File>();
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{video:.+}")
-	public StreamingResponseBody stream(@PathVariable String video, Principal principal, HttpServletRequest request, HttpServletResponse response)
-			throws MalformedURLException, IOException {
-		
-		//File videoFile = new File(videoLocation+empresa+"/"+video);
+//	@PostConstruct
+//	public void init() {
+//		File dir = new File(videoLocation);
+//		videos.clear();
+//		if (dir != null){
+//			videos.putAll(Arrays.asList(dir.listFiles()).stream()
+//					.collect(Collectors.toMap((f) -> {
+//						String name = ((File) f).getName();
+//						return name;
+//					}, (f) -> (File) f)));
+//		}
+//	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{empresa:.+}/{video:.+}")
+	public void stream(@PathVariable String empresa, @PathVariable String video, Principal principal, HttpServletRequest request, HttpServletResponse response)
+			//throws MalformedURLException, IOException {
+	{	
+		File videoFile = new File(videoLocation+empresa+"/"+video);
 		Usuario user = userRepository.findByUsername(principal.getName());
 		Client client = ClientBuilder.newClient();
 		DatosJson dj = new DatosJson();
@@ -113,21 +102,7 @@ public class VideoController {
 		System.out.println("cliente subscripto" + clienteSubscripto.toString());
 		
 		System.out.println("cliente PPV Comprado" + conenidoPPVComprado.toString());
-		
-		String url = client
-    	.target(this.target+"/contenido/obtenerURL/"+nomEmpresa+"/"+video)
-    	.request(MediaType.APPLICATION_JSON).get(String.class);
-		if (url == null){
-			return (os) -> {};
-		}
-		final InputStream videoFileStream = new URL(url).openStream();
-		return (os) -> {
-			if (!clienteBloqueado && ((!esContenidoPPV && clienteSubscripto) || (esContenidoPPV && conenidoPPVComprado)))
-			{
-				readAndWrite(videoFileStream, os);
-			}
-		};
-		/*if (!clienteBloqueado && ((!esContenidoPPV && clienteSubscripto) || (esContenidoPPV && conenidoPPVComprado)))		
+		if (!clienteBloqueado && ((!esContenidoPPV && clienteSubscripto) || (esContenidoPPV && conenidoPPVComprado)))		
 		{
 			try {
 				MultipartFileSender.fromPath(videoFile.toPath())
@@ -149,22 +124,13 @@ public class VideoController {
 				e.printStackTrace();
 			}
 		}
-		
->>>>>>> 2a1fcba158c245c613e399377527883eb7e9732d
-		//final InputStream videoFileStream = new FileInputStream(videoFile);
-		final InputStream videoFileStream = new URL("http://172.20.10.3:8080/").openStream();
-		return (os) -> {
-			readAndWrite(videoFileStream, os);
-<<<<<<< HEAD
-		};
-=======
-		};*/
 	}
 	
 	private void readAndWrite(InputStream is, OutputStream os)
             throws IOException {
         byte[] data = new byte[2048];
         int read = 0;
+        
         System.out.println("Paso y leyo"+Integer.toString(read));
         while ((read = is.read(data)) > 0) {
             os.write(data, 0, read);
@@ -173,5 +139,4 @@ public class VideoController {
         System.out.println("salio del while =="+Integer.toString(read));
         os.flush();
     }
-	
 }

@@ -74,6 +74,14 @@ public class EventosVideos {
 	    	Response postResponse = client
 		    	.target(URL+"/contenido/guardarTiempoReproduccion")
 		    	.request().post(Entity.json(dj));
+	    	
+	    	 DatosJson djh = new DatosJson();
+	    	 djh.addParameter("idFacebook",user.getProfileUrl());
+	    	 djh.addParameter("titulo",request.getParameter("video"));
+	    	 dj.addParameter("empresa",nomEmpresa);
+	    	 Boolean agreghist = client
+		    	.target(URL+"/cliente/agregarHistorico")
+		    	.request().post(Entity.json(djh),Boolean.class);
 	}
 	
 
