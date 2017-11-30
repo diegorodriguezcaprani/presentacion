@@ -15,16 +15,29 @@
 			<h:outputStylesheet library="css" name="contenido.css" />
 			<div class= "divContenidos contenido" style= " background: linear-gradient(rgba(255,255,255,.6), rgba(0,0,0,1)), url(#{contenidoBean.url})">
 				<h1 class= "nombreContenido">#{contenidoBean.id}</h1> 
-				<h2 class= "cantPuntuacionesContenido">#{contenidoBean.cantPuntuaciones}</h2> 
-	
-				<div class= "rating">
-					<c:forEach begin="1" end="#{contenidoBean.puntuacion}">
-   						<span class="fa fa-star checked"></span> 
-					</c:forEach>
-					<c:forEach begin="#{contenidoBean.puntuacion}" end="#{contenidoBean.maxEstrellas}">
-   						<span class="fa fa-star"></span> 
-					</c:forEach>
-				</div>
+						
+					<h:panelGroup layout="block" id="container-puntuacion" class= "rating">	
+						<h2 class= "cantPuntuacionesContenido">#{contenidoBean.cantPuntuaciones}</h2>
+						<h:form id="form-estrellas">	
+							<c:forEach var = "i" begin="1" end="#{contenidoBean.puntuacion}">
+								<h:commandLink id="btnStarschecked"
+			   						 action="#{homeBean.puntuarContenido(i)}">
+			   						 <f:param name="idContenido" value="#{contenidoBean.id}" />
+			    					 <span class="fa fa-star checked"></span> 
+			    					<f:ajax render=":container-puntuacion" />
+								</h:commandLink>
+							</c:forEach>
+							<c:forEach  var = "i" begin="#{contenidoBean.puntuacion+1}" end="#{contenidoBean.maxEstrellas+1}">
+		   						<h:commandLink id="btnStars"
+			   						 action="#{homeBean.puntuarContenido(i)}">
+			   						 <f:param name="idContenido" value="#{contenidoBean.id}" />
+			    					 <span class="fa fa-star"></span> 
+			    					<f:ajax render=":container-puntuacion" />
+								</h:commandLink> 
+							</c:forEach>
+						</h:form>
+					</h:panelGroup>	
+				  
 				<h3 class= "descripcionContenido">#{contenidoBean.descripcion}</h3> 
 				<div class= "img-contenido-div">
 					<img src= "#{contenidoBean.url}"></img>
@@ -40,15 +53,18 @@
 					</div>
 				</h:panelGroup>
 				
+				 <h:panelGroup layout="block" id="container-favourite-form">	
 					<h:form id="form">
 					 
 					  <h:commandLink id="btnFavourite"
-   						 action="#{homeBean.addToFavourite}" styleClass="btn btn-default">
+   						 action="#{homeBean.addToFavourite(contenidoBean.agregarQuitarFavorito())}" styleClass="btn btn-default">
    						  <f:param name="idContenidoFavorito" value="#{contenidoBean.id}" />
-    						<i class="fa fa-heart"  style="color:white;"></i> Añadir a Favoritos
+    						<i class="fa fa-heart"  style="color:white;"></i> #{contenidoBean.textFavourite}
+    						 <f:ajax render=":container-favourite-form" />
 					  </h:commandLink>
 				
 					</h:form>
+				 </h:panelGroup>
 				
 			</div>
 		

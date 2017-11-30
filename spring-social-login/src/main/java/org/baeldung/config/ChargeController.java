@@ -6,6 +6,7 @@ import org.baeldung.config.ChargeRequest.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -18,7 +19,8 @@ public class ChargeController {
  
     @Autowired
     private StripeService paymentsService;
- 
+    
+    @CrossOrigin(origins="*")
     @PostMapping("/charge")
     public String charge(ChargeRequest chargeRequest, Model model,HttpServletRequest request)
       throws StripeException {

@@ -38,74 +38,17 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/video")
 public class VideoController {
 
-	private String videoLocation = "C:/Users/toshiba/git/presentacion/spring-social-login/src/main/webapp/resources/videos";
-
-	private ConcurrentHashMap<String, File> videos = new ConcurrentHashMap<String, File>();
-
-	@PostConstruct
-	public void init() {
-		File dir = new File(videoLocation);
-		videos.clear();
-		videos.putAll(Arrays.asList(dir.listFiles()).stream()
-				.collect(Collectors.toMap((f) -> {
-					String name = ((File) f).getName();
-					return name;
-				}, (f) -> (File) f)));
-	}
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{video:.+}")
 	public StreamingResponseBody stream(@PathVariable String video)
 			throws MalformedURLException, IOException {
-		File videoFile = videos.get(video);
 		//final InputStream videoFileStream = new FileInputStream(videoFile);
 		final InputStream videoFileStream = new URL("http://172.20.10.3:8080/").openStream();
 		return (os) -> {
 			readAndWrite(videoFileStream, os);
 		};
-	}/*
-	//@RequestMapping(method = RequestMethod.GET, value = "/stream1")
-    @ResponseBody
-    public StreamingResponseBody getVidoeStream1(@PathVariable String video) throws IOException {
-        /* do security check before connecting to stream hosting server */ 
-     /*   RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Resource> responseEntity = restTemplate.exchange( "http://192.168.1.47:8091/", HttpMethod.GET, null, Resource.class );
-        InputStream st = responseEntity.getBody().getInputStream();
-        return (os) -> {
-            readAndWrite(st, os);
-        };
-
-
-	}*/
-
-	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void upload(@RequestParam("file") MultipartFile file) throws IOException {
-		OutputStream os = new FileOutputStream(new File(videoLocation, file.getOriginalFilename()));
-		readAndWrite(file.getInputStream(), os);
-		init();
 	}
-
-	@RequestMapping(method = RequestMethod.GET)
-	public Set<String> list() {
-		//aca deveria de ir una consulta a la logica para devolver los contenidos en vivo. podriamos ponder todos
-		return videos.keySet();
-	}
-	
-	/*private void readAndWrite(final InputStream is, OutputStream os)
-			throws IOException {
-		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		StringBuilder result = new StringBuilder();
-		String line;
-		
-		while((line = reader.readLine()) != null) {
-		    //result.append(line);
-			os.write(line.getBytes(), 0, line.getBytes().length);
-			System.out.println(line);
-		}
-	
-		os.flush();
-	}*/
 	
 	private void readAndWrite(InputStream is, OutputStream os)
             throws IOException {

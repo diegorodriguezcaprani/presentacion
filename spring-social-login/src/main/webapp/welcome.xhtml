@@ -4,7 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
  	  xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a4j="http://primefaces.org/ui">
       
 	<ui:composition template="templates/templateUser.xhtml"> 
     <ui:define name="homeContent">
@@ -14,13 +16,12 @@
 	 <h:outputStylesheet library="css" name="popUp.css" />
 	<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
 	<h:outputScript library="js" name="searchform.js" />
-	<h:outputScript library="js" name="dropdown.js" />
 	<h:outputScript library="js" name="popUp.js" />
+	<h:outputScript library="js" name="popUpExito.js" />
 	
 	
 	<h:panelGroup rendered="#{!homeBean.updated}">
-	
-		<h:panelGroup id="idOfDialogPlaceHolder" class="modal">
+		<h:panelGroup id="idOfDialogPlaceHolder" class="modal" rendered="#{!pagoBean.chequeo()}">
 			<!-- Modal content -->
   			<div class="modal-content">
    			 <span class="close">&times;</span>
@@ -29,39 +30,46 @@
 	    			<th class="order-table-header">Tipo Suscripcion</th>
 	    			<th class="order-table-header">Precio</th>
 	    		</tr>
-		        <ui:repeat var="o" value="#{homeBean.suscripciones}" >
+		        <ui:repeat var="o" value="#{homeBean.suscripcionesModificadas}" >
 		   		<tr>
 	    			<td class="order-table-even-row">#{o.tipo}</td>
-	    			<td class="order-table-even-row">#{o.precio}</td>
+	    			<td class="order-table-even-row">#{o.precioOriginal}</td>
 	    			<td> 
-	    				<h:form>
-	    					<h:commandButton value="Obtener Suscripcion" onclick ="functionPago()" />
-	    				</h:form>
-	    			</td>
-	    		 </tr>
-    			 <tr>
-	    			<td class="order-table-odd-row">#{o.tipo}</td>
-	    			<td class="order-table-odd-row">#{o.precio}</td>
-	    			<td> 
-	    				  <form action='./charge' method="post" id='checkout-form'>
+	    				 <form action='./charge' method="post" id='checkout-form'>
 				            <input type='hidden' value='#{homeBean.amount}' name='amount' />
 				            <script
 				                src='https://checkout.stripe.com/checkout.js' 
 				                class='stripe-button'
 				                data-key='#{homeBean.stripePublicKey}'
-		                        data-amount='#{homeBean.amount}'
+		                        data-amount='#{o.precio}'
 		                        data-currency='#{homeBean.currency}'
 				                data-name='Baeldung'
 				                data-description='Spring course checkout'
 				                data-image='http://www.baeldung.com/wp-content/themes/baeldung/favicon/android-chrome-192x192.png'
 				                data-locale='auto'
-				                data-zip-code='false'>
+				                data-zip-code='false'
+				                Access-Control-Allow-Credentials='true'>
 				            </script>
-				        </form>
+				             
+				         </form>
 	    			</td>
-	    		  </tr>
-		    		</ui:repeat>
+	    			<td> 
+		    				<p:selectBooleanCheckbox value="#{homeBean.tipoSuscripcion}">
+	        					<p:ajax listener="#{homeBean.changeActive(o.tipo)}"/>  
+							</p:selectBooleanCheckbox>  
+
+	    			</td>
+	    		 </tr>
+		    	</ui:repeat>
     		</table>
+    			
+  			</div>
+        </h:panelGroup>
+        <h:panelGroup id="idOfDialog" class="modal" rendered="#{pagoBean.exito}">
+        		<!-- Modal content -->
+  			<div class="modal-content">
+   			 <span class="close">&times;</span>
+    			<p> Exito!</p>
     			
   			</div>
         </h:panelGroup>

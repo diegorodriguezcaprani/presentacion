@@ -37,6 +37,7 @@ import datatypes.DatosContenido;
 import datatypes.DatosIdNombre;
 import datatypes.DatosJson;
 import datatypes.DatosSuscripcion;
+import datatypes.DatosSuscripcionModificado;
 import datatypes.DatosTipoContenido;
 
 @ManagedBean(name="homeBean")
@@ -48,6 +49,7 @@ public class HomeBean {
 	private Usuario user;
 	private List <DatosContenido> contenidos = new ArrayList<DatosContenido>();
 	private List <DatosSuscripcion> suscripciones = new ArrayList<DatosSuscripcion>();
+	private List <DatosSuscripcionModificado> suscripcionesModificadas = new ArrayList<DatosSuscripcionModificado>();
 	private List <DatosContenido> contenidosSugeridos = new ArrayList<DatosContenido>();
 	private String algo;//search algo
 	private List <DatosContenido> contenidosFiltrados = new ArrayList<DatosContenido>();
@@ -55,6 +57,7 @@ public class HomeBean {
 	private List <DatosContenido> contenidosDestacados = new ArrayList<DatosContenido>();
 	private List <DatosContenido> contenidosFavoritos = new ArrayList<DatosContenido>();
 	private List <DatosTipoContenido> tiposContenido = new ArrayList<DatosTipoContenido>();
+	private List <DatosIdNombre> categorias = new ArrayList<DatosIdNombre>();
 	private List <String> imageURLs = new ArrayList<String>();
 	private String URL= "http://localhost:8080/ServidorTsi2/";
 	private String idContenidoFavorito;
@@ -67,8 +70,12 @@ public class HomeBean {
 	private boolean updated;
 	private boolean search;
 	private boolean todos;
+	private boolean chequeo;
 	private boolean contenidoFiltrado;
 	private String tipoContenido;
+	private int categoriaContenido;
+	private boolean tipoSuscripcion;
+	private String tipoSuscripcionString;
 	
 	
 	 public enum Currency {
@@ -100,19 +107,18 @@ public class HomeBean {
     	this.idFacebook=user.getProfileUrl();
     	this.user= user;
     	//obtenerCliente();
-    	//boolean chequeo= chequearSuscripcion();
-		//setSuscripto(chequeo);
-    	setSuscripto(true);
-		
+    	this.chequeo= chequearSuscripcion();
+		setSuscripto(chequeo);
+    	//setSuscripto(true);
 		if(!this.isSuscripto()) {
 			RequestContext requestContext = RequestContext.getCurrentInstance();    
 			requestContext.execute("openPopUp();");
 		}
 		obtenerSuscripciones();
 		//DatosTipoContenido dtContenido2=new DatosTipoContenido("evento deportivo",null, null,true);
-//		DatosTipoContenido dtContenido1=new DatosTipoContenido("pelicula",null, null,false);
-//		DatosContenido contenido1= new DatosContenido("contenido1", "descripcion",2, (double) 4,true, false, "http://gfbrobot.com/wp-content/uploads/2011/08/true-blood3.png",null,null,null,dtContenido1, null,"./videoEnArchivo/spring-social-login/fish3.mp4","Fox",10.0);
-//		contenidos.add(contenido1);
+		DatosTipoContenido dtContenido1=new DatosTipoContenido("pelicula",null, null,false);
+		DatosContenido contenido1= new DatosContenido("contenido1", "descripcion",2, (double) 4,true, false, "http://gfbrobot.com/wp-content/uploads/2011/08/true-blood3.png",null,null,null,dtContenido1, null,"./videoEnArchivo/spring-social-login/fish3.mp4","Fox",10.0);
+		contenidos.add(contenido1);
 		contenidosDestacados();
 		obtenerTiposContenido();
 		//obtenerFavoritos();
@@ -140,7 +146,9 @@ public class HomeBean {
 		
 		//Cliente cliente= new Cliente("belen.remedi@gmail.com","Belen",24,'M',"Uruguay"," ",true);
 		//this.cliente= cliente;
-    }	
+    
+	
+	}	
 	public HomeBean() {
 		// TODO Auto-generated constructor stub
 	}
@@ -169,6 +177,16 @@ public class HomeBean {
     	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosContenido>>() {});
 		this.setContenidosFiltradosTipoGenero(cont);
 	}
+	public void filtrarContenidoTipoCategoria() {
+		System.out.println(tipoContenido+"tipoooooo");
+		System.out.println(categoriaContenido+"categoriaaa");
+		Client client = ClientBuilder.newClient();
+    	List<DatosContenido> cont = client
+    	.target(URL+"contenido/"+nombreEmpresa+"/filtrar/"+tipoContenido+"/"+categoriaContenido)
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosContenido>>() {});
+    	contenidosFiltradosTipoGenero.clear();
+		this.setContenidosFiltradosTipoGenero(cont);
+	}
 	
 	public void obtenerFavoritos() {
 		DatosJson dj= new DatosJson();
@@ -189,8 +207,32 @@ public class HomeBean {
     	.target(URL+"empresa/"+nombreEmpresa+"/obtenerSuscripciones")
     	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosSuscripcion>>() {});
 		this.setSuscripciones(cont);
+		
+		for(DatosSuscripcion sus : this.getSuscripciones()) {
+			suscripcionesModificadas.add(new DatosSuscripcionModificado(sus.getTipo(), (int)(sus.getPrecio()*100), sus.getPrecio()));
+			System.out.println((int)(sus.getPrecio()*100)+"aaaaaaaDoubleSusc");
+		}
 	}
 	
+	public List<DatosSuscripcionModificado> getSuscripcionesModificadas() {
+		return suscripcionesModificadas;
+	}
+	public void setSuscripcionesModificadas(List<DatosSuscripcionModificado> suscripcionesModificadas) {
+		this.suscripcionesModificadas = suscripcionesModificadas;
+	}
+	public void obtenerSugeridos() {
+
+		DatosJson dj= new DatosJson();
+		dj.addParameter("idFacebook", idFacebook);
+		dj.addParameter("empresa",nombreEmpresa);
+	
+    	Client client = ClientBuilder.newClient();
+    	List<DatosContenido> postResponse = client
+    	.target(URL+"cliente/obtenerContenidosSugeridos")
+    	.request().post(Entity.json(dj),new GenericType<List<DatosContenido>>() {});
+    	
+		this.setContenidosSugeridos(postResponse);
+	}
 	public boolean chequearSuscripcion() {
 		DatosJson dj= new DatosJson();
 		dj.addParameter("idFacebook", idFacebook);
@@ -216,39 +258,99 @@ public class HomeBean {
 		return postResponse.booleanValue();
 	}
 	
-	public boolean addToFavourite() {
+	public boolean addToFavourite(boolean aeliminar) {
+		//elimino o guardo dependiendo si es favorito
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-	    String idContenidoFavorito = ec.getRequestParameterMap().get("idContenidoFavorito");	       
-		
+	    String idContenidoFavorito = ec.getRequestParameterMap().get("idContenidoFavorito");
+	   
 		System.out.println("favoritoooooooooooooo"+idContenidoFavorito);
 		System.out.println("favoritoooooooooooooo"+idFacebook);
-		contenidosFavoritos.add(buscarContenidoId(idContenidoFavorito));
-		System.out.println(URL + "cliente/agregarFavorito");
-		String target= URL + "cliente/agregarFavorito";
-		System.out.println(target+"targetttttt");
-		DatosJson dj= new DatosJson();
-		dj.addParameter("idFacebook", idFacebook);
-		dj.addParameter("titulo",idContenidoFavorito);
-		dj.addParameter("empresa","Fox");
+		if(aeliminar) {
+			System.out.println("lo eliminoooooo");
+			contenidosFavoritos.remove((buscarContenidoId(idContenidoFavorito)));
+			DatosJson dj= new DatosJson();
+			dj.addParameter("idFacebook", idFacebook);
+			dj.addParameter("titulo",idContenidoFavorito);
+			dj.addParameter("empresa",nombreEmpresa);
+			
+	    	Client client = ClientBuilder.newClient();
+	    	Response postResponse = client
+	    	.target(URL + "cliente/quitarFavorito")
+	    	.request().post(Entity.json(dj));
+	    	
+	    	System.out.println(Entity.json(dj));
+	    	
+	    	if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
+	    		System.out.println("Error al consumir mediante post.");
+	    	}
+	    	else{
+	    		System.out.println("Se consumio correctamente mediante post.");
+	    	}
+	    	
+			return true;
+			
+		}else {
+			contenidosFavoritos.add(buscarContenidoId(idContenidoFavorito));
+			System.out.println("lo agregooooo");
+			String target= URL + "cliente/agregarFavorito";
+			System.out.println(target+"targetttttt");
+			DatosJson dj= new DatosJson();
+			dj.addParameter("idFacebook", idFacebook);
+			dj.addParameter("titulo",idContenidoFavorito);
+			dj.addParameter("empresa",nombreEmpresa);
+			
+	    	Client client = ClientBuilder.newClient();
+	    	Response postResponse = client
+	    	.target(target)
+	    	.request().post(Entity.json(dj));
+	    	
+	    	if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
+	    		System.out.println("Error al consumir mediante post.");
+	    	}
+	    	else{
+	    		System.out.println("Se consumio correctamente mediante post.");
+	    	}
+	    	
+			return true;
+			
+		}
 		
-    	Client client = ClientBuilder.newClient();
-    	Response postResponse = client
-    	.target(target)
-    	.request().post(Entity.json(dj));
-    	
-    	System.out.println(Entity.json(dj));
-    	
-    	if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
-    		System.out.println("Error al consumir mediante post.");
-    	}
-    	else{
-    		System.out.println("Se consumio correctamente mediante post.");
-    	}
-    	
-		return true;
+	}
+	
+	public int puntuarContenido(int puntuacion) {
+		System.out.println(puntuacion+ "puntuacionnnnnnn");
+		return puntuacion;
+//		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+//	    String idContenido = ec.getRequestParameterMap().get("idContenido");
+//		
+//		DatosJson dj= new DatosJson();
+//		dj.addParameter("idFacebook", idFacebook);
+//		dj.addParameter("empresa",nombreEmpresa);
+//		dj.addParameter("puntacion",puntuacion+"");
+//		dj.addParameter("titulo",idContenido);
+//		
+//    	Client client = ClientBuilder.newClient();
+//    	double postResponse = client
+//    	.target(URL+"contenido/puntuar")
+//    	.request().post(Entity.json(dj),double.class);
+//    	
+//    	System.out.println(postResponse+"puntuacionServiciooooo");
+//    	DatosContenido contenido=buscarContenidoId(idContenido);
+//    	contenidos.remove(contenido);
+//    	contenido.setPuntuacion(postResponse);
+//    	contenido.setCantPuntuaciones(contenido.getCantPuntuaciones()+1);
+//    	contenidos.add(contenido);
+//    	
+//		return (int)postResponse;
 	}
 	
 /*******auxiliares*******************************************************************************************/	
+	
+	public void changeActive(String tipoSuscripcion) {
+		System.out.println("yeahhhhh____");
+		System.out.println("yeahhhhh____"+ tipoSuscripcion);
+		this.tipoSuscripcionString= tipoSuscripcion;
+	}
 	public void contenidosDestacados() {
 		for(DatosContenido contenido : contenidos) { 
 			   if(contenido.isDestacado()) { 
@@ -285,11 +387,21 @@ public class HomeBean {
 		this.search= false;
 		this.contenidoFiltrado = false;
 	}
-	public void Tipos(String tipo) {
+	public void Tipos(DatosTipoContenido o) {
 		this.updated= true;
 		this.search= false;
-		this.tipoContenido= tipo;
+		this.tipoContenido= o.getNombre();
+		this.categorias= o.getCategorias();
 		this.filtrarContenido();
+		this.contenidoFiltrado = true;
+	}
+	
+	public void Genero(int idCategoria) {
+		System.out.println("hola"+"jajajaj");
+		this.updated= true;
+		this.search= false;
+		this.categoriaContenido= idCategoria;
+		this.filtrarContenidoTipoCategoria();
 		this.contenidoFiltrado = true;
 	}
 	
@@ -300,6 +412,18 @@ public class HomeBean {
 		return suscripciones;
 	}
 
+	public int getCategoriaContenido() {
+		return categoriaContenido;
+	}
+	public void setCategoriaContenido(int categoriaContenido) {
+		this.categoriaContenido = categoriaContenido;
+	}
+	public List<DatosIdNombre> getCategorias() {
+		return categorias;
+	}
+	public void setCategorias(List<DatosIdNombre> categorias) {
+		this.categorias = categorias;
+	}
 	public List<DatosContenido> getContenidosFiltradosTipoGenero() {
 		return contenidosFiltradosTipoGenero;
 	}
@@ -464,6 +588,46 @@ public void setCurrency(Currency currency) {
 	public void setContenidoFiltrado(boolean contenidoFiltrado) {
 		this.contenidoFiltrado = contenidoFiltrado;
 	}
+	public String getIdContenidoFavorito() {
+		return idContenidoFavorito;
+	}
+	public void setIdContenidoFavorito(String idContenidoFavorito) {
+		this.idContenidoFavorito = idContenidoFavorito;
+	}
+	public boolean isChequeo() {
+		return chequeo;
+	}
+	public void setChequeo(boolean chequeo) {
+		this.chequeo = chequeo;
+	}
+	public String getURL() {
+		return URL;
+	}
+	public void setURL(String uRL) {
+		URL = uRL;
+	}
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
+	}
+	public void setTipoSuscripcion(boolean tipoSusc) {
+		this.tipoSuscripcion= tipoSusc;
+		System.out.println(tipoSusc+"tipoSuscBooleannnncheckkkk_____");
+	}
+	public boolean getTipoSuscripcion() {
+		return tipoSuscripcion;
+	}
+	public String getTipoSuscripcionString() {
+		return tipoSuscripcionString;
+	}
+	public void setTipoSuscripcionString(String tipoSuscripcionString) {
+		this.tipoSuscripcionString = tipoSuscripcionString;
+	}
+	
+	
+	
 	
 	
 }
