@@ -47,11 +47,58 @@
    						  <f:param name="idContenidoFavorito" value="#{contenidoBean.id}" />
     						<i class="fa fa-heart"  style="color:white;"></i> Añadir a Favoritos
 					  </h:commandLink>
+					  
+					  <h:panelGrid columns="1" cellpadding="5">
+ 
+					    <p:commandLink value="Compartir" type="button" onclick="PF('dlg2').show();" />
+					 
+					</h:panelGrid>
+										  
+					 <p:dialog header="Compartir contenido" widgetVar="dlg2" modal="true" height="100">
+					    
+						    <h:panelGrid columns="2" cellpadding="5">
+						        <h:outputLabel for="menu" value="Compartir con:" />
+						        <p:selectCheckboxMenu id="menu" value="#{contenidoBean.clientesSeleccionados}" label="Usuarios"
+						                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+						            <f:selectItems value="#{contenidoBean.nombresClientes}" />
+						        </p:selectCheckboxMenu>
+						        
+						        <h:commandButton value="Compartir" action="#{contenidoBean.compartirContenido()}" >
+							 			<f:ajax execute="@form" render="@form" />
+						 		</h:commandButton>
+						        
+					    	</h:panelGrid>
+					     
+					    
+					</p:dialog>  
 				
 					</h:form>
 				
 			</div>
-		
+			
+			<h:form>
+				<h:panelGroup>
+			    	<div>
+					   	 <ui:repeat var="o" value="#{contenidoBean.comentarios}" >
+					    	<div>
+					    		
+						    		 <h:outputText rendered="#{o.spoilerCount eq 0}" value="#{o.nombreCliente} : #{o.mensaje}"/>
+						    		 <h:outputText rendered="#{o.spoilerCount ne 0}" value="#{o.nombreCliente} : Este comentario ha sido marcado como spoiler" style="color:red"/>
+						    		 <h:commandButton rendered="#{o.spoilerCount eq 0}" style="width:20px; height:20px; text-align:center; margin-left:50px;" value="X" action="#{contenidoBean.marcarComentarioSpam(o.id)}" >
+							 			<f:ajax execute="@form" render="@form" />
+							 		</h:commandButton>
+						 		
+				   			</div>	
+					    </ui:repeat>
+				 	</div>	
+				 	<div>
+				 		<h:inputText value="#{contenidoBean.comentarioEscrito}" />
+				 		<h:commandButton value="Agregar comentario" action="#{contenidoBean.agregarComentario()}" >
+				 			<f:ajax execute="@form" render="@form" />
+				 		</h:commandButton>
+				 	</div> 
+	   			 </h:panelGroup>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </html>

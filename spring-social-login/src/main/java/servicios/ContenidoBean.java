@@ -1,6 +1,7 @@
 package servicios;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -18,9 +19,14 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import datatypes.DatosCliente;
+import datatypes.DatosComentario;
+import datatypes.DatosCompartirContenido;
 import datatypes.DatosContenido;
 import datatypes.DatosIdNombre;
 import datatypes.DatosJson;
+import datatypes.DatosNotificacion;
+import datatypes.DatosParametro;
 
 @ManagedBean(name="contenidoBean")
 @RequestScoped
@@ -48,11 +54,24 @@ public class ContenidoBean {
 	private List<String> elenco;
 	private List<String> directores;
 	private List<DatosIdNombre> categorias;
-	private String URL= "http://192.168.1.5:8080/ServidorTsi2/";
+	private String URL= "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
 	private String videoTime;
-
+	private String empresaContenido;
+	private List<DatosComentario> comentarios;
+	private String comentarioEscrito;
+	private List<String> clientesSeleccionados;
+	private List<DatosCliente> clientes;
+	private List<String> nombresClientes;
+	private boolean esPPV;
+	private double precioPPV;
+	private boolean clienteComproPPV;
+	
 	@PostConstruct
     public void init() {
+		
+		this.comentarios = new LinkedList<DatosComentario>();
+		esPPV = false;
+		clienteComproPPV = false;
 		
 		System.out.println("_______"+"contonidoBean");
 		System.out.println("_______"+this.getId());
@@ -77,13 +96,130 @@ public class ContenidoBean {
 					this.bloqueado= contenido.isBloqueado();
 					this.destacado= contenido.isDestacado();
 					this.enVivo= contenido.getTipoContenido().isVivo();
+					this.empresaContenido = contenido.getEmpresa();
+					esPPV = contenido.getPrecioPayPerView() != null;
+					if(esPPV) {
+						precioPPV = contenido.getPrecioPayPerView();
+						clienteComproPPV = tieneCompradoPPV();
+					}
+					
 			   }
 		}
 		obtenerTiempoReproduccion(this.id);
+		obtenerComentarios();
+		nombresClientes = new LinkedList<String>();
+		obtenerClientes();
 		this.maxEstrellas=(int) (5-this.puntuacion-1);
 	}
 	
+	private boolean tieneCompradoPPV() {
+		DatosJson dj = new DatosJson();
+		dj.addParameter("empresa", empresaContenido);
+		dj.addParameter("idFacebook", idFacebook);
+		dj.addParameter("titulo", id);
+		
+		Client client = ClientBuilder.newClient();
+		Boolean respuesta = client
+    	.target(URL + "cliente/tieneCompradoPPV")
+    	.request().post(Entity.json(dj), new GenericType<Boolean>() {});
+		
+		return respuesta;
+	}
 	
+	public String marcarComentarioSpam(int idComent) {
+		
+		DatosJson dj = new DatosJson();
+		dj.addParameter("idComentario", idComent+"");
+		dj.addParameter("empresa", empresaContenido);
+		dj.addParameter("idFacebook", idFacebook);
+		
+		Client client = ClientBuilder.newClient();
+		Response postResponse = client
+    	.target(URL + "comentario/denunciarSpoiler")
+    	.request().post(Entity.json(dj));
+		
+		if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
+    		System.out.println("Error al consumir mediante post.");
+    	}
+    	else{
+    		obtenerComentarios();
+    	}
+		
+		return "";
+	}
+	
+	public String compartirContenido() {
+		
+		DatosCompartirContenido dcc = new DatosCompartirContenido(empresaContenido, id, idFacebook, obtenerIdFacebookReceptores());		
+		Client client = ClientBuilder.newClient();
+		Response postResponse = client
+    	.target(URL + "contenido/compartirContenido")
+    	.request().post(Entity.json(dcc));
+		
+		return "";
+	}
+	
+	private List<String> obtenerIdFacebookReceptores() {
+		List<String> retorno = new LinkedList<String>();
+		
+		for(DatosCliente cli : clientes) {
+			if(clientesSeleccionados.contains(cli.getNombre())) {
+				retorno.add(cli.getidfacebook());
+			}
+		}
+		
+		return retorno;
+	}
+	
+	public String agregarComentario() {
+		
+		DatosJson dj = new DatosJson();
+		dj.addParameter("texto", comentarioEscrito);
+		dj.addParameter("titulo", id);
+		dj.addParameter("empresa", empresaContenido);
+		dj.addParameter("idFacebook", idFacebook);
+		
+		Client client = ClientBuilder.newClient();
+		Response postResponse = client
+    	.target(URL + "comentario/agregarComentario")
+    	.request().post(Entity.json(dj));
+		
+		if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
+    		System.out.println("Error al consumir mediante post.");
+    	}
+    	else{
+    		obtenerComentarios();
+    		
+    	}
+		
+		return "";
+	}
+	
+	public void obtenerComentarios() {
+		
+		Client client = ClientBuilder.newClient();
+    	List<DatosComentario> cont = client
+    	.target(URL+"comentario/"+empresaContenido+"/obtenerComentarios/"+id)
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosComentario>>() {});
+		this.setComentarios(cont);
+	}
+	
+	public void obtenerClientes() {
+		Client client = ClientBuilder.newClient();
+    	List<DatosCliente> cont = client
+    	.target(URL+"cliente/"+empresaContenido+"/obtenerClientes")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosCliente>>() {});
+		this.setClientes(cont);
+		obtenerNombresClientes();
+	}
+	
+	public void obtenerNombresClientes() {
+		for(DatosCliente cli : this.getClientes()) {
+			if(!((cli.getidfacebook()).equals(idFacebook))) {
+				nombresClientes.add(cli.getNombre());
+			}
+		}
+	}
 
 	public String getIdFacebook() {
 		return idFacebook;
@@ -91,11 +227,45 @@ public class ContenidoBean {
 
 
 
+	public List<DatosCliente> getClientes() {
+		return clientes;
+	}
+
+	public void setClientes(List<DatosCliente> clientes) {
+		this.clientes = clientes;
+	}
+
 	public void setIdFacebook(String idFacebook) {
 		this.idFacebook = idFacebook;
 	}
 
 
+
+	public List<String> getNombresClientes() {
+		return nombresClientes;
+	}
+
+	public void setNombresClientes(List<String> nombresClientes) {
+		this.nombresClientes = nombresClientes;
+	}
+
+	
+
+	public List<String> getClientesSeleccionados() {
+		return clientesSeleccionados;
+	}
+
+	public void setClientesSeleccionados(List<String> clientesSeleccionados) {
+		this.clientesSeleccionados = clientesSeleccionados;
+	}
+
+	public String getComentarioEscrito() {
+		return comentarioEscrito;
+	}
+
+	public void setComentarioEscrito(String comentarioEscrito) {
+		this.comentarioEscrito = comentarioEscrito;
+	}
 
 	public String getVideoTime() {
 		return videoTime;
@@ -105,6 +275,14 @@ public class ContenidoBean {
 		this.videoTime = currentVideoTime;
 	}
 
+
+	public String getEmpresaContenido() {
+		return empresaContenido;
+	}
+
+	public void setEmpresaContenido(String empresaContenido) {
+		this.empresaContenido = empresaContenido;
+	}
 
 	public void obtenerTiempoReproduccion(String id) {
 		
@@ -218,9 +396,41 @@ public class ContenidoBean {
 	public void setCategorias( List<DatosIdNombre> categorias) {
 		this.categorias = categorias;
 	}
+	
+	public List<DatosComentario> getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(List<DatosComentario> comentarios) {
+		this.comentarios = comentarios;
+	}
 
 	public String getUrl() {
 		return url;
+	}
+
+	public boolean isEsPPV() {
+		return esPPV;
+	}
+
+	public void setEsPPV(boolean esPPV) {
+		this.esPPV = esPPV;
+	}
+
+	public double getPrecioPPV() {
+		return precioPPV;
+	}
+
+	public void setPrecioPPV(double precioPPV) {
+		this.precioPPV = precioPPV;
+	}
+
+	public boolean isClienteComproPPV() {
+		return clienteComproPPV;
+	}
+
+	public void setClienteComproPPV(boolean clienteComproPPV) {
+		this.clienteComproPPV = clienteComproPPV;
 	}
 
 	public void setUrl(String url) {

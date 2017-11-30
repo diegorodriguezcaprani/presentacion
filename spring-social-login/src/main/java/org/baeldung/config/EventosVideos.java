@@ -33,7 +33,7 @@ public class EventosVideos {
 	private ConfigurableApplicationContext context;
 	@Autowired
     private UserRepository userRepository;
-	private String URL= "http://192.168.1.5:8080/ServidorTsi2/";
+	private String URL= "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/pausa")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

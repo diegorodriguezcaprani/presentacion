@@ -36,6 +36,7 @@ import datatypes.DatosAtributoContenido;
 import datatypes.DatosContenido;
 import datatypes.DatosIdNombre;
 import datatypes.DatosJson;
+import datatypes.DatosNotificacion;
 import datatypes.DatosSuscripcion;
 import datatypes.DatosTipoContenido;
 
@@ -56,7 +57,7 @@ public class HomeBean {
 	private List <DatosContenido> contenidosFavoritos = new ArrayList<DatosContenido>();
 	private List <DatosTipoContenido> tiposContenido = new ArrayList<DatosTipoContenido>();
 	private List <String> imageURLs = new ArrayList<String>();
-	private String URL= "http://localhost:8080/ServidorTsi2/";
+	private String URL= "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
 	private String idContenidoFavorito;
 	private String nombreEmpresa;
 	private boolean suscripto;
@@ -69,6 +70,7 @@ public class HomeBean {
 	private boolean todos;
 	private boolean contenidoFiltrado;
 	private String tipoContenido;
+	private List<DatosNotificacion> notificaciones;
 	
 	
 	 public enum Currency {
@@ -88,7 +90,8 @@ public class HomeBean {
     	ServletContext sc = (ServletContext) fc.getExternalContext().getContext();
     	ConfigurableApplicationContext applicationContext = (ConfigurableApplicationContext) WebApplicationContextUtils.getWebApplicationContext(sc);
     	String nomEmpresa = applicationContext.getApplicationName();
-    	this.nombreEmpresa= nomEmpresa.substring(1); // saco el /
+    	//this.nombreEmpresa= nomEmpresa.substring(1); // saco el /
+    	this.nombreEmpresa = "fox";
 		
 		System.out.println("______holaaaaaaaaa");
     	obtenerContenidos();
@@ -109,6 +112,7 @@ public class HomeBean {
 			requestContext.execute("openPopUp();");
 		}
 		obtenerSuscripciones();
+		obtenerNotificaciones();
 		//DatosTipoContenido dtContenido2=new DatosTipoContenido("evento deportivo",null, null,true);
 //		DatosTipoContenido dtContenido1=new DatosTipoContenido("pelicula",null, null,false);
 //		DatosContenido contenido1= new DatosContenido("contenido1", "descripcion",2, (double) 4,true, false, "http://gfbrobot.com/wp-content/uploads/2011/08/true-blood3.png",null,null,null,dtContenido1, null,"./videoEnArchivo/spring-social-login/fish3.mp4","Fox",10.0);
@@ -145,6 +149,28 @@ public class HomeBean {
 		// TODO Auto-generated constructor stub
 	}
 /*****************************************Servicios*********************************/	
+	
+	public void obtenerNotificaciones() {
+		
+		DatosJson dj = new DatosJson();
+		dj.addParameter("empresa", nombreEmpresa);
+		dj.addParameter("idFacebook", idFacebook);
+		
+		Client client = ClientBuilder.newClient();
+		notificaciones = client
+    	.target(URL + "cliente/obtenerNotificaciones")
+    	.request().post(Entity.json(dj), new GenericType<List<DatosNotificacion>>() {});
+		
+//		if ((postResponse.getStatus() != 201) && (postResponse.getStatus() != 200)){
+//    		System.out.println("Error al consumir mediante post.");
+//    	}
+//    	else{
+//    		notificaciones= (List<DatosNotificacion>)postResponse.getEntity();
+//    	}
+	
+	}
+	
+	
 	public void obtenerContenidos() {
 		
 		Client client = ClientBuilder.newClient();
@@ -229,7 +255,7 @@ public class HomeBean {
 		DatosJson dj= new DatosJson();
 		dj.addParameter("idFacebook", idFacebook);
 		dj.addParameter("titulo",idContenidoFavorito);
-		dj.addParameter("empresa","Fox");
+		dj.addParameter("empresa","fox");
 		
     	Client client = ClientBuilder.newClient();
     	Response postResponse = client
@@ -455,6 +481,12 @@ public void setCurrency(Currency currency) {
 		return algo;
 	}
 
+	public List<DatosNotificacion> getNotificaciones() {
+		return notificaciones;
+	}
+	public void setNotificaciones(List<DatosNotificacion> notificaciones) {
+		this.notificaciones = notificaciones;
+	}
 	public void setAlgo(String algo) {
 		this.algo = algo;
 	}

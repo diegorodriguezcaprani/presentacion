@@ -38,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/video")
 public class VideoController {
 
-	private String videoLocation = "C:/Users/toshiba/git/presentacion/spring-social-login/src/main/webapp/resources/videos";
+	private String videoLocation = "C:/Users/Santiago/git/presentacion/spring-social-login/src/main/webapp/resources/videos";
 
 	private ConcurrentHashMap<String, File> videos = new ConcurrentHashMap<String, File>();
 

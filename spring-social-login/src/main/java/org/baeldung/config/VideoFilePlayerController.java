@@ -51,7 +51,7 @@ public class VideoFilePlayerController {
 	@Autowired
     private UserRepository userRepository;
 	private String videoLocation = "../../Empresas/";
-	private String target = "http://localhost:8080/ServidorTsi2";
+	private String target = "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
 
 	private ConcurrentHashMap<String, File> videos = new ConcurrentHashMap<String, File>();
 

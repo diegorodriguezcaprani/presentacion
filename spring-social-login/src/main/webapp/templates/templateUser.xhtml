@@ -66,7 +66,27 @@
 			    			<a href="#">Link 2</a>
 			    			<a href="#">Link 3</a>
 			  			</div>
-		 
+			  			
+			  			<h:panelGrid columns="1" cellpadding="5" styleClass="tab-button border" rendered="#{homeBean.notificaciones.size()>0}">
+					    	<p:commandLink value="!" type="button" onclick="PF('dlg3').show();" style="color:red"/>
+						</h:panelGrid>
+											  
+						 <p:dialog header="Notificaciones" widgetVar="dlg3" modal="true" height="100">
+							    <h:panelGroup>
+							    	<div>
+									   	 <ui:repeat var="notif" value="#{homeBean.notificaciones}" >
+									    	<div>
+									    		
+									    		 <a href="contenido.xhtml?id=#{notif.tituloContenido}&amp;url=#{notif.portada}&amp;urlvideo=#{notif.url}" >
+									    		 	<h:outputText value="#{notif.nombreClienteQueComparte} te recomienda: #{notif.tituloContenido}" />
+									    		 </a>
+								   			</div>	
+									    </ui:repeat>
+								 	</div>	
+					   			 </h:panelGroup>
+						</p:dialog>  
+		 				
+		 				
 					</div>
 			
 			  			
