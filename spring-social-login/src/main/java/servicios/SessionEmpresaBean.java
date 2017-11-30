@@ -28,6 +28,10 @@ public class SessionEmpresaBean {
 		System.out.println("Nombre empresa es: "+nombreEmpresa);
 		
 	}
+	
+	public boolean ismantel(){
+		return "Mantel".equals(nombreEmpresa);
+	}
 
 	public String getCall() {
 		return call;

@@ -30,7 +30,7 @@
 
 		<!-- Welcome page -->
 	<welcome-file-list>
-		<welcome-file>faces/welcome.xhtml</welcome-file>
+		<welcome-file>/</welcome-file>
 	</welcome-file-list>
 		
 		
