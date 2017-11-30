@@ -45,36 +45,31 @@
 			                onkeypress="if (event.keyCode == 13) {onchange(event); return false;}"
 			                onchange="return event.keyCode !== undefined" 
 			            >
-			                <f:ajax listener="#{homeBean.searchContenido}" render=":container" />
+			                <f:ajax listener="#{homeBean.searchContenido}" render=":container-home" />
 			            </h:inputText>
 		        	</h:form>
 		    		
 		    		
-					<div class="tab-todos">
-			  			 <h:commandButton value="Destacados" action="#{homeBean.Todos}" onclick="tabFunction(event)" class="todos-button">
-	                		<f:ajax execute="@form" render=":container"/>
-	           			 </h:commandButton>
-					</div>
-		    	  	<div class="dropdown1">
-			  			<button onclick="myFunction()" class="dropbtn background-button">Vivo</button>
-			 			
-					</div>
-					<div class="dropdown1">
-			  			<button onclick="myFunction()" class="dropbtn background-button">Películas</button>
-			 			
-					</div>
-					<div class="dropdown1">
-			  			<button onclick="myFunction()" class="dropbtn background-button">Series</button>
-			 			 
-					</div>
-					<div class="dropdown2">
-			  			<button onclick="myFunction()" class="dropbtn background-button">Género</button>
+					<div class="tabs">
+						<h:commandButton value="Destacados" action="#{homeBean.Todos}" onclick="tabFunction(event)" class="tab-button border">
+	                			<f:ajax execute="@form" render=":container-home"/>
+	           			</h:commandButton>
+						<ui:repeat var="o" value="#{homeBean.tiposContenido}" >
+			    			<h:commandButton value="#{o.nombre}" action="#{homeBean.Tipos(o.nombre)}" onclick="tabFunction(event)" class="tab-button border">
+	                			<f:ajax execute="@form" render=":container-home"/>
+	           			 	</h:commandButton>
+			    		</ui:repeat>
+			  			
+			 			<button onclick="myFunction()" class="tab-button border">Género</button>
 			 			 <div id="myDropdown" class="dropdown-content">
 			   				<a href="welcome.xhtml">Link 1</a>
 			    			<a href="#">Link 2</a>
 			    			<a href="#">Link 3</a>
 			  			</div>
+		 
 					</div>
+			
+			  			
 						<!-- <div class="dropdown-profile">
 				  			<button onclick="myFunction()" class="dropbtn button-img">
 				  				<h:graphicImage library="images" name="profile-icon-9.png" style= "width:15px; border-radius: 50%"/>
@@ -85,10 +80,11 @@
 						</div> -->
 		    		
 		    		</header>
-		    			
+		    		 <h:panelGroup layout="block" id="container-home">	
 		    		<ui:insert name="homeContent">
 		    			
 		    		</ui:insert>
+		    		 </h:panelGroup>
 				 	</div> 
 			 
 			</ui:insert>

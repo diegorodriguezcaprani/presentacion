@@ -48,7 +48,7 @@ public class ContenidoBean {
 	private List<String> elenco;
 	private List<String> directores;
 	private List<DatosIdNombre> categorias;
-	private String URL= "http://192.168.1.5:8080/ServidorTsi2/";
+	private String URL= "http://localhost:8080/ServidorTsi2/";
 	private String videoTime;
 
 	@PostConstruct
@@ -58,6 +58,7 @@ public class ContenidoBean {
 		System.out.println("_______"+this.getId());
 		System.out.println("siiiiiiiiiiiiiii___"+this.getContenidos().get(0).getTitulo());
 		System.out.println("____encontreeURL_"+this.getUrl());
+		System.out.println(this.urlvideo+"URLVIDEO");
 	
 		//Busco contenido con titulo id
 		for(DatosContenido contenido : contenidos) { 

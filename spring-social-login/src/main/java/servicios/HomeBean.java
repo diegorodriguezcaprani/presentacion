@@ -3,6 +3,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -50,23 +51,38 @@ public class HomeBean {
 	private List <DatosContenido> contenidosSugeridos = new ArrayList<DatosContenido>();
 	private String algo;//search algo
 	private List <DatosContenido> contenidosFiltrados = new ArrayList<DatosContenido>();
+	private List <DatosContenido> contenidosFiltradosTipoGenero = new ArrayList<DatosContenido>();
 	private List <DatosContenido> contenidosDestacados = new ArrayList<DatosContenido>();
 	private List <DatosContenido> contenidosFavoritos = new ArrayList<DatosContenido>();
-//	private List <DatosContenido> contenidosEnVivo = new ArrayList<DatosContenido>();
-//	private List <DatosContenido> peliculas = new ArrayList<DatosContenido>();
-//	private List <DatosContenido> series = new ArrayList<DatosContenido>();
+	private List <DatosTipoContenido> tiposContenido = new ArrayList<DatosTipoContenido>();
 	private List <String> imageURLs = new ArrayList<String>();
-	private boolean updated;
-	private boolean search;
-	private boolean todos;
 	private String URL= "http://localhost:8080/ServidorTsi2/";
 	private String idContenidoFavorito;
 	private String nombreEmpresa;
 	private boolean suscripto;
 	private boolean home;
+	private String stripePublicKey;
+	private int amount;
+	private Currency currency;
+	private boolean updated;
+	private boolean search;
+	private boolean todos;
+	private boolean contenidoFiltrado;
+	private String tipoContenido;
 	
+	
+	 public enum Currency {
+	        EUR, USD;
+	 }
+	 
 	@PostConstruct
     public void init() {
+		Map<String, String> env = System.getenv();
+		
+		System.out.println(env.get("STRIPE_PUBLIC_KEY")+"env___________");
+		this.stripePublicKey= env.get("STRIPE_PUBLIC_KEY");
+		this.currency= Currency.EUR;
+		this.amount= 5000;
 		this.home= true;
 		FacesContext fc = FacesContext.getCurrentInstance();
     	ServletContext sc = (ServletContext) fc.getExternalContext().getContext();
@@ -75,7 +91,7 @@ public class HomeBean {
     	this.nombreEmpresa= nomEmpresa.substring(1); // saco el /
 		
 		System.out.println("______holaaaaaaaaa");
-    	//obtenerContenidos();
+    	obtenerContenidos();
 		
 		
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -84,8 +100,9 @@ public class HomeBean {
     	this.idFacebook=user.getProfileUrl();
     	this.user= user;
     	//obtenerCliente();
-    	boolean chequeo= chequearSuscripcion();
-		setSuscripto(chequeo);
+    	//boolean chequeo= chequearSuscripcion();
+		//setSuscripto(chequeo);
+    	setSuscripto(true);
 		
 		if(!this.isSuscripto()) {
 			RequestContext requestContext = RequestContext.getCurrentInstance();    
@@ -93,10 +110,11 @@ public class HomeBean {
 		}
 		obtenerSuscripciones();
 		//DatosTipoContenido dtContenido2=new DatosTipoContenido("evento deportivo",null, null,true);
-		DatosTipoContenido dtContenido1=new DatosTipoContenido("pelicula",null, null,false);
-		DatosContenido contenido1= new DatosContenido("contenido1", "descripcion",2, (double) 4,true, false, "http://gfbrobot.com/wp-content/uploads/2011/08/true-blood3.png",null,null,null,dtContenido1, null,"./videoEnArchivo/spring-social-login/fish3.mp4","Fox",10.0);
-		contenidos.add(contenido1);
+//		DatosTipoContenido dtContenido1=new DatosTipoContenido("pelicula",null, null,false);
+//		DatosContenido contenido1= new DatosContenido("contenido1", "descripcion",2, (double) 4,true, false, "http://gfbrobot.com/wp-content/uploads/2011/08/true-blood3.png",null,null,null,dtContenido1, null,"./videoEnArchivo/spring-social-login/fish3.mp4","Fox",10.0);
+//		contenidos.add(contenido1);
 		contenidosDestacados();
+		obtenerTiposContenido();
 		//obtenerFavoritos();
 //		//contenidosSugeridos.add(contenido1);
 //		DatosContenido contenido2= new DatosContenido(" ","contenido2", "descripcion",2, (double) 1,true, false,"https://play3r.net/wp-content/uploads/2015/11/TTG_GoT_Logo.png",null,null,null,dtContenido2, null);
@@ -131,9 +149,25 @@ public class HomeBean {
 		
 		Client client = ClientBuilder.newClient();
     	List<DatosContenido> cont = client
-    	.target(URL+"contenido/Fox/obtenerContenidos")
+    	.target(URL+"contenido/"+nombreEmpresa+"/obtenerContenidosNoBloqueados")
     	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosContenido>>() {});
 		this.setContenidos(cont);
+	}
+	public void obtenerTiposContenido() {
+		
+		Client client = ClientBuilder.newClient();
+    	List<DatosTipoContenido> cont = client
+    	.target(URL+"contenido/tipoContenido")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosTipoContenido>>() {});
+		this.setTiposContenido(cont);
+		System.out.println(cont.get(1).getNombre()+"NombreeeX_______");
+	}
+	public void filtrarContenido() {
+		Client client = ClientBuilder.newClient();
+    	List<DatosContenido> cont = client
+    	.target(URL+"contenido/"+nombreEmpresa+"/filtrar/"+tipoContenido+"/-1")
+    	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosContenido>>() {});
+		this.setContenidosFiltradosTipoGenero(cont);
 	}
 	
 	public void obtenerFavoritos() {
@@ -237,6 +271,7 @@ public class HomeBean {
 	public void searchContenido() {
 		this.updated= true;
 		this.search= true;
+		this.contenidoFiltrado = false;
 		contenidosFiltrados.clear();
 		for(DatosContenido contenido : contenidos) { 
 			   if(contenido.getTitulo().equals(algo)) { 
@@ -248,6 +283,14 @@ public class HomeBean {
 	public void Todos() {
 		this.updated= false;
 		this.search= false;
+		this.contenidoFiltrado = false;
+	}
+	public void Tipos(String tipo) {
+		this.updated= true;
+		this.search= false;
+		this.tipoContenido= tipo;
+		this.filtrarContenido();
+		this.contenidoFiltrado = true;
 	}
 	
 /*******************getters y setters***************************************************************************************/
@@ -257,6 +300,42 @@ public class HomeBean {
 		return suscripciones;
 	}
 
+	public List<DatosContenido> getContenidosFiltradosTipoGenero() {
+		return contenidosFiltradosTipoGenero;
+	}
+	public void setContenidosFiltradosTipoGenero(List<DatosContenido> contenidosFiltradosTipoGenero) {
+		this.contenidosFiltradosTipoGenero = contenidosFiltradosTipoGenero;
+	}
+	public String getTipoContenido() {
+		return tipoContenido;
+	}
+	public void setTipoContenido(String tipo) {
+		this.tipoContenido = tipo;
+	}
+	public List<DatosTipoContenido> getTiposContenido() {
+		return tiposContenido;
+	}
+	public void setTiposContenido(List<DatosTipoContenido> tiposContenido) {
+		this.tiposContenido = tiposContenido;
+	}
+	public int getAmount() {
+	return amount;
+}
+public void setAmount(int amount) {
+	this.amount = amount;
+}
+public Currency getCurrency() {
+	return currency;
+}
+public void setCurrency(Currency currency) {
+	this.currency = currency;
+}
+	public String getStripePublicKey() {
+		return stripePublicKey;
+	}
+	public void setStripePublicKey(String stripePublicKey) {
+		this.stripePublicKey = stripePublicKey;
+	}
 	public boolean isHome() {
 		return home;
 	}
@@ -379,5 +458,12 @@ public class HomeBean {
 	public void setAlgo(String algo) {
 		this.algo = algo;
 	}
+	public boolean isContenidoFiltrado() {
+		return contenidoFiltrado;
+	}
+	public void setContenidoFiltrado(boolean contenidoFiltrado) {
+		this.contenidoFiltrado = contenidoFiltrado;
+	}
+	
 	
 }

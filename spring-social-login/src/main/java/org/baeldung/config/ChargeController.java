@@ -1,5 +1,7 @@
 package org.baeldung.config;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.baeldung.config.ChargeRequest.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,7 @@ public class ChargeController {
     private StripeService paymentsService;
  
     @PostMapping("/charge")
-    public String charge(ChargeRequest chargeRequest, Model model)
+    public String charge(ChargeRequest chargeRequest, Model model,HttpServletRequest request)
       throws StripeException {
         chargeRequest.setDescription("Example charge");
         chargeRequest.setCurrency(Currency.USD);
@@ -27,12 +29,12 @@ public class ChargeController {
         model.addAttribute("status", charge.getStatus());
         model.addAttribute("chargeId", charge.getId());
         model.addAttribute("balance_transaction", charge.getBalanceTransaction());
-        return "result";
+        return "redirect:" + "welcome.xhtml?exito=true";
     }
  
     @ExceptionHandler(StripeException.class)
-    public String handleError(Model model, StripeException ex) {
+    public String handleError(Model model, StripeException ex,HttpServletRequest request) {
         model.addAttribute("error", ex.getMessage());
-        return "result";
+        return "redirect:" + "welcome.xhtml?exito=false";
     }
 }

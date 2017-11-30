@@ -51,23 +51,7 @@ public class VideoFilePlayerController {
 	@Autowired
     private UserRepository userRepository;
 	private String videoLocation = "../../Empresas/";
-	private String target = "http://localhost:8080/ServidorTsi2";
 
-	private ConcurrentHashMap<String, File> videos = new ConcurrentHashMap<String, File>();
-			
-	/*@RequestMapping(method = RequestMethod.GET, value = "/{video:.+}")
-	public StreamingResponseBody stream(@PathVariable String video, Principal principal)
-			throws MalformedURLException, IOException {*/
-		
-	/*	Usuario user = userRepository.findByUsername(principal.getName());
-		
-		//File videoFile = videos.get(video);
-		final InputStream videoFileStream = new FileInputStream(videoFile);
-
-		//final InputStream videoFileStream = new URL("http://192.168.1.47:8091/").openStream();
-		return (os) -> {
-			readAndWrite(videoFileStream, os);
-		};*/
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)

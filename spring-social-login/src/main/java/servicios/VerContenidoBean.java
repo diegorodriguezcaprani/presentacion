@@ -73,8 +73,9 @@ public class VerContenidoBean {
 	@PostConstruct
     public void init() {
 		System.out.println("videoTimeeeee"+this.videoTime);
+		System.out.println("videoTimeeeee"+this.videoTime);
 		this.urlVideoTime= this.urlvideo+ "#t="+ this.videoTime;
-		System.out.println("videoTimeeeee"+this.urlVideoTime);
+		System.out.println("URLvideoTimeeeee"+this.urlVideoTime);
 		if (this.isEnVivo()) {
 			this.videoType= "video/ogg";
 		}else {
