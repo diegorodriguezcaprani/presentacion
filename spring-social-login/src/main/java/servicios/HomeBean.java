@@ -100,7 +100,7 @@ public class HomeBean {
     	ConfigurableApplicationContext applicationContext = (ConfigurableApplicationContext) WebApplicationContextUtils.getWebApplicationContext(sc);
     	String nomEmpresa = applicationContext.getApplicationName();
     	this.nombreEmpresa= nomEmpresa.substring(1); // saco el /
-    	this.nombreEmpresa = "fox";
+    	//this.nombreEmpresa = "fox";
 		
 		System.out.println("______holaaaaaaaaa");
     	obtenerContenidos();
