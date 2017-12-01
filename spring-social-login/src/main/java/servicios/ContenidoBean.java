@@ -37,10 +37,14 @@ public class ContenidoBean {
 	private List <DatosContenido> contenidos;
 	@ManagedProperty(value = "#{homeBean.idFacebook}") //idFacebook del BeanHome
 	private String idFacebook;
+	@ManagedProperty(value = "#{homeBean.contenidosFavoritos}")
+	private List <DatosContenido> contenidosFavoritos = new ArrayList<DatosContenido>();
 	@ManagedProperty(value = "#{param.url}")// portada
 	private String url;// portada
 	@ManagedProperty(value = "#{param.urlvideo}")// t�tulo
 	private String urlvideo;
+	@ManagedProperty(value = "#{homeBean.URL}") //
+	private String URL;	
 	private int maxEstrellas;
 	
 	private String descripcion;
@@ -54,7 +58,7 @@ public class ContenidoBean {
 	private List<String> elenco;
 	private List<String> directores;
 	private List<DatosIdNombre> categorias;
-	private String URL= "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
+
 	private String videoTime;
 	private String empresaContenido;
 	private List<DatosComentario> comentarios;
@@ -65,14 +69,21 @@ public class ContenidoBean {
 	private boolean esPPV;
 	private double precioPPV;
 	private boolean clienteComproPPV;
+	private int precioPPVInt;
 	
+	private String textFavourite;
+	private int puntuacionUsuario;
+
 	@PostConstruct
     public void init() {
+
 		
 		this.comentarios = new LinkedList<DatosComentario>();
 		esPPV = false;
 		clienteComproPPV = false;
 		
+
+		this.puntuacionUsuario=0;
 		System.out.println("_______"+"contonidoBean");
 		System.out.println("_______"+this.getId());
 		System.out.println("siiiiiiiiiiiiiii___"+this.getContenidos().get(0).getTitulo());
@@ -88,8 +99,8 @@ public class ContenidoBean {
 					System.out.println("____encontreePortada_"+contenido.getPortada());
 					this.descripcion= contenido.getDescripcion();
 					this.cantPuntuaciones= contenido.getCantPuntuaciones();
-					//this.puntuacion= contenido.getPuntuacion().intValue();
-					this.puntuacion= 4;
+					this.puntuacion= contenido.getPuntuacion().intValue();
+					System.out.println("Doubleeeee"+puntuacion);
 					this.elenco= contenido.getElenco();
 					this.directores= contenido.getDirectores();
 					this.categorias= contenido.getCategorias();
@@ -100,6 +111,7 @@ public class ContenidoBean {
 					esPPV = contenido.getPrecioPayPerView() != null;
 					if(esPPV) {
 						precioPPV = contenido.getPrecioPayPerView();
+						precioPPVInt = (int)precioPPV;
 						clienteComproPPV = tieneCompradoPPV();
 					}
 					
@@ -109,9 +121,16 @@ public class ContenidoBean {
 		obtenerComentarios();
 		nombresClientes = new LinkedList<String>();
 		obtenerClientes();
-		this.maxEstrellas=(int) (5-this.puntuacion-1);
+		this.maxEstrellas= 5-1;
+		//this.maxEstrellas= 5-this.puntuacion;
+		if (estaEnFavoritos()) {
+			this.textFavourite= "Quitar de Favoritos";
+		}else {
+			this.textFavourite= "Agregar a Favoritos";
+		}
 	}
 	
+
 	private boolean tieneCompradoPPV() {
 		DatosJson dj = new DatosJson();
 		dj.addParameter("empresa", empresaContenido);
@@ -219,6 +238,26 @@ public class ContenidoBean {
 				nombresClientes.add(cli.getNombre());
 			}
 		}
+	}
+	public boolean agregarQuitarFavorito() {
+		boolean favorito=false;
+		this.textFavourite= "Quitar de Favoritos";
+		for(DatosContenido contenido : contenidosFavoritos) { 
+			   if(contenido.getTitulo().equals(id)) { 
+				   favorito= true;
+				   this.textFavourite=  "Añadir a Favoritos";
+			   }
+		}
+		return favorito;
+	}
+	public boolean estaEnFavoritos() {
+		boolean favorito=false;
+		for(DatosContenido contenido : contenidosFavoritos) { 
+			   if(contenido.getTitulo().equals(id)) { 
+				   favorito= true;
+			   }
+		}
+		return favorito;
 	}
 
 	public String getIdFacebook() {
@@ -366,6 +405,16 @@ public class ContenidoBean {
 	public void setBloqueado(boolean bloqueado) {
 		this.bloqueado = bloqueado;
 	}
+	public int getPrecioPPVInt() {
+		return precioPPVInt;
+	}
+
+
+	public void setPrecioPPVInt(int precioPPVInt) {
+		this.precioPPVInt = precioPPVInt;
+	}
+
+
 	public String getComienzo() {
 		return comienzo;
 	}
@@ -453,6 +502,41 @@ public class ContenidoBean {
 	public void setContenidos(List<DatosContenido> contenidos) {
 		this.contenidos = contenidos;
 	}
+
+	public String getTextFavourite() {
+		return textFavourite;
+	}
+
+	public void setTextFavourite(String textFavourite) {
+		this.textFavourite = textFavourite;
+	}
+
+	public List<DatosContenido> getContenidosFavoritos() {
+		return contenidosFavoritos;
+	}
+
+	public void setContenidosFavoritos(List<DatosContenido> contenidosFavoritos) {
+		this.contenidosFavoritos = contenidosFavoritos;
+	}
+
+	public String getURL() {
+		return URL;
+	}
+
+	public void setURL(String uRL) {
+		URL = uRL;
+	}
+
+	public int getPuntuacionUsuario() {
+		System.out.println(puntuacionUsuario+"puntuacionnUsuarioo");
+		this.puntuacionUsuario= puntuacionUsuario+1;
+		return puntuacionUsuario;
+	}
+
+	public void setPuntuacionUsuario(int puntuacionUsuario) {
+		this.puntuacionUsuario = puntuacionUsuario;
+	}
+	
 	
 
 }

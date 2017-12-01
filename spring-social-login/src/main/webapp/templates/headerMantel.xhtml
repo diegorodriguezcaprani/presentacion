@@ -18,7 +18,7 @@
 			        <h:graphicImage value="resources/images/logo.png" style="margin-left: 10px; margin-right: 10px" width="32px" height="32px" />
 				</p:menuitem>
 				
-				<p:menuitem value="Home" url="/adminMantel.xhtml" icon="ui-icon-home" /> 
+				<p:menuitem value="Home" url="/adminhome.xhtml" icon="ui-icon-home" /> 
 				
 				<p:submenu label="Usuarios" icon="ui-icon-person">
 			        <p:menuitem value="Listar todos" url="/adminlistarUsuariosMantel.xhtml" />
@@ -44,7 +44,8 @@
 		        </p:submenu>
 		 		
 		        <f:facet name="options">
-		            <p:commandButton action="index" value="Logout" icon="ui-icon-extlink" />
+		        	<a href="./logout">Logout</a>
+		            <!-- <p:commandButton action="index" value="Logout" icon="ui-icon-extlink" />  -->
 		        </f:facet>
 		    </p:menubar>
 		</h:form>

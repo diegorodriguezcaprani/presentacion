@@ -2,6 +2,7 @@ package datatypes;
 
 public class DatosNotificacion {
 	
+	private int id;
 	private String nombreClienteQueComparte;
 	private String tituloContenido;
 	private String url;
@@ -41,7 +42,11 @@ public class DatosNotificacion {
 	public void setPortada(String portada) {
 		this.portada = portada;
 	}
-	
-	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 
 }

@@ -15,37 +15,80 @@
 			<h:outputStylesheet library="css" name="contenido.css" />
 			<div class= "divContenidos contenido" style= " background: linear-gradient(rgba(255,255,255,.6), rgba(0,0,0,1)), url(#{contenidoBean.url})">
 				<h1 class= "nombreContenido">#{contenidoBean.id}</h1> 
-				<h2 class= "cantPuntuacionesContenido">#{contenidoBean.cantPuntuaciones}</h2> 
-	
-				<div class= "rating">
-					<c:forEach begin="1" end="#{contenidoBean.puntuacion}">
-   						<span class="fa fa-star checked"></span> 
-					</c:forEach>
-					<c:forEach begin="#{contenidoBean.puntuacion}" end="#{contenidoBean.maxEstrellas}">
-   						<span class="fa fa-star"></span> 
-					</c:forEach>
-				</div>
+						
+					<h:panelGroup layout="block" id="container-puntuacion" class= "rating">	
+						<h2 class= "cantPuntuacionesContenido">#{contenidoBean.cantPuntuaciones}</h2>
+						<h:form id="form-estrellas">	
+							<c:forEach var = "i" begin="1" end="#{contenidoBean.puntuacion}">
+								<h:commandLink id="btnStarschecked"
+			   						 action="#{homeBean.puntuarContenido(i)}">
+			   						 <f:param name="idContenido" value="#{contenidoBean.id}" />
+			    					 <span class="fa fa-star checked"></span> 
+			    					<f:ajax render=":container-puntuacion" />
+								</h:commandLink>
+							</c:forEach>
+							<c:forEach  var = "i" begin="#{contenidoBean.puntuacion+1}" end="#{contenidoBean.maxEstrellas+1}">
+		   						<h:commandLink id="btnStars"
+			   						 action="#{homeBean.puntuarContenido(i)}">
+			   						 <f:param name="idContenido" value="#{contenidoBean.id}" />
+			    					 <span class="fa fa-star"></span> 
+			    					<f:ajax render=":container-puntuacion" />
+								</h:commandLink> 
+							</c:forEach>
+						</h:form>
+					</h:panelGroup>	
+				  
 				<h3 class= "descripcionContenido">#{contenidoBean.descripcion}</h3> 
 				<div class= "img-contenido-div">
 					<img src= "#{contenidoBean.url}"></img>
 				</div>
-				<h:panelGroup rendered="#{!contenidoBean.enVivo}">
-				<div>
-					<a class= "link-button" href="player.xhtml?enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}&amp;videoTime=#{contenidoBean.videoTime}">Ver ahora <i class="fa fa-play-circle"></i></a>
-				</div>
-				</h:panelGroup>
-				<h:panelGroup rendered="#{contenidoBean.enVivo}">
+				<h:panelGroup rendered="#{!contenidoBean.esPPV or (contenidoBean.esPPV and contenidoBean.clienteComproPPV)}">
+					<h:panelGroup rendered="#{!contenidoBean.enVivo}">
 					<div>
-						<a class= "link-button" href="player.xhtml?>enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}&amp;videoTime=#{contenidoBean.videoTime}">Ver ahora <i class="fa fa-play-circle"></i></a>
+						<a class= "link-button" href="player.xhtml?enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}&amp;videoTime=#{contenidoBean.videoTime}">Ver ahora <i class="fa fa-play-circle"></i></a>
 					</div>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{contenidoBean.enVivo}">
+						<div>
+							<a class= "link-button" href="player.xhtml?>enVivo=#{contenidoBean.enVivo}&amp;urlvideo=#{contenidoBean.urlvideo}&amp;videoTime=#{contenidoBean.videoTime}">Ver ahora <i class="fa fa-play-circle"></i></a>
+						</div>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{contenidoBean.esPPV and !contenidoBean.clienteComproPPV}">
+					
+							<form action='./chargePPV' method="post" id='checkout-form'>
+							<input type="text" id="name" name="name" value="#{contenidoBean.id}" style="display: none;" />
+							<input type="text" id="idFacebook" name="idFacebook" value="#{homeBean.idFacebook}" style="display: none;" />
+							<input type="text" id="empresa" name="empresa" value="#{contenidoBean.empresaContenido}" style="display: none;" />
+							<input type="text" id="url" name="url" value="#{contenidoBean.URL}" style="display: none;" />
+				            <input type='hidden' value='#{contenidoBean.precioPPVInt}' name='amount' />
+				            <script
+				                src='https://checkout.stripe.com/checkout.js' 
+				                class='stripe-button'
+				                data-key='#{homeBean.stripePublicKey}'
+		                        data-amount='#{contenidoBean.precioPPVInt}'
+		                        data-currency='#{homeBean.currency}'
+				                data-name='Baeldung'
+				                data-description='Spring course checkout'
+				                data-image='http://www.baeldung.com/wp-content/themes/baeldung/favicon/android-chrome-192x192.png'
+				                data-locale='auto'
+				                data-zip-code='false'
+				                Access-Control-Allow-Credentials='true'>
+				            </script>
+				             
+				         </form>
+					
 				</h:panelGroup>
 				
+				
+				 <h:panelGroup layout="block" id="container-favourite-form">	
 					<h:form id="form">
 					 
 					  <h:commandLink id="btnFavourite"
-   						 action="#{homeBean.addToFavourite}" styleClass="btn btn-default">
+   						 action="#{homeBean.addToFavourite(contenidoBean.agregarQuitarFavorito())}" styleClass="btn btn-default">
    						  <f:param name="idContenidoFavorito" value="#{contenidoBean.id}" />
-    						<i class="fa fa-heart"  style="color:white;"></i> Añadir a Favoritos
+    						<i class="fa fa-heart"  style="color:white;"></i> #{contenidoBean.textFavourite}
+    						 <f:ajax render=":container-favourite-form" />
 					  </h:commandLink>
 					  
 					  <h:panelGrid columns="1" cellpadding="5">
@@ -73,6 +116,7 @@
 					</p:dialog>  
 				
 					</h:form>
+				 </h:panelGroup>
 				
 			</div>
 			
@@ -84,7 +128,7 @@
 					    		
 						    		 <h:outputText rendered="#{o.spoilerCount eq 0}" value="#{o.nombreCliente} : #{o.mensaje}"/>
 						    		 <h:outputText rendered="#{o.spoilerCount ne 0}" value="#{o.nombreCliente} : Este comentario ha sido marcado como spoiler" style="color:red"/>
-						    		 <h:commandButton rendered="#{o.spoilerCount eq 0}" style="width:20px; height:20px; text-align:center; margin-left:50px;" value="X" action="#{contenidoBean.marcarComentarioSpam(o.id)}" >
+						    		 <h:commandButton rendered="#{(o.spoilerCount eq 0) and (o.idfacebookCliente != contenidoBean.idFacebook)}" style="width:20px; height:20px; text-align:center; margin-left:50px;" value="X" action="#{contenidoBean.marcarComentarioSpam(o.id)}" >
 							 			<f:ajax execute="@form" render="@form" />
 							 		</h:commandButton>
 						 		

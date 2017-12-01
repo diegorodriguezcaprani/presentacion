@@ -51,109 +51,8 @@ public class VideoFilePlayerController {
 	@Autowired
     private UserRepository userRepository;
 	private String videoLocation = "../../Empresas/";
-	private String target = "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
 
-	private ConcurrentHashMap<String, File> videos = new ConcurrentHashMap<String, File>();
 
-//	@PostConstruct
-//	public void init() {
-//		File dir = new File(videoLocation);
-//		videos.clear();
-//		if (dir != null){
-//			videos.putAll(Arrays.asList(dir.listFiles()).stream()
-//					.collect(Collectors.toMap((f) -> {
-//						String name = ((File) f).getName();
-//						return name;
-//					}, (f) -> (File) f)));
-//		}
-//	}
-
-	@RequestMapping(method = RequestMethod.GET, value = "/{empresa:.+}/{video:.+}")
-	public void stream(@PathVariable String empresa, @PathVariable String video, Principal principal, HttpServletRequest request, HttpServletResponse response)
-			//throws MalformedURLException, IOException {
-	{	
-		File videoFile = new File(videoLocation+empresa+"/"+video);
-		Usuario user = userRepository.findByUsername(principal.getName());
-		Client client = ClientBuilder.newClient();
-		DatosJson dj = new DatosJson();
-		DatosJson djbloqueado = new DatosJson();
-		DatosJson djVerificarppv = new DatosJson();
-		DatosJson djesPPV = new DatosJson();
-		
-		djbloqueado.addParameter("idFacebook", user.getProfileUrl());
-		djVerificarppv.addParameter("idFacebook", user.getProfileUrl());
-		dj.addParameter("idFacebook",user.getProfileUrl());
-		
-		String nomEmpresa = context.getDisplayName();
-        nomEmpresa = nomEmpresa.substring(1); // saco el /
-        System.out.println(nomEmpresa);
-        
-        djbloqueado.addParameter("empresa", nomEmpresa);
-        dj.addParameter("empresa", nomEmpresa);
-		djVerificarppv.addParameter("empresa", nomEmpresa);
-		djesPPV.addParameter("empresa", nomEmpresa);
-		
-		djVerificarppv.addParameter("titulo", video);
-		djesPPV.addParameter("titulo", video);
-		
-		Response postResponseesPPV = client
-		    	.target(this.target+ "/contenido/contenidoEsPPV")
-		    	.request().post(Entity.json(djesPPV));
-		
-		Response postResponsePPV = client
-		    	.target(this.target+ "/cliente/tieneCompradoPPV")
-		    	.request().post(Entity.json(djVerificarppv));
-		Response postResponseSubscripto = client
-		    	.target(this.target+ "/cliente/verificarSuscripcionVigente")
-		    	.request().post(Entity.json(dj));
-		Response postResponseBloqueado = client
-		    	.target(this.target+ "/cliente/clienteEstaBloqueado")
-		    	.request().post(Entity.json(djbloqueado));
-		Boolean clienteBloqueado = ((Boolean)postResponseBloqueado.getEntity()).equals(false);
-		System.out.println("cliente bloqueado" + clienteBloqueado.toString());
-		Boolean esContenidoPPV = ((Boolean)postResponseesPPV.getEntity()).equals(true);
-		System.out.println("es contenido ppv" + esContenidoPPV.toString());
-		Boolean clienteSubscripto = ((Boolean)postResponseSubscripto.getEntity()).equals(true);
-		System.out.println("cliente subscripto" + clienteSubscripto.toString());
-		Boolean conenidoPPVComprado= ((Boolean)postResponseesPPV.getEntity()).equals(true);
-		System.out.println("cliente PPV Comprado" + conenidoPPVComprado.toString());
-		if (!clienteBloqueado && ((!esContenidoPPV && clienteSubscripto) || (esContenidoPPV && conenidoPPVComprado)))		
-		{
-			try {
-				MultipartFileSender.fromPath(videoFile.toPath())
-				.with(request)
-				.with(response)
-				.serveResource();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else
-		{
-			System.out.println("El usuario no esta suscripto");
-			try {
-				response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-			
-	/*@RequestMapping(method = RequestMethod.GET, value = "/{video:.+}")
-	public StreamingResponseBody stream(@PathVariable String video, Principal principal)
-			throws MalformedURLException, IOException {*/
-		
-	/*	Usuario user = userRepository.findByUsername(principal.getName());
-		
-		//File videoFile = videos.get(video);
-		final InputStream videoFileStream = new FileInputStream(videoFile);
-
-		//final InputStream videoFileStream = new URL("http://192.168.1.47:8091/").openStream();
-		return (os) -> {
-			readAndWrite(videoFileStream, os);
-		};*/
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -165,12 +64,6 @@ public class VideoFilePlayerController {
 		System.out.println(file.getName());
 		readAndWrite(file.getInputStream(), os);
 		//init();
-	}
-
-	@RequestMapping(method = RequestMethod.GET)
-	public Set<String> list() {
-		//aca deveria de ir una consulta a la logica para devolver los contenidos en vivo. podriamos ponder todos
-		return videos.keySet();
 	}
 	
 	
