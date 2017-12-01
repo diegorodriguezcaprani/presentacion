@@ -199,13 +199,14 @@ public class ContenidoBeanAdmin {
 	    	}
 	}
 	
-	public void obtenerContenidosVivoPorHabilitar(){
+	public List<String> obtenerContenidosVivoPorHabilitar(){
 		Client client = ClientBuilder.newClient();
     	List<DatosContenido> contenidos = client
     	.target(URL_Back+"/contenido/"+nombreEmpresa+"/contenidosParaTransmitir")
     	.request(MediaType.APPLICATION_JSON).get(new GenericType<List<DatosContenido>>() {});
     	this.contenidosvivo = contenidos;
     	this.contvivostr = toListCont(contenidos);
+    	return this.contvivostr;
 	}
 	
 	public void guardarContenidoVivo(){

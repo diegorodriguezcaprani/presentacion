@@ -159,7 +159,7 @@
 
     <build>
     	<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
-        <finalName>spring-social-login</finalName>
+        <finalName>fox</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

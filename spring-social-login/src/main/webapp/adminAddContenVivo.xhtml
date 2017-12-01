@@ -91,19 +91,6 @@
 			            </p:outputPanel>
 						
 					</h:panelGrid>
-					
-					<!-- SUBIR CONTENIDO  
-					<h:panelGrid id="chooseFile" columns="1" cellpadding="7" style="margin-left: -6px; width: 115%;">
-						<input type="file" id="file" name="file" accept="video/mp4" />
-           				<div id="results"></div>
-					</h:panelGrid> -->
-					
-					
-					
-					
-					<!--<input type="file" id="file-chooser" style="width: 103%;"/>
-				     <button id="upload-button">Subir contenido</button> 
-				    <div id="results"></div>-->
 				    
 	   					<script type="text/javascript">
 					    var player;
@@ -125,20 +112,9 @@
 					 </script>
 					<!-- FIN SUBIR CONTENIDO -->
 					
-					<!-- id="upload-button" -->
-					<p:commandButton value="Guardar" update="form-contenido:header-contenido" action="#{contenidoView.guardarContenidoVivo()}" style="width: 100%; background-color: #9ACD32;" />
-	 				<!-- <input type="submit" onclick="#{contenidoView.guardarContenido()}" value="Guardar"/> -->
-	 				<!-- <input type="submit" id="upload" value="Guardar" /> -->
-	 					
-	 				<!-- <input type="submit" id="upload" value="Upload" action="/spring-social-login/videoEnArchivo" onclick="#{contenidoView.guardarContenido()}" />-->	
+					<p:commandButton value="Guardar" update="form-contenido:header-contenido" action="#{contenidoView.guardarContenidoVivo()}" style="width: 100%; background-color: #9ACD32;" />	
 				</p:panel>
 			</h:form>
-			 <!-- <form id="form-load" method="post" enctype="multipart/form-data" action="/spring-social-login/videoEnArchivo" onsubmit="uploadEnded()" >
-				<h5>Subir contenido:</h5>
-				<input type="file" id="file" name="file" accept="video/mp4" /> <input
-					type="submit" id="upload" value="Subir" />
-				<p:inputText id="nombre_tipocontenido" value="#{contenidoView.nombre_tipocontenido}" />
-			</form> -->
 			</center>
 		</ui:define>
 	</ui:composition>

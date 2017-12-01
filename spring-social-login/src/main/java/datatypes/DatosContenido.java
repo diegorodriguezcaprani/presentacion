@@ -2,13 +2,6 @@ package datatypes;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
 public class DatosContenido {
 
 	private String empresa;
@@ -26,6 +19,7 @@ public class DatosContenido {
 	private DatosTipoContenido tipoContenido;
 	private List<DatosAtributoContenido> atributos;
 	private Double precioPayPerView;
+	private String urlLive;
 	
 	
 	
@@ -64,6 +58,12 @@ public class DatosContenido {
 	}
 	public void setPuntuacion(Double puntuacion) {
 		this.puntuacion = puntuacion;
+	}
+	public String getUrlLive() {
+		return urlLive;
+	}
+	public void setUrlLive(String urlLive) {
+		this.urlLive = urlLive;
 	}
 	public boolean isDestacado() {
 		return destacado;
@@ -115,7 +115,7 @@ public class DatosContenido {
 	}
 	public DatosContenido(String titulo, String descripcion, int cantPuntuaciones, Double puntuacion, boolean destacado,
 			boolean bloqueado, String portada, List<String> elenco, List<String> directores, List<DatosIdNombre> categorias,
-			DatosTipoContenido tipoContenido, List<DatosAtributoContenido> atributos, String url, String empresa, Double  precioPayPerView) {
+			DatosTipoContenido tipoContenido, List<DatosAtributoContenido> atributos, String url, String empresa) {
 		super();
 		this.titulo = titulo;
 		this.descripcion = descripcion;
@@ -131,7 +131,6 @@ public class DatosContenido {
 		this.atributos = atributos;
 		this.url = url;
 		this.empresa = empresa;
-		this.precioPayPerView= precioPayPerView;
 	}
 	public DatosContenido() {
 		super();

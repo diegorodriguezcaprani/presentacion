@@ -108,21 +108,21 @@ public class ContenidoBean {
 
 	public void obtenerTiempoReproduccion(String id) {
 		
-		this.setVideoTime("5");
-//		DatosJson dj = new DatosJson();
-//		dj.addParameter("idFacebook",idFacebook);
-//		String nomEmpresa = "Fox";
-//        dj.addParameter("empresa", nomEmpresa);
-//        dj.addParameter("titulo",id);
-//	    
-//	    Client client = ClientBuilder.newClient();
-//    	Response postResponse = client
-//	    	.target(URL+"contenido/guardarTiempoReproduccion")
-//	    	.request().post(Entity.json(dj));
-//    	
-//    	String cont= (String)postResponse.getEntity();
-//    	System.out.println(cont);
-//    	this.setVideoTime(cont);
+		//this.setVideoTime("5");
+		DatosJson dj = new DatosJson();
+		dj.addParameter("idFacebook",idFacebook);
+		String nomEmpresa = "fox";
+        dj.addParameter("empresa", nomEmpresa);
+        dj.addParameter("titulo",id);
+	    
+	    Client client = ClientBuilder.newClient();
+    	int postResponse = client
+	    	.target(URL+"contenido/obtenerTiempoReproduccion")
+	    	.request().post(Entity.json(dj),int.class);
+    	
+    	//String cont= (String)postResponse.getEntity();
+    	System.out.println("TIEMPO DE REPRODUCCION: "+ postResponse);
+    	this.setVideoTime(Integer.toString(postResponse));
 	
 	}
 
