@@ -81,7 +81,7 @@
 					data.append('video', source.src);
 				
 				var http = new XMLHttpRequest();
-				var url = "http://localhost:8080/spring-social-login/eventosVideo/pausa";
+				var url = "http://localhost:8080/fox/eventosVideo/pausa";
 				
 			    http.open("POST", url, true);
 				http.withCredentials = true;
@@ -95,11 +95,12 @@
 			
 			function myFunctionPlay() {
 				var data = new FormData();
-				data.append('played', video.currentTime);
+				//data.append('played', video.currentTime);
+				data.append('video', source.src);
 				
 			
 				var http = new XMLHttpRequest();
-				var url = "http://localhost:8080/spring-social-login/eventosVideo/play";
+				var url = "http://localhost:8080/fox/eventosVideo/play";
 				
 				http.open("POST", url, true);
 				http.withCredentials = true;

@@ -33,7 +33,8 @@ public class EventosVideos {
 	private ConfigurableApplicationContext context;
 	@Autowired
     private UserRepository userRepository;
-	private String URL= "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
+
+	private String URL= "http://localhost:8080/ServidorTsi2/";
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/pausa")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -43,15 +44,23 @@ public class EventosVideos {
 		    Usuario user = userRepository.findByUsername(principal.getName());
 			DatosJson dj = new DatosJson();
 			dj.addParameter("idFacebook",user.getProfileUrl());
-			String nomEmpresa = context.getDisplayName();
+			String nomEmpresa = context.getApplicationName();
 	        nomEmpresa = nomEmpresa.substring(1); // saco el /
+	        //http://localhost:8080/fox/videoEnArchivo/fox/Matrix#t=0
+	        String[] mapaurl = request.getParameter("video").split("/");
+	        System.out.println(mapaurl[6]);
+	        String[] mapaauxiliar = mapaurl[6].split("#");
+	        System.out.println(mapaauxiliar[0]);
+	        		
+	        
 	        dj.addParameter("empresa", nomEmpresa);
 	        dj.addParameter("tiempo",request.getParameter("paused") );
-	        dj.addParameter("titulo",request.getParameter("video"));
+	        dj.addParameter("titulo",mapaauxiliar[0]);
+	       
 		    
 		    Client client = ClientBuilder.newClient();
 	    	Response postResponse = client
-		    	.target(URL+"/contenido/guardarTiempoReproduccion")
+		    	.target(URL+"contenido/guardarTiempoReproduccion")
 		    	.request().post(Entity.json(dj));
 
 	}
@@ -59,29 +68,41 @@ public class EventosVideos {
 	@RequestMapping(method = RequestMethod.POST, value = "/play")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 		public void guardarEstadoPlay(WebRequest request, Principal principal){
-		    System.out.println(request.getParameter("played"));
+		    //System.out.println(request.getParameter("played"));
 		    //System.out.println(request.getParameter("video"));
 		    Usuario user = userRepository.findByUsername(principal.getName());
 			DatosJson dj = new DatosJson();
-			dj.addParameter("idFacebook",user.getProfileUrl());
-			String nomEmpresa = context.getDisplayName();
+			
+			String nomEmpresa = context.getApplicationName();
 	        nomEmpresa = nomEmpresa.substring(1); // saco el /
+	        String[] mapaurl = request.getParameter("video").split("/");
+	        System.out.println(mapaurl[6]);
+	        String[] mapaauxiliar = mapaurl[6].split("#");
+	        System.out.println(mapaauxiliar[0]);
+	        
+	        dj.addParameter("idFacebook",user.getProfileUrl());
 	        dj.addParameter("empresa", nomEmpresa);
 	        dj.addParameter("tiempo","0" );
-	        dj.addParameter("titulo",request.getParameter("video"));
+	        dj.addParameter("titulo",mapaauxiliar[0]);
 		    
 		    Client client = ClientBuilder.newClient();
 	    	Response postResponse = client
-		    	.target(URL+"/contenido/guardarTiempoReproduccion")
+		    	.target(URL+"contenido/guardarTiempoReproduccion")
 		    	.request().post(Entity.json(dj));
+	    	client.close();
 	    	
+	    	client = ClientBuilder.newClient();
 	    	 DatosJson djh = new DatosJson();
 	    	 djh.addParameter("idFacebook",user.getProfileUrl());
-	    	 djh.addParameter("titulo",request.getParameter("video"));
-	    	 dj.addParameter("empresa",nomEmpresa);
-	    	 Boolean agreghist = client
-		    	.target(URL+"/cliente/agregarHistorico")
-		    	.request().post(Entity.json(djh),Boolean.class);
+	    	 System.out.println("user profile " +user.getProfileUrl());
+	    	 djh.addParameter("titulo",mapaauxiliar[0]);
+	    	 System.out.println("user titulo" +mapaauxiliar[0]);
+	    	 djh.addParameter("empresa",nomEmpresa);
+	    	 System.out.println("user empresa" +nomEmpresa);
+	    	 System.out.println("CONSUMO A:  " + URL + "cliente/agregarHistorico");
+	    	 Response agreghist = client
+		    	.target(URL + "cliente/agregarHistorico")
+		    	.request().post(Entity.json(djh));
 	}
 	
 

@@ -115,13 +115,13 @@ public class VideoController {
 		
 		System.out.println("cliente PPV Comprado" + conenidoPPVComprado.toString());
 		
-		String url = client
+		DatosContenido dcurl = client
     	.target(this.target+"/contenido/obtenerURL/"+nomEmpresa+"/"+video)
-    	.request(MediaType.APPLICATION_JSON).get(String.class);
-		if (url == null){
+    	.request(MediaType.APPLICATION_JSON).get(DatosContenido.class);
+		if (dcurl == null){
 			return (os) -> {};
 		}
-		final InputStream videoFileStream = new URL(url).openStream();
+		final InputStream videoFileStream = new URL(dcurl.getUrlLive()).openStream();
 		return (os) -> {
 			if (!clienteBloqueado && ((!esContenidoPPV && clienteSubscripto) || (esContenidoPPV && conenidoPPVComprado)))
 			{

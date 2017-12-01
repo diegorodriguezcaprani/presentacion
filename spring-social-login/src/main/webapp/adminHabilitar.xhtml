@@ -17,7 +17,7 @@
 				            <h:outputText value="Contenidos sin habilitar:" />
 				            <p:selectOneMenu id="contenido" required="true" value="#{contenidoView.contenidoseleccionado}" style="width:100%;">
 					            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-					            <f:selectItems value="#{contenidoView.contvivostr}"/>
+					            <f:selectItems value="#{contenidoView.obtenerContenidosVivoPorHabilitar()}"/>
 					        </p:selectOneMenu>
 					        <h:outputLabel for="url" value="URL:" />
 					        <p:inputText id="url" value="#{contenidoView.URLcontenidovivo}" style="width:100%;"/>
