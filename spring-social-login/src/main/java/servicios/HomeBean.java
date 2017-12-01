@@ -100,7 +100,7 @@ public class HomeBean {
     	ConfigurableApplicationContext applicationContext = (ConfigurableApplicationContext) WebApplicationContextUtils.getWebApplicationContext(sc);
     	String nomEmpresa = applicationContext.getApplicationName();
     	this.nombreEmpresa= nomEmpresa.substring(1); // saco el /
-    	//this.nombreEmpresa = "fox";
+    	this.nombreEmpresa = "fox";
 		
 		System.out.println("______holaaaaaaaaa");
     	obtenerContenidos();
@@ -377,31 +377,31 @@ public class HomeBean {
 		
 	}
 	
-	public int puntuarContenido(int puntuacion) {
-		System.out.println(puntuacion+ "puntuacionnnnnnn");
-		return puntuacion;
-//		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//	    String idContenido = ec.getRequestParameterMap().get("idContenido");
-//		
-//		DatosJson dj= new DatosJson();
-//		dj.addParameter("idFacebook", idFacebook);
-//		dj.addParameter("empresa",nombreEmpresa);
-//		dj.addParameter("puntacion",puntuacion+"");
-//		dj.addParameter("titulo",idContenido);
-//		
-//    	Client client = ClientBuilder.newClient();
-//    	double postResponse = client
-//    	.target(URL+"contenido/puntuar")
-//    	.request().post(Entity.json(dj),double.class);
-//    	
-//    	System.out.println(postResponse+"puntuacionServiciooooo");
-//    	DatosContenido contenido=buscarContenidoId(idContenido);
-//    	contenidos.remove(contenido);
-//    	contenido.setPuntuacion(postResponse);
-//    	contenido.setCantPuntuaciones(contenido.getCantPuntuaciones()+1);
-//    	contenidos.add(contenido);
-//    	
-//		return (int)postResponse;
+	public boolean puntuarContenido(int puntuacion) {
+		//System.out.println(puntuacion+ "puntuacionnnnnnn");
+		//return puntuacion;
+		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+	    String idContenido = ec.getRequestParameterMap().get("idContenido");
+		
+		DatosJson dj= new DatosJson();
+		dj.addParameter("idFacebook", idFacebook);
+		dj.addParameter("empresa",nombreEmpresa);
+		dj.addParameter("puntuacion",puntuacion+"");
+		dj.addParameter("titulo",idContenido);
+		
+    	Client client = ClientBuilder.newClient();
+    	DatosContenido postResponse = client
+    	.target(URL+"contenido/puntuar")
+    	.request().post(Entity.json(dj),DatosContenido.class);
+    	
+    	//System.out.println(postResponse+"puntuacionServiciooooo");
+    	DatosContenido contenido=buscarContenidoId(idContenido);
+    	contenidos.remove(contenido);
+    	contenido.setPuntuacion(postResponse.getPuntuacion());
+    	contenido.setCantPuntuaciones(postResponse.getCantPuntuaciones());
+    	contenidos.add(contenido);
+    	
+		return true;
 	}
 	
 /*******auxiliares*******************************************************************************************/	

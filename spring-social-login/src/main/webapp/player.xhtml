@@ -47,16 +47,33 @@
 		   data-layout="button_count">
 		 </div>
 	
+		<br />
 		
-		<div><input id="input" placeholder="you-chat-here" /></div>
 		
 		
-		<div id="box"></div>
+		
+		
+		<textarea id="test" style="width:400px; height:150px;"/>
+		<div><input id="input" placeholder="you-chat-here" onkeypress="return runScript(event)"/></div>
+		
+		
 		
 		<script type="text/javascript" src= "https://cdn.pubnub.com/sdk/javascript/pubnub.4.18.0.js"></script>
 		<script type="text/javascript">
 			var video = document.getElementById("myVideo");
 			var source = document.getElementById("mySource");
+
+			function agregarUserName(){
+				document.getElementById('input').value = "#{homeBean.user.username} : " + document.getElementById('input').value;
+			}
+
+			function runScript(e) {
+			    if (e.keyCode == 13) {
+				    console.log("apreto enter");
+			    	agregarUserName();
+			        return true;
+			    }
+			}
 			
 			function myFunctionPause() {
 				var data = new FormData();
@@ -100,7 +117,30 @@
 			    pubnub.addListener({
 			        message: function(obj) {
 			            if (obj.message.startsWith(source.src)){
-			            	box.innerHTML = '<br>' + (''+obj.message.slice(source.src.length, this.length)) + '</br>' + box.innerHTML	
+
+			            	var str = obj.message.slice(source.src.length, this.length)+'\n';
+			                var res = str.split("@");
+
+
+			                console.log(res);
+			                console.log("#{homeBean.user.username}");
+
+
+							if(res.length>1){
+								console.log("dio mas que uno");
+								if (res.indexOf("#{homeBean.user.username}") > -1) {
+				                	$('test').append(res[0] + res[res.length-1]);
+					            	document.getElementById("test").scrollTop = document.getElementById("test").scrollHeight
+				                } else if (res[0].indexOf("#{homeBean.user.username}") !== -1){
+				                	$('test').append(str);
+				                }
+							} else {
+								console.log("dio uno o menos");
+								$('test').append(obj.message.slice(source.src.length, this.length)+'\n');
+				            	document.getElementById("test").scrollTop = document.getElementById("test").scrollHeight
+							}
+			                
+			            	
 			            }
 			            
 			        }});

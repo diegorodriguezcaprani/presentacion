@@ -24,7 +24,7 @@
 			   						 action="#{homeBean.puntuarContenido(i)}">
 			   						 <f:param name="idContenido" value="#{contenidoBean.id}" />
 			    					 <span class="fa fa-star checked"></span> 
-			    					<f:ajax render=":container-puntuacion" />
+			    					<f:ajax execute="@form" render="@form" />
 								</h:commandLink>
 							</c:forEach>
 							<c:forEach  var = "i" begin="#{contenidoBean.puntuacion+1}" end="#{contenidoBean.maxEstrellas+1}">
@@ -32,7 +32,7 @@
 			   						 action="#{homeBean.puntuarContenido(i)}">
 			   						 <f:param name="idContenido" value="#{contenidoBean.id}" />
 			    					 <span class="fa fa-star"></span> 
-			    					<f:ajax render=":container-puntuacion" />
+			    					<f:ajax execute="@form" render="@form" />
 								</h:commandLink> 
 							</c:forEach>
 						</h:form>
