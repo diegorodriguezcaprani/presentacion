@@ -56,12 +56,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/video")
 public class VideoController {
 
+
 	@Autowired 
 	private ConfigurableApplicationContext context;
 	@Autowired
     private UserRepository userRepository;
 	
-	private String target = "http://localhost:8080/ServidorTsi2";
+	private String target = "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
 
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{video:.+}")
@@ -150,10 +151,14 @@ public class VideoController {
 			}
 		}
 		
+>>>>>>> 2a1fcba158c245c613e399377527883eb7e9732d
 		//final InputStream videoFileStream = new FileInputStream(videoFile);
 		final InputStream videoFileStream = new URL("http://172.20.10.3:8080/").openStream();
 		return (os) -> {
 			readAndWrite(videoFileStream, os);
+<<<<<<< HEAD
+		};
+=======
 		};*/
 	}
 	

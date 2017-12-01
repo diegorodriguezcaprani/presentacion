@@ -17,6 +17,7 @@
         <h:outputStylesheet library="css" name="main.css" />
         <h:outputStylesheet library="css" name="welcome.css" />
         <h:outputScript library="js" name="tab.js" />
+        <h:outputScript library="js" name="dropdown.js" />
         <h:panelGroup layout="block" id="container" class="container">
 	    	 <div class= "divC">
      		 	<h:graphicImage library="images" name="Mantel_cont.png" style= "margin: 0 auto" />
@@ -39,8 +40,45 @@
 			 	
 				 	<div class= "divContenidos">
 				 		<header class="home-header">
-		    	
-			 					<h:form class= "search-form">
+		    		
+					<div class="tabs">
+						<h:panelGroup rendered="#{!homeBean.updated}">
+							<h:commandButton value="Destacados" action="#{homeBean.Todos}" onclick="tabFunction(event)" class="tab-button active">
+		                			<f:ajax execute="@form" render=":container-home"/>
+		           			</h:commandButton>
+		           		</h:panelGroup>
+		           		<h:panelGroup rendered="#{homeBean.updated}">
+		           			<h:commandButton value="Destacados" action="#{homeBean.Todos}" onclick="tabFunction(event)" class="tab-button border">
+		                			<f:ajax execute="@form" render=":container-home"/>
+		           			</h:commandButton>
+		           		</h:panelGroup>
+						<ui:repeat var="o" value="#{homeBean.tiposContenido}" >
+			    			<h:commandButton value="#{o.nombre}" action="#{homeBean.Tipos(o)}" onclick="tabFunction(event)" class="tab-button border">
+	                			<f:ajax execute="@form" render=":container-home"/>
+	           			 	</h:commandButton>
+			    		</ui:repeat>	
+			    		<h:panelGrid columns="1" cellpadding="5" styleClass="tab-button border" rendered="#{homeBean.notificaciones.size()>0}">
+					    	<p:commandLink value="!" type="button" onclick="PF('dlg3').show();" style="color:red"/>
+						</h:panelGrid>
+						
+						<p:dialog header="Notificaciones" widgetVar="dlg3" modal="true" height="100">
+							    <h:panelGroup>
+							    	<div>
+									   	 <ui:repeat var="notif" value="#{homeBean.notificaciones}" >
+									    	<div>
+									    		<a href="contenido.xhtml?id=#{notif.tituloContenido}&amp;url=#{notif.portada}&amp;urlvideo=#{notif.url}" onclick="#{homeBean.borrarNotif()}" >
+									    		 	<h:outputText value="#{notif.nombreClienteQueComparte} te recomienda: #{notif.tituloContenido}" />
+									    		 </a>
+								   			</div>	
+									    </ui:repeat>
+								 	</div>	
+					   			 </h:panelGroup>
+						</p:dialog>
+		 
+					</div>			  			
+		    		
+		    		</header>
+		    		<h:form class= "search-form">
 			            <h:inputText id="search" value="#{homeBean.algo}" placeholder="Search.."
 			                onkeypress="if (event.keyCode == 13) {onchange(event); return false;}"
 			                onchange="return event.keyCode !== undefined" 
@@ -49,43 +87,28 @@
 			            </h:inputText>
 		        	</h:form>
 		    		
-		    		
-					<div class="tabs">
-						<h:commandButton value="Destacados" action="#{homeBean.Todos}" onclick="tabFunction(event)" class="tab-button border">
-	                			<f:ajax execute="@form" render=":container-home"/>
-	           			</h:commandButton>
-						<ui:repeat var="o" value="#{homeBean.tiposContenido}" >
-			    			<h:commandButton value="#{o.nombre}" action="#{homeBean.Tipos(o.nombre)}" onclick="tabFunction(event)" class="tab-button border">
-	                			<f:ajax execute="@form" render=":container-home"/>
-	           			 	</h:commandButton>
-			    		</ui:repeat>
-			  			
-			 			<button onclick="myFunction()" class="tab-button border">Género</button>
-			 			 <div id="myDropdown" class="dropdown-content">
-			   				<a href="welcome.xhtml">Link 1</a>
-			    			<a href="#">Link 2</a>
-			    			<a href="#">Link 3</a>
-			  			</div>
-		 
-					</div>
-			
-			  			
-						<!-- <div class="dropdown-profile">
-				  			<button onclick="myFunction()" class="dropbtn button-img">
-				  				<h:graphicImage library="images" name="profile-icon-9.png" style= "width:15px; border-radius: 50%"/>
-				  			</button>
-				 			 <div id="myDropdown" class="dropdown-content">
-				   				<a href="verPerfil.xhtml">Ver Perfil</a>
-				  			</div>
-						</div> -->
-		    		
-		    		</header>
+
 		    		 <h:panelGroup layout="block" id="container-home">	
+		    		 <div class="dropdown">
+			 			<button onclick="myFunction()" class="dropbtn">Género</button>
+			 			 <div id="myDropdown" class="dropdown-content">
+				 			 <ui:repeat var="o" value="#{homeBean.categorias}" >
+				    			<h:form>
+				    			<h:commandLink value= "#{o.nombre}" action="#{homeBean.Genero(o.id)}">
+								    <f:ajax render=":container-home" />
+								  
+								</h:commandLink>
+								</h:form>
+							</ui:repeat>
+			  			</div>
+			  		</div>
 		    		<ui:insert name="homeContent">
 		    			
 		    		</ui:insert>
 		    		 </h:panelGroup>
 				 	</div> 
+				 	
+				 	
 			 
 			</ui:insert>
 		</h:panelGroup>

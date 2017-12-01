@@ -9,6 +9,7 @@ public class DatosComentario {
 	private Date fecha;
 	private int spoilerCount;
 	private String idfacebookCliente;
+	private String nombreCliente;
 	private String tituloContenido;
 	
 	
@@ -17,7 +18,7 @@ public class DatosComentario {
 		// TODO Auto-generated constructor stub
 	}
 	public DatosComentario(int id, String mensaje, Date fecha, int spoilerCount, String idfacebookCliente,
-			String tituloContenido) {
+			String tituloContenido, String nombreCliente) {
 		super();
 		this.id = id;
 		this.mensaje = mensaje;
@@ -25,6 +26,7 @@ public class DatosComentario {
 		this.spoilerCount = spoilerCount;
 		this.idfacebookCliente = idfacebookCliente;
 		this.tituloContenido = tituloContenido;
+		this.nombreCliente = nombreCliente;
 	}
 	public int getId() {
 		return id;
@@ -38,6 +40,18 @@ public class DatosComentario {
 	public void setMensaje(String mensaje) {
 		this.mensaje = mensaje;
 	}
+	public String getIdfacebookCliente() {
+		return idfacebookCliente;
+	}
+	public void setIdfacebookCliente(String idfacebookCliente) {
+		this.idfacebookCliente = idfacebookCliente;
+	}
+	public String getNombreCliente() {
+		return nombreCliente;
+	}
+	public void setNombreCliente(String nombreCliente) {
+		this.nombreCliente = nombreCliente;
+	}
 	public Date getFecha() {
 		return fecha;
 	}
@@ -49,12 +63,6 @@ public class DatosComentario {
 	}
 	public void setSpoilerCount(int spoilerCount) {
 		this.spoilerCount = spoilerCount;
-	}
-	public String getidfacebookCliente() {
-		return idfacebookCliente;
-	}
-	public void setidfacebookCliente(String idfacebookCliente) {
-		this.idfacebookCliente = idfacebookCliente;
 	}
 	public String getTituloContenido() {
 		return tituloContenido;

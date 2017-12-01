@@ -6,6 +6,7 @@
 }
 
 .home-header {
+	display: inline-block;
 	height:10%	
 }
 /*.dropdown1 {

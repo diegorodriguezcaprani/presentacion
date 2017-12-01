@@ -15,7 +15,7 @@ public class SessionEmpresaBean {
 	
 	private String call=null;
 	private String nombreEmpresa;
-	private String URL_Back = "http://localhost:8080/ServidorTsi2";
+	private String URL_Back = "http://localhost:8180/ServidorTsi2-0.0.1-SNAPSHOT/";
 	
 	@PostConstruct
 	public void init(){

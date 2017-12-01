@@ -4,6 +4,10 @@
 .cantPuntuacionesContenido {
 	display: inline
 }
+.nombreContenido {
+	margin-top: 1%;
+	margin-bottom: 0%;
+}
 
 .img-contenido-div {
     width: 180px;
