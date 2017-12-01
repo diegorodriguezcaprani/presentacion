@@ -159,32 +159,37 @@ public class HomeBean {
 	}
 /*****************************************Servicios*********************************/	
 	
-	public void borrarNotif() {
-		notificaciones = new LinkedList<DatosNotificacion>();
-	}
-	
-//	public String borrarNotif(int id, String tituloContenido, String portada, String url) {
-//		int posicionBorrar = 0;
-//		for(DatosNotificacion notif : notificaciones) {
-//			if(notif.getId() == id) {
-//				break;
-//			}
-//			posicionBorrar++;
-//		}
-//		notificaciones.remove(posicionBorrar);
-//		
-//		
-//		DatosJson dj = new DatosJson();
-//		dj.addParameter("id", id+"");
-//		
-//		Client client = ClientBuilder.newClient();
-//		Boolean respuesta = client
-//    	.target(URL + "cliente/eliminarNotificacion")
-//    	.request().post(Entity.json(dj), new GenericType<Boolean>() {});
-//		
-//		String ret = "contenido.xhtml?id="+tituloContenido+"&amp;url="+portada+"&amp;urlvideo="+url+"/";
-//		return ret;
+//	public void borrarNotif() {
+//		notificaciones = new LinkedList<DatosNotificacion>();
 //	}
+	
+	public String borrarNotif(int id, String tituloContenido, String portada, String url) {
+		int posicionBorrar = 0;
+		for(DatosNotificacion notif : notificaciones) {
+			if(notif.getId() == id) {
+				break;
+			}
+			posicionBorrar++;
+		}
+		notificaciones.remove(posicionBorrar);
+		
+		
+		DatosJson dj = new DatosJson();
+		dj.addParameter("id", id+"");
+		
+		Client client = ClientBuilder.newClient();
+		Boolean respuesta = client
+    	.target(URL + "cliente/eliminarNotificacion")
+    	.request().post(Entity.json(dj), new GenericType<Boolean>() {});
+		
+		String ret = "contenido.xhtml?id="+tituloContenido+"&amp;url="+portada+"&amp;urlvideo="+url+"/";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().dispatch(ret);
+		} catch(Exception e) {
+			
+		}
+		return ret;
+	}
 	
 	public void obtenerNotificaciones() {
 		

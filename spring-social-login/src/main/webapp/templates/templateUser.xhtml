@@ -28,6 +28,9 @@
 	  				<tr>
 	    				<td><a href="favoritos.xhtml">Favoritos</a></td>
 	  				</tr>
+	  				<tr>
+	    				<td><a href="historial.xhtml">Historial</a></td>
+	  				</tr>
 				</table>
 	 			 <div class= "profile-div">
 	   				<a href="verPerfil.xhtml">#{homeBean.user.username}<h:graphicImage library="images" name="profile-icon-9.png" style= "width:30px; vertical-align: middle"/></a>
@@ -66,9 +69,9 @@
 							    	<div>
 									   	 <ui:repeat var="notif" value="#{homeBean.notificaciones}" >
 									    	<div>
-									    		<a href="contenido.xhtml?id=#{notif.tituloContenido}&amp;url=#{notif.portada}&amp;urlvideo=#{notif.url}" onclick="#{homeBean.borrarNotif()}" >
-									    		 	<h:outputText value="#{notif.nombreClienteQueComparte} te recomienda: #{notif.tituloContenido}" />
-									    		 </a>
+									    		 <h:form>
+									    		<h:commandLink action="#{homeBean.borrarNotif(notif.id, notif.tituloContenido, notif.portada, notif.url)}" value="#{notif.nombreClienteQueComparte} te recomienda: #{notif.tituloContenido}" /> 
+						    		 			</h:form>
 								   			</div>	
 									    </ui:repeat>
 								 	</div>	
